@@ -5,6 +5,7 @@ LABEL MAINTAINER="https://github.com/Johnny-Knighten"
 ENV DEBUG=false \
     CONTAINER_BIN_DIR="/opt/ark-sa-container/bin" \
     STEAMCMD_ARK_SA_APP_ID=2430930 \
+    STEAMCMD_VALIDATION_SKIP=False \
     PROTON_GE_VAR=wine-lutris \
     PROTON_GE_VER=GE-Proton8-21 \
     PROTON_GE_ARCH=x86_64 \
@@ -20,7 +21,7 @@ ENV DEBUG=false \
     ARK_RCON_PORT=27020 \
     ARK_MAX_PLAYERS=70  \
     ARK_SERVER_NAME="Ark Server"
-
+    
 RUN set -x && \
     apt-get update && \
     apt-get install -y  wget \
