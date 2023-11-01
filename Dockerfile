@@ -8,7 +8,11 @@ ENV DEBUG=false \
     PROTON_GE_VAR=wine-lutris \
     PROTON_GE_VER=GE-Proton8-21 \
     PROTON_GE_ARCH=x86_64 \
-    ARK_SERVER_DIR="/ark-server"
+    ARK_SERVER_DIR="/ark-server" \
+    ARK_MAP="TheIsland_WP" \
+    ARK_GAME_PORT=7777 \
+    ARK_QUERY_PORT=27015 \
+    ARK_LAUNCH_OPTIONS="-log -NoBattlEye"
 
 RUN set -x && \
     apt-get update && \
