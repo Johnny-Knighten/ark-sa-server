@@ -4,11 +4,35 @@ set -e
 
 [[ -z "${DEBUG}" ]] || [[ "${DEBUG,,}" = "false" ]] || [[ "${DEBUG,,}" = "0" ]] || set -x
 
-xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe ${ARK_MAP}?listen?Port=${ARK_GAME_PORT}?QueryPort=${ARK_QUERY_PORT} ${ARK_LAUNCH_OPTIONS} &> proton-wine.log &
+CMD_ARGS="$ARK_MAP?listen"
+CMD_ARGS+="?SessionName=$ARK_SERVER_NAME"
+CMD_ARGS+="?Port=$ARK_GAME_PORT"
+CMD_ARGS+="?QueryPort=$ARK_QUERY_PORT"
+CMD_ARGS+="?RCONEnabled=$ARK_ENABLE_RCON"
+CMD_ARGS+="?RCONPort=$ARK_RCON_PORT"
+CMD_ARGS+="?ServerPVE=$ARK_ENABLE_PVE"
+CMD_ARGS+="?MaxPlayers=$ARK_MAX_PLAYERS"
 
-while [ ! -f "${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log" ]; do
-  echo "Waiting for file ${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log to exist..."
+if [[ "$ARK_PUBLIC_SERVER" != "True" ]]; then
+  CMD_ARGS+="?ServerPassword=$ARK_SERVER_PASSWORD"
+fi
+
+CMD_ARGS+="?ServerAdminPassword=$ARK_SERVER_ADMIN_PASSWORD"
+
+xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe $CMD_ARGS $ARK_LAUNCH_OPTIONS &> proton-wine.log &
+
+log_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
+timeout=300 
+
+while [ ! -f "$log_file" ] && [ $timeout -gt 0 ]; do
+  echo "Waiting for file $log_file to exist..."
   sleep 1
+  ((timeout--))
 done
 
-tail -f "${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
+if [ -f "$log_file" ]; then
+  tail -f "$log_file"
+else
+  echo "File $log_file did not appear within the timeout period"
+  exit 1
+fi

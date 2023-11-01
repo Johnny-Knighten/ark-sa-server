@@ -12,7 +12,14 @@ ENV DEBUG=false \
     ARK_MAP="TheIsland_WP" \
     ARK_GAME_PORT=7777 \
     ARK_QUERY_PORT=27015 \
-    ARK_LAUNCH_OPTIONS="-log -NoBattlEye"
+    ARK_LAUNCH_OPTIONS="-log -NoBattlEye" \
+    ARK_PUBLIC_SERVER=False \
+    ARK_SERVER_PASSWORD=password \
+    ARK_SERVER_ADMIN_PASSWORD=adminpassword \
+    ARK_ENABLE_RCON=True \
+    ARK_RCON_PORT=27020 \
+    ARK_MAX_PLAYERS=70  \
+    ARK_SERVER_NAME="Ark Server"
 
 RUN set -x && \
     apt-get update && \
