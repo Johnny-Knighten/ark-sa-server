@@ -1,0 +1,27 @@
+[Unit]
+Description=ARK Survival Ascended Server
+After=docker.service
+Requires=docker.service
+ConditionPathExists=/etc/sysconfig/ark-sa-server
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStart=/usr/bin/docker run \
+          --name %n \
+          --pull=always \
+          --rm \
+          -v /opt/ark-sa-server:/ark-server\
+          -p 8888:8888/udp \
+          -p 8889:8889/udp \
+          -p 27016:27016/udp \
+          -p 27021:27021/tcp \
+          --env-file /etc/sysconfig/ark-sa-server \
+          ark-sa-server:1.0.0
+ExecStop=/usr/bin/docker stop %n
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
