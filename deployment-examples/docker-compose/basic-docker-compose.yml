@@ -12,7 +12,7 @@ services:
       - 'ark-files:/ark-server'
     ports:
       - 7777:7777/udp
-      - 77778:7778/udp
+      - 7778:7778/udp
       - 27015:27015/udp
       - 27020:27020/tcp
 volumes:
