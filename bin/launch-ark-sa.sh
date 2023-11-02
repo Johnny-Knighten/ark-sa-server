@@ -8,10 +8,14 @@ CMD_ARGS="$ARK_MAP?listen"
 CMD_ARGS+="?SessionName=$ARK_SERVER_NAME"
 CMD_ARGS+="?Port=$ARK_GAME_PORT"
 CMD_ARGS+="?QueryPort=$ARK_QUERY_PORT"
-CMD_ARGS+="?RCONEnabled=$ARK_ENABLE_RCON"
-CMD_ARGS+="?RCONPort=$ARK_RCON_PORT"
 CMD_ARGS+="?ServerPVE=$ARK_ENABLE_PVE"
 CMD_ARGS+="?MaxPlayers=$ARK_MAX_PLAYERS"
+
+if [[ "$ARK_RCON_ENABLED" = "True" ]]; then
+  CMD_ARGS+="?RCONEnabled=$ARK_RCON_ENABLED?RCONPort=$ARK_RCON_PORT"
+else
+  CMD_ARGS+="?RCONEnabled=False"
+fi
 
 if [[ -n "$ARK_MULTI_HOME" ]]; then
   CMD_ARGS+="?MultiHome=$ARK_MULTI_HOME"
