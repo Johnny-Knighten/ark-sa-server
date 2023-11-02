@@ -19,7 +19,16 @@ fi
 
 CMD_ARGS+="?ServerAdminPassword=$ARK_SERVER_ADMIN_PASSWORD"
 
-xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe $CMD_ARGS $ARK_LAUNCH_OPTIONS &> proton-wine.log &
+# remove all whitespace from ARK_MOD_LIST
+ARK_MOD_LIST="$(echo -e "$ARK_MOD_LIST" | tr -d '[:space:]')"
+
+if [[ -z "$ARK_MOD_LIST" ]]; then
+  MOD_ARGS=""
+else
+  MOD_ARGS="-automanagedmods -mods=$ARK_MOD_LIST"
+fi
+
+xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe $CMD_ARGS -log $MOD_ARGS $ARK_LAUNCH_OPTIONS &> proton-wine.log &
 
 log_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
 timeout=300 
