@@ -14,49 +14,48 @@ See [basic-docker-compose.yml](basic-docker-compose.yml) for the full docker com
 
 ### Launch Compose Stack With Log Displayed
 ```bash
-docker compose -f basic-docker-compose.yml up
+$ docker compose -f basic-docker-compose.yml up
 ```
 
 Press `CTRL+C` to stop the stack.
 
 ### Launch Compose Stack With Detached Log 
 ```bash
-docker compose -f basic-docker-compose.yml up -d
+$ docker compose -f basic-docker-compose.yml up -d
 ```
 
 #### View Detached Log
 View all logs generated.
 ```bash
-docker compose -f basic-docker-compose.yml logs
+$ docker compose -f basic-docker-compose.yml logs
 ```
 
 View last N log entries, N=10 in example below.
 ```bash
-docker compose -f basic-docker-compose.yml logs -n 10
+$ docker compose -f basic-docker-compose.yml logs -n 10
 ```
 
 View all logs generated then follow new log entries.
 ```bash
-docker compose -f basic-docker-compose.yml logs -f
+$ docker compose -f basic-docker-compose.yml logs -f
+```
 
 Press `CTRL+C` to stop following.
 
-```
-
 View last N log entries, then follow new log entries.
 ```bash
-docker compose -f basic-docker-compose.yml logs -n 10 -f
+$ docker compose -f basic-docker-compose.yml logs -n 10 -f
 ```
 
 #### Restart Compose Stack
 ```bash
-docker compose -f basic-docker-compose.yml restart
+$ docker compose -f basic-docker-compose.yml restart
 ```
 
 #### Stop Compose Stack
 Stop the stack.
 ```bash
-docker compose -f basic-docker-compose.yml down
+$ docker compose -f basic-docker-compose.yml down
 ```
 
 ## Advanced Example
@@ -67,48 +66,48 @@ See [advanced-docker-compose.yml](advanced-docker-compose.yml) for the full dock
 
 ### Launch Compose Stack With Log Displayed
 ```bash
-docker compose -f advanced-docker-compose.yml up
+$ docker compose -f advanced-docker-compose.yml up
 ```
 
 Press `CTRL+C` to stop the stack.
 
 ### Launch Compose Stack With Detached Log 
 ```bash
-docker compose -f advanced-docker-compose.yml up -d
+$ docker compose -f advanced-docker-compose.yml up -d
 ```
 
 #### View Detached Log
 View all logs generated.
 ```bash
-docker compose -f advanced-docker-compose.yml logs
+$ docker compose -f advanced-docker-compose.yml logs
 ```
 
 View last N log entries, N=10 in example below.
 ```bash
-docker compose -f advanced-docker-compose.yml logs -n 10
+$ docker compose -f advanced-docker-compose.yml logs -n 10
 ```
 
 View all logs generated then follow new log entries.
 ```bash
-docker compose -f advanced-docker-compose.yml logs -f
+$ docker compose -f advanced-docker-compose.yml logs -f
 ```
 
 Press `CTRL+C` to stop following.
 
 View last N log entries, then follow new log entries.
 ```bash
-docker compose -f advanced-docker-compose.yml logs -n 10 -f
+$ docker compose -f advanced-docker-compose.yml logs -n 10 -f
 ```
 
 #### Restart Compose Stack
 ```bash
-docker compose -f advanced-docker-compose.yml restart
+$ docker compose -f advanced-docker-compose.yml restart
 ```
 
 #### Stop Compose Stack
 Stop the stack.
 ```bash
-docker compose -f advanced-docker-compose.yml down
+$ docker compose -f advanced-docker-compose.yml down
 ```
 
 ## Note About Volumes
