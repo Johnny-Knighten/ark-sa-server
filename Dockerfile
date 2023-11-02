@@ -24,7 +24,8 @@ ENV DEBUG=false \
     ARK_MOD_LIST= \
     ARK_NO_BATTLEYE=True \
     ARK_EPIC_PUBLIC_IP= \
-    ARK_MULTI_HOME=
+    ARK_MULTI_HOME= \
+    ARK_ENABLE_PVE=False
 
 RUN set -x && \
     apt-get update && \
