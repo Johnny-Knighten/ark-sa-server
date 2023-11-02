@@ -1,0 +1,32 @@
+---
+version: '3'
+services:
+  ark-sa:
+    container_name: ark
+    image: ark-sa-server
+    restart: unless-stopped
+    environment:
+      - ARK_GAME_PORT=8888
+      - ARK_QUERY_PORT=27016
+      - ARK_MAX_PLAYERS=20
+      - ARK_SERVER_NAME="Containerized Ark Server"
+      - ARK_SERVER_PASSWORD=password2
+      - ARK_SERVER_ADMIN_PASSWORD=adminpassword2
+      - ARK_ENABLE_PVE=True
+      - STEAMCMD_SKIP_VALIDATION=True
+      - ARK_PREVENT_AUTO_UPDATE=True
+      - ARK_RCON_ENABLED=True
+      - ARK_RCON_PORT=27021
+      - ARK_MOD_LIST="927131, 893657"
+      - ARK_MULTI_HOME=0.0.0.0      # Make Your Public IP
+      - ARK_EPIC_PUBLIC_IP=0.0.0.0  # Make Your Public IP
+      - ARK_NO_BATTLEYE=False
+    volumes:
+      - 'ark-files:/ark-server'
+    ports:
+      - 8888:8888/udp
+      - 8889:8889/udp
+      - 27016:27016/udp
+      - 27021:27021/tcp
+volumes:
+  ark-files:

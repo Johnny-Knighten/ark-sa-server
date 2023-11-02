@@ -1,0 +1,19 @@
+---
+version: '3'
+services:
+  ark-sa:
+    container_name: ark
+    image: ark-sa-server
+    restart: unless-stopped
+    environment:
+      - ARK_SERVER_NAME="Simple ARK SA Server"
+      - ARK_SERVER_ADMIN_PASSWORD=secretpassword
+    volumes:
+      - 'ark-files:/ark-server'
+    ports:
+      - 8888:8888/udp
+      - 8889:8889/udp
+      - 27016:27016/udp
+      - 27021:27021/tcp
+volumes:
+  ark-files:
