@@ -13,17 +13,19 @@ ENV DEBUG=false \
     ARK_MAP="TheIsland_WP" \
     ARK_GAME_PORT=7777 \
     ARK_QUERY_PORT=27015 \
-    ARK_LAUNCH_OPTIONS="-NoBattlEye" \
-    ARK_PUBLIC_SERVER=False \
-    ARK_SERVER_PASSWORD=password \
+    ARK_EXTRA_LAUNCH_OPTIONS= \
+    ARK_SERVER_PASSWORD= \
     ARK_SERVER_ADMIN_PASSWORD=adminpassword \
     ARK_ENABLE_RCON=True \
     ARK_RCON_PORT=27020 \
     ARK_MAX_PLAYERS=70  \
     ARK_SERVER_NAME="Ark Server" \
     ARK_PREVENT_AUTO_UPDATE=False \
-    ARK_MOD_LIST=
-    
+    ARK_MOD_LIST= \
+    ARK_NO_BATTLEYE=True \
+    ARK_EPIC_PUBLIC_IP= \
+    ARK_MULTI_HOME=
+
 RUN set -x && \
     apt-get update && \
     apt-get install -y  wget \

@@ -13,22 +13,38 @@ CMD_ARGS+="?RCONPort=$ARK_RCON_PORT"
 CMD_ARGS+="?ServerPVE=$ARK_ENABLE_PVE"
 CMD_ARGS+="?MaxPlayers=$ARK_MAX_PLAYERS"
 
-if [[ "$ARK_PUBLIC_SERVER" != "True" ]]; then
+if [[ -n "$ARK_MULTI_HOME" ]]; then
+  CMD_ARGS+="?MultiHome=$ARK_MULTI_HOME"
+fi
+
+if [[ -n "$ARK_SERVER_PASSWORD" ]]; then
   CMD_ARGS+="?ServerPassword=$ARK_SERVER_PASSWORD"
 fi
 
 CMD_ARGS+="?ServerAdminPassword=$ARK_SERVER_ADMIN_PASSWORD"
 
+if [[ "$ARK_NO_BATTLEYE" = "True" ]]; then
+  BATTLE_EYE_FLAG="-NoBattlEye"
+else
+  BATTLE_EYE_FLAG=""
+fi
+
+if [[ -n "$ARK_EPIC_PUBLIC_IP" ]]; then
+  EPIC_IP_FLAG="--PublicIPforEpic $ARK_EPIC_PUBLIC_IP"
+else
+  EPIC_IP_FLAG=""
+fi
+
 # remove all whitespace from ARK_MOD_LIST
 ARK_MOD_LIST="$(echo -e "$ARK_MOD_LIST" | tr -d '[:space:]')"
 
-if [[ -z "$ARK_MOD_LIST" ]]; then
-  MOD_ARGS=""
-else
+if [[ -n "$ARK_MOD_LIST" ]]; then
   MOD_ARGS="-automanagedmods -mods=$ARK_MOD_LIST"
+else
+  MOD_ARGS=""
 fi
 
-xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe $CMD_ARGS -log $MOD_ARGS $ARK_LAUNCH_OPTIONS &> proton-wine.log &
+xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe $CMD_ARGS -log $BATTLE_EYE_FLAG $EPIC_IP_FLAG $MOD_ARGS $ARK_EXTRA_LAUNCH_OPTIONS &> proton-wine.log &
 
 log_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
 timeout=300 
