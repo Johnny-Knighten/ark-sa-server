@@ -11,9 +11,9 @@ services:
     volumes:
       - 'ark-files:/ark-server'
     ports:
-      - 8888:8888/udp
-      - 8889:8889/udp
-      - 27016:27016/udp
-      - 27021:27021/tcp
+      - 7777:7777/udp
+      - 77778:7778/udp
+      - 27015:27015/udp
+      - 27020:27020/tcp
 volumes:
   ark-files:
