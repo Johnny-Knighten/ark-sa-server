@@ -6,7 +6,7 @@ This section is written in terms of using Systemd in an Ubuntu 22.04 VM. It shou
 
 Start by creating a file to hold all of your variables. Consider the permissions of this file if it will contain secrets. 
 
-Create a service config file [`/etc/sysconfig/ark-sa-server.env`](deployment-examples/docker-run-with-systemd/ark-sa-server.env)):
+Create a service config file [`/etc/sysconfig/ark-sa-server.env`](ark-sa-server.env):
 
 ```
 ARK_SERVER_NAME="Simple ARK SA Server"
@@ -27,7 +27,7 @@ ARK_MOD_LIST="927131, 893657"
 
 Next create a systemd service unit file, that specifies dependencies, startup and shutdown behavior, and other properties of the service.
 
-Create a systemd service until file [`/etc/systemd/system/ark-sa-server.service`](deployment-examples/docker-run-with-systemd/ark-sa-server.service)):
+Create a systemd service until file [`/etc/systemd/system/ark-sa-server.service`](ark-sa-server.service):
 
 ```
 [Unit]
@@ -114,4 +114,4 @@ $ sudo systemctl daemon-reload
 
 ### Update Configs
 
-To update the configs, you will need to stop the service, update the configs, then start the service again for the server to pick up on the changes. Change environment variables via modifying `/etc/sysconfig/ark-sa-server.env` and change the actual config files as documented in the primary [README](README.md).
+To update the configs, you will need to stop the service, update the configs, then start the service again for the server to pick up on the changes. Change environment variables via modifying `/etc/sysconfig/ark-sa-server.env` and change the actual config files as documented in the primary [README](../../README.md).

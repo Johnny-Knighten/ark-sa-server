@@ -4,5 +4,5 @@ These directories contains examples of how to deploy ARK SA dedicated server con
 
 ## Index
 
-* [Docker Run Inside A Systemd Service](deployment-examples/docker-run-with-systemd/README.md)
-* [Docker Compose](deployment-examples/docker-compose/README.md)
+* [Docker Run Inside A Systemd Service](docker-run-with-systemd/README.md)
+* [Docker Compose](docker-compose/README.md)
