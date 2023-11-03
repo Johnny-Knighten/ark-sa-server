@@ -11,8 +11,8 @@ CMD_ARGS+="?QueryPort=$ARK_QUERY_PORT"
 CMD_ARGS+="?ServerPVE=$ARK_ENABLE_PVE"
 CMD_ARGS+="?MaxPlayers=$ARK_MAX_PLAYERS"
 
-if [[ "$ARK_RCON_ENABLED" = "True" ]]; then
-  CMD_ARGS+="?RCONEnabled=$ARK_RCON_ENABLED?RCONPort=$ARK_RCON_PORT"
+if [[ "$ARK_ENABLE_RCON" = "True" ]]; then
+  CMD_ARGS+="?RCONEnabled=$ARK_ENABLE_RCON?RCONPort=$ARK_RCON_PORT"
 else
   CMD_ARGS+="?RCONEnabled=False"
 fi
