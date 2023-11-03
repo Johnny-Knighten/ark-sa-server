@@ -1,4 +1,4 @@
-# Docker Compose Examples
+# Docker Compose
 
 This README contains examples of using docker compose to launch the ARK: Survival Ascended server container via two different docker compose files.
 
@@ -19,40 +19,40 @@ $ docker compose -f basic-docker-compose.yml up
 
 Press `CTRL+C` to stop the stack.
 
-### Launch Compose Stack With Detached Log 
+### Launch Detached Compose Stack   
 ```bash
 $ docker compose -f basic-docker-compose.yml up -d
 ```
 
-#### View Detached Log
-View all logs generated.
+### Viewing Logs When Using A Detached Compose Stack 
+#### View all logs generated.
 ```bash
 $ docker compose -f basic-docker-compose.yml logs
 ```
 
-View last N log entries, N=10 in example below.
+#### View last N log entries, N=10
 ```bash
 $ docker compose -f basic-docker-compose.yml logs -n 10
 ```
 
-View all logs generated then follow new log entries.
+#### View all logs generated then follow new log entries
 ```bash
 $ docker compose -f basic-docker-compose.yml logs -f
 ```
 
 Press `CTRL+C` to stop following.
 
-View last N log entries, then follow new log entries.
+#### View last N log entries, then follow new log entries
 ```bash
 $ docker compose -f basic-docker-compose.yml logs -n 10 -f
 ```
 
-#### Restart Compose Stack
+### Restart Compose Stack
 ```bash
 $ docker compose -f basic-docker-compose.yml restart
 ```
 
-#### Stop Compose Stack
+### Stop Compose Stack
 Stop the stack.
 ```bash
 $ docker compose -f basic-docker-compose.yml down
@@ -71,40 +71,40 @@ $ docker compose -f advanced-docker-compose.yml up
 
 Press `CTRL+C` to stop the stack.
 
-### Launch Compose Stack With Detached Log 
+### Launch Detached Compose Stack 
 ```bash
 $ docker compose -f advanced-docker-compose.yml up -d
 ```
 
-#### View Detached Log
-View all logs generated.
+### Viewing Logs When Using A Detached Compose Stack 
+####  View all logs generated.
 ```bash
 $ docker compose -f advanced-docker-compose.yml logs
 ```
 
-View last N log entries, N=10 in example below.
+#### View last N log entries, N=10 
 ```bash
 $ docker compose -f advanced-docker-compose.yml logs -n 10
 ```
 
-View all logs generated then follow new log entries.
+#### View all logs generated then follow new log entries
 ```bash
 $ docker compose -f advanced-docker-compose.yml logs -f
 ```
 
 Press `CTRL+C` to stop following.
 
-View last N log entries, then follow new log entries.
+#### View last N log entries, then follow new log entries
 ```bash
 $ docker compose -f advanced-docker-compose.yml logs -n 10 -f
 ```
 
-#### Restart Compose Stack
+### Restart Compose Stack
 ```bash
 $ docker compose -f advanced-docker-compose.yml restart
 ```
 
-#### Stop Compose Stack
+### Stop Compose Stack
 Stop the stack.
 ```bash
 $ docker compose -f advanced-docker-compose.yml down
@@ -114,7 +114,7 @@ $ docker compose -f advanced-docker-compose.yml down
 
 In the two above examples a docker volume called `ark-files` will be created and store all server files.  This volume will persist even if the container is removed.  This allows the container to be removed and re-created without losing any server data.
 
-Depending on your preference, you may prefer bind mounts to a directory on your computer instead of using a docker volume. To do this, replace the the bottom `volumes` section of the docker compose file and then update the `volumes` section under `ark-sa` with the path to the directory you want to use. See the example below.
+Depending on your preference, you may prefer bind mounts to a directory on your computer instead of using a docker volume. To do this, replace the bottom `volumes` section of the docker compose file and then update the `volumes` section under `ark-sa` with the path to the directory you want to use. See the example below.
 
 ```yaml
 version: '3'

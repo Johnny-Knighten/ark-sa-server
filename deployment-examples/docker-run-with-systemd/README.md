@@ -1,8 +1,13 @@
+# Docker Run Inside A Systemd Service
+
 This section is written in terms of using Systemd in an Ubuntu 22.04 VM. It should be easily adaptable to other Linux distros that use Systemd.
+
+## Create File To Hold All Environment Variables
 
 Start by creating a file to hold all of your variables. Consider the permissions of this file if it will contain secrets. 
 
-Create a service config file `/etc/sysconfig/ark-sa-server.env`:
+Create a service config file [`/etc/sysconfig/ark-sa-server.env`](deployment-examples/docker-run-with-systemd/ark-sa-server.env)):
+
 ```
 ARK_SERVER_NAME="Simple ARK SA Server"
 ARK_GAME_PORT=8888
@@ -18,9 +23,12 @@ ARK_RCON_PORT=27021
 ARK_MOD_LIST="927131, 893657"
 ```
 
+## Create Systemd Service Unit File
+
 Next create a systemd service unit file, that specifies dependencies, startup and shutdown behavior, and other properties of the service.
 
-Create a systemd service until file `/etc/systemd/system/ark-sa-server.service`:
+Create a systemd service until file [`/etc/systemd/system/ark-sa-server.service`](deployment-examples/docker-run-with-systemd/ark-sa-server.service)):
+
 ```
 [Unit]
 Description=ARK Survival Ascended Server
@@ -50,11 +58,15 @@ RestartSec=10s
 [Install]
 WantedBy=multi-user.target
 ```
+
 Note 
 * Make sure you make your ports and volumes match your desired configuration.
 * %n will be the same of the service which is ark-sa-server.service in this case.
 
+## Enable and Start Service
+
 Now enable the service and start it:
+
 ```bash
 $ sudo mkdir -p  /opt/ark-sa-server # Where ark server files will be stored, check the -v above
 $ sudo systemctl daemon-reload
@@ -62,37 +74,44 @@ $ sudo systemctl enable ark-sa-server.service
 $ sudo systemctl start ark-sa-server.service
 ```
 
-To check the status of the service:
+## Admin Tasks
+
+### Check Service Status
 ```bash
 $ sudo systemctl status ark-sa-server.service
 ```
 
-To check the logs of the service:
+### Check Service Logs
 ```bash
 $ sudo journalctl -u ark-sa-server.service
 ```
 
-To stop the service:
+### Start Service
+```bash
+$ sudo systemctl start ark-sa-server.service
+```
+
+### Stop Service
 ```bash
 $ sudo systemctl stop ark-sa-server.service
 ```
 
-To prevent the service from starting on boot:
+### Disable Service - Prevents Service From Starting On Boot
 ```bash
 $ sudo systemctl disable ark-sa-server.service
 ```
-
-To enable the service to start on boot again:
+### Enable Service - Allows Service To Start On Boot
 ```bash
 $ sudo systemctl enable ark-sa-server.service
 ```
 
-To start the service if its stopped:
-```bash
-$ sudo systemctl start ark-sa-server.service
-```
+### Reload Service Unit File
 
 If you modify the service unit file then you will need to reload the daemon:
 ```bash
 $ sudo systemctl daemon-reload
 ```
+
+### Update Configs
+
+To update the configs, you will need to stop the service, update the configs, then start the service again for the server to pick up on the changes. Change environment variables via modifying `/etc/sysconfig/ark-sa-server.env` and change the actual config files as documented in the primary [README](README.md).
