@@ -17,7 +17,7 @@ ExecStart=/usr/bin/docker run \
           -p 27016:27016/udp \
           -p 27021:27021/tcp \
           --env-file /etc/sysconfig/ark-sa-server.env \
-          ark-sa-server:1.0.0
+          johnnyknighten/ark-sa-server:latest
 ExecStop=/usr/bin/docker stop %n
 Restart=always
 RestartSec=10s

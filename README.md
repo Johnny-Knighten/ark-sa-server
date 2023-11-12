@@ -6,7 +6,7 @@ Docker container images for running an ARK Survival Ascended dedicated server.
 
 * Simple automated installation of ARK Survival Ascended (SA) dedicated server
 * Configuration via environment variables and config files
-* Automatic updating of server, but can be frozen to a specific version thats already downloaded
+* Automatic updating of server, but can be frozen to a specific version that is already downloaded
 * Automatic mod deployment, management, and updating
 * Multiple container builds based upon different execution environments
   * Linux Containers
@@ -17,11 +17,11 @@ Docker container images for running an ARK Survival Ascended dedicated server.
 
 ## Automated Builds
 
-Automated builds are made upon successful Pull Requests merges on the `main` and `next` branches via Github Actions. Container images are published to [Docker Hub](https://hub.docker.com/r/johnnyknighten/ark-sa-server).
+Automated builds are made upon successful Pull Requests merges on the `main` and `next` branches via GitHub Actions. Container images are published to [Docker Hub](https://hub.docker.com/r/johnnyknighten/ark-sa-server).
 
 ## Tags
 
-Tags used in this project are focused on the version of the Github release and the execution environment it uses. It is not based on the game/server version or mod versions.
+Tags used in this project are focused on the version of the GitHub release and the execution environment it uses. It is not based on the game/server version or mod versions.
 
 Currently the only execution environment is `wine`, which runs the Windows version of the game server in a Linux container via the wine compatibility layer. More specifically it uses [GloriousEggroll's build of wine](https://github.com/GloriousEggroll/wine-ge-custom) that's based on Valves's [Proton experimental wine repo](https://github.com/ValveSoftware/wine).
 
@@ -56,7 +56,7 @@ $ docker run -d \
   -e ARK_SERVER_NAME="\"Simple ARK SA Server\"" \
   -e ARK_SERVER_ADMIN_PASSWORD=secretpassword \
   -v $HOME/ark-data:/ark-server \
-  ark-sa-server:latest
+  johnnyknighten/ark-sa-server:latest
 ```
 
 To view the container logs:
@@ -95,7 +95,7 @@ docker run -d `
   -e ARK_QUERY_PORT=27016 `
   -e ARK_RCON_PORT=27021 `
   -v /mnt/c/Users/USER/ark-data:/ark-server `
-  ark-sa-server:latest
+  johnnyknighten/ark-sa-server:latest
 ```
 
 To view the container logs:
@@ -141,13 +141,19 @@ Currently the image has been tested with these two setups:
     * 4 Mirrored VDEVs That Are Then Striped (2TB Usable)
     * Test VM Assigned 60GB
 
+Note - All performance testing has been highly informal and based off of my own personal experience with some performance metrics collected over time. Treat these as suggestions rather than hard rules.
+
+### RAM
+
 In both setups an empty server (no players) consumes about 12GB of RAM. With about 6 players (with only 20hrs played - so minimal number of buildings/bases/tamed dinos) I saw RAM usage float around 14GB. For a small private server I think 16GB of RAM would be a good starting place. For a larger server with more players and more time played, I could easily see RAM usage creep up to 20-30+GB.
+
+### CPU
 
 In terms of CPU I didn't see any major CPU usage besides the initial server setup/launch. I would assume a modern CPU with 4 cores should be good enough for a small private server. I cant truly project what large servers would need with the testing performed so far. From the research I have done Ark Survival Evolved benefited from a higher CPU frequency rather than more cores, so I assume the same will be true for Ark Survival Ascended.
 
-Storage wise the wine based image is roughly 1.64GB and the docker volume created is about 9.1GB without any mods or backups. I have only tested on SATA and PCIe 3.0 NVMEs SSD drives, so I cant speak to the performance of spinning rust. In my testing there were no noticeable performance difference between SATA and NVME SSDs. Be prepared to use about 12GB of storage minimum, and plan for more for future server updates, mods, and backups.
+### Storage
 
-Note - All performance testing has been highly informal and based off of my own personal experience with some performance metrics collected over time. Treat these as suggestions rather than hard rules.
+Storage wise the wine based image is roughly 1.64GB and the docker volume created is about 9.1GB without any mods or backups. I have only tested on SATA and PCIe 3.0 NVMEs SSD drives, so I cant speak to the performance of spinning rust. In my testing there were no noticeable performance difference between SATA and NVME SSDs. Be prepared to use about 12GB of storage minimum, and plan for more for future server updates, mods, and backups.
 
 ## Game/Server Configs
 
@@ -205,7 +211,7 @@ version: '3'
 services:
   ark-sa:
     container_name: ark
-    image: ark-sa-server
+    image: johnnyknighten/ark-sa-server:latest
     ...
     volumes:
       - '/mnt/c/Users/johnny/ark-data:/ark-server'
@@ -221,7 +227,7 @@ When using Docker Volumes you have a few options:
   * You will need to copy the config files out of the volume, make your changes, and then copy them back in (will not show an example of this)
   * Another alternative for docker volume usage is to open a bash shell in the container while it is running, install a text editor (current builds don't have them preinstalled), modify the files from there, and then restart the container.
 
-Here is an example example of installing nano in the container and modifying the config file as it runs:
+Here is an example of installing nano in the container and modifying the config file as it runs:
 
 ```bash
 # Open a bash shell in the container (below assumes a single docker container for ARK SA is running) otherwise use `docker ps` to get the container id
@@ -306,7 +312,7 @@ $ docker run -d \
   -e ARK_RCON_ENABLED=True \
   -e ARK_RCON_PORT=27021 \
   -e ARK_MOD_LIST="\"927131, 893657\"" \
-  ark-sa-server:1.0.0
+  johnnyknighten/ark-sa-server:1.0.0
 ```
 
 ### Docker Run + Systemd
@@ -323,7 +329,7 @@ version: '3'
 services:
   ark-sa:
     container_name: ark
-    image: ark-sa-server
+    image: johnnyknighten/ark-sa-server:latest
     restart: unless-stopped
     environment:
       - ARK_SERVER_NAME="Simple ARK SA Server"

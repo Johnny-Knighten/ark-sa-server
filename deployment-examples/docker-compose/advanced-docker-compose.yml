@@ -3,7 +3,7 @@ version: '3'
 services:
   ark-sa:
     container_name: ark
-    image: ark-sa-server
+    image: johnnyknighten/ark-sa-server:latest
     restart: unless-stopped
     environment:
       - ARK_GAME_PORT=8888
