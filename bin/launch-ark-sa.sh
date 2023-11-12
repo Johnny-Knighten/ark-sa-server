@@ -9,7 +9,6 @@ CMD_ARGS+="?SessionName=$ARK_SERVER_NAME"
 CMD_ARGS+="?Port=$ARK_GAME_PORT"
 CMD_ARGS+="?QueryPort=$ARK_QUERY_PORT"
 CMD_ARGS+="?ServerPVE=$ARK_ENABLE_PVE"
-CMD_ARGS+="?MaxPlayers=$ARK_MAX_PLAYERS"
 
 if [[ "$ARK_ENABLE_RCON" = "True" ]]; then
   CMD_ARGS+="?RCONEnabled=$ARK_ENABLE_RCON?RCONPort=$ARK_RCON_PORT"
@@ -39,6 +38,8 @@ else
   EPIC_IP_FLAG=""
 fi
 
+PLAYER_COUNT_FLAG="-WinLiveMaxPlayers=$ARK_MAX_PLAYERS"
+
 # remove all whitespace from ARK_MOD_LIST
 ARK_MOD_LIST="$(echo -e "$ARK_MOD_LIST" | tr -d '[:space:]')"
 
@@ -48,7 +49,7 @@ else
   MOD_ARGS=""
 fi
 
-xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe $CMD_ARGS -log $BATTLE_EYE_FLAG $EPIC_IP_FLAG $MOD_ARGS $ARK_EXTRA_LAUNCH_OPTIONS &> proton-wine.log &
+xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe $CMD_ARGS -log $BATTLE_EYE_FLAG $EPIC_IP_FLAG $PLAYER_COUNT_FLAG $MOD_ARGS $ARK_EXTRA_LAUNCH_OPTIONS &> proton-wine.log &
 
 log_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
 timeout=300 
