@@ -1,6 +1,6 @@
 FROM steamcmd/steamcmd:ubuntu-22
 
-LABEL MAINTAINER="https://github.com/Johnny-Knighten"
+LABEL maintainer="https://github.com/Johnny-Knighten"
 
 ENV DEBUG=false \
     CONTAINER_BIN_DIR="/opt/ark-sa-container/bin" \
@@ -25,18 +25,20 @@ ENV DEBUG=false \
     ARK_NO_BATTLEYE=True \
     ARK_EPIC_PUBLIC_IP= \
     ARK_MULTI_HOME= \
-    ARK_ENABLE_PVE=False
+    ARK_ENABLE_PVE=False\
+    TEST_DRY_RUN=False
 
 RUN set -x && \
     apt-get update && \
-    apt-get install -y  wget \
-                        xz-utils \
-                        xvfb && \
+    apt-get install --no-install-recommends -y  \
+                        wget=1.21.2-2ubuntu1 \
+                        xz-utils=5.2.5-2ubuntu1 \
+                        xvfb=2:21.1.4-2ubuntu1.7~22.04.2 && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll
 RUN PROTON_GE_FILE="$PROTON_GE_VAR-$PROTON_GE_VER-$PROTON_GE_ARCH" && \
-    wget "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/$PROTON_GE_VER/$PROTON_GE_FILE.tar.xz" && \
+    wget -q "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/$PROTON_GE_VER/$PROTON_GE_FILE.tar.xz" && \
     tar -xvf "$PROTON_GE_FILE.tar.xz" && \
     mkdir -p ~/.proton && \
     mv "lutris-$PROTON_GE_VER-$PROTON_GE_ARCH" ./proton && \
@@ -52,5 +54,5 @@ EXPOSE 7778/udp
 EXPOSE 27015/udp
 EXPOSE 27020/tcp
 
-ENTRYPOINT "${CONTAINER_BIN_DIR}/docker-entrypoint.sh"
+ENTRYPOINT ["/opt/ark-sa-container/bin/docker-entrypoint.sh"]
 CMD []
