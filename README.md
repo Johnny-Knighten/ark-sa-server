@@ -1,12 +1,12 @@
 # ARK Survival Ascended Server - Docker Containers
 
-Docker containers for running an ARK Survival Ascended dedicated server.
+Docker container images for running an ARK Survival Ascended dedicated server.
 
 ## Features
 
 * Simple automated installation of ARK Survival Ascended (SA) dedicated server
 * Configuration via environment variables and config files
-* Automatic updating of server, but can frozen to a specific version
+* Automatic updating of server, but can be frozen to a specific version thats already downloaded
 * Automatic mod deployment, management, and updating
 * Multiple container builds based upon different execution environments
   * Linux Containers
@@ -17,11 +17,11 @@ Docker containers for running an ARK Survival Ascended dedicated server.
 
 ## Automated Builds
 
-Automated builds are made upon successful Pull Requests on the `main` branch via Github Actions and are available on [Docker Hub]().
+Automated builds are made upon successful Pull Requests merges on the `main` and `next` branches via Github Actions. Container images are published to [Docker Hub](https://hub.docker.com/r/johnnyknighten/ark-sa-server).
 
 ## Tags
 
-Tags used in this project are focused on the version of the container release and the execution environment it uses. It is not based on the game/server version or mod versions.
+Tags used in this project are focused on the version of the Github release and the execution environment it uses. It is not based on the game/server version or mod versions.
 
 Currently the only execution environment is `wine`, which runs the Windows version of the game server in a Linux container via the wine compatibility layer. More specifically it uses [GloriousEggroll's build of wine](https://github.com/GloriousEggroll/wine-ge-custom) that's based on Valves's [Proton experimental wine repo](https://github.com/ValveSoftware/wine).
 
@@ -32,11 +32,21 @@ Currently the only execution environment is `wine`, which runs the Windows versi
 | major.minor.fix | semantic versioned releases, defaults to the `wine` execution environment  | `1.0.0` |
 | major.minor.fix-{execution environment} | semantic versioned releases for a specific execution environment | `1.0.0-wine` |
 
+There are also pre-release tags that are built from the `next` branch. These are used for testing and are not recommended for production use.
+
 ## Quick Start
 
-The command below will run the latest version of the ARK SA Server in a Linux container using `wine`. It will expose the default ports needed for the game server and RCON. It will also set the server name and admin password. Since no volume is specified, the server data will be stored in docker volume with a random name. See the [Environment Variables](#environment-variables) section for more details about the other environment variables and their defaults.
+The commands below will run the latest version of the ARK SA Server in a Linux container using `wine`. It will expose the default ports needed for the game server and RCON. It will also set the server name and admin password. 
+
+**Note - I do not recommend using this approach unless you just want something quick and dirty. See the [Deployment](#deployment) section for more details on how to deploy the server in a more production ready manner. I highly recommend docker compose for its simplicity.**
+
+### Linux Host
+
+The ark server data in this example will be stored in the current users home directory under `/home/USER/ark-data`. 
 
 ```bash
+# written for bash, but should work in other shells
+# may require Sudo depending on your docker setup
 $ docker run -d \
   --name ark-sa-server \
   -p 7777:7777/udp \
@@ -45,6 +55,7 @@ $ docker run -d \
   -p 27020:27020/tcp \
   -e ARK_SERVER_NAME="\"Simple ARK SA Server\"" \
   -e ARK_SERVER_ADMIN_PASSWORD=secretpassword \
+  -v $HOME/ark-data:/ark-server \
   ark-sa-server:latest
 ```
 
@@ -64,7 +75,53 @@ $ docker stop ark-sa-server
 
 Note - When setting `ARK_SERVER_NAME` in the docker run command, you must escape the quotes with a backslash. This is because the value is passed to the server as a command line argument and the quotes are needed to keep the name together. When using docker compose, the escaped quotes are not needed and standard quotes are good enough.
 
+### Windows Host
+
+This code is written for PowerShell, but assumes you are running Docker via WSL. If you installed Docker via Docker Desktop recently then you should be good to go. The volume mount path is written in context of a Linux shell in WSL, so you will need to adjust it to match your system.
+
+For instance if you want to use `C:\Users\johnny\ark-data` then the WSL path should be `/mnt/c/Users/johnny/ark-data`. In general `/mnt/c` is the root of your C drive in WSL, and `/mnt/d` is the root of your D drive in WSL and so on.
+
+```powershell
+# written for powershell, but should work in other shells
+docker run -d `
+  --name ark-sa-server `
+  -p 8888:8888/udp `
+  -p 8889:8889/udp `
+  -p 27016:27016/udp `
+  -p 27021:27021/tcp `
+  -e ARK_SERVER_NAME="Simple ARK SA Server" `
+  -e ARK_SERVER_ADMIN_PASSWORD=secretpassword `
+  -e ARK_GAME_PORT=8888 `
+  -e ARK_QUERY_PORT=27016 `
+  -e ARK_RCON_PORT=27021 `
+  -v /mnt/c/Users/USER/ark-data:/ark-server `
+  ark-sa-server:latest
+```
+
+To view the container logs:
+
+```bash
+docker logs ark-sa-server -f
+```
+
+Press `CTRL+C` to exit the logs output.
+
+To stop the container:
+  
+```bash
+docker stop ark-sa-server
+```
+
 ## System Requirements
+
+You should consider running this on another device besides your gaming PC, unless you have RAM to spare.
+
+General Minimum Spec Recommendation (For Server Only):
+* 16GB of RAM
+* 4 Cores Modern CPU
+* 20GB of Storage (SSD Recommended)
+
+### Performance Testing
 
 Currently the image has been tested with these two setups:
 
@@ -90,15 +147,13 @@ In terms of CPU I didn't see any major CPU usage besides the initial server setu
 
 Storage wise the wine based image is roughly 1.64GB and the docker volume created is about 9.1GB without any mods or backups. I have only tested on SATA and PCIe 3.0 NVMEs SSD drives, so I cant speak to the performance of spinning rust. In my testing there were no noticeable performance difference between SATA and NVME SSDs. Be prepared to use about 12GB of storage minimum, and plan for more for future server updates, mods, and backups.
 
-Note - All performance testing has been highly informal and based off of my own personal experience with some performance metrics collected over time. Treat these a suggestions rather than hard rules.
+Note - All performance testing has been highly informal and based off of my own personal experience with some performance metrics collected over time. Treat these as suggestions rather than hard rules.
 
 ## Game/Server Configs
 
 ### Environment Variables
 
-Environment variables are the primary way to configure the server itself. They are used to set things such as: the server name, admin password, ports, and more. 
-
-For configurations such as XP/Gathering/Taming rates and player stats, you will need to use config files. See the [Config Files](#config-files) section for more details.
+Environment variables are the primary way to configure the server itself. For configurations such as XP/Gathering/Taming rates and player stats, you will need to use config files. See the [Config Files](#config-files) section for more details.
 
 The table below shows all the available environment variables and their default values.
 
@@ -106,7 +161,7 @@ The table below shows all the available environment variables and their default 
 | --- | --- | :---: |
 | `STEAMCMD_SKIP_VALIDATION` | Skips SteamCMD validation of the server files. Can speed up server start time, but could risk not detecting corrupted files. | `False` |
 | `ARK_PREVENT_AUTO_UPDATE` | Prevents the server from automatically updating. If you do need to update after having this set to `True`, then flip the Value to `False` then restart the container. Afterwards, set it back to `True` and restart again to prevent any further updates. | `False` |
-| `ARK_SERVER_NAME` | Name of the server that appears in the server list GUI. If the name contains a space wrap the name in quotes, depending on your system you may need to add escaped quotes `\"`. | `"ARK SA Server"` |
+| `ARK_SERVER_NAME` | Name of the server that appears in the server list. If the name contains a space wrap the name in quotes, depending on your system you may need to add escaped quotes `\"`. | `"ARK SA Server"` |
 | `ARK_SERVER_PASSWORD` | Password to login to the server. Defaults to no password aka a public server. **Do not put spaces in your password.** | EMPTY |
 | `ARK_SERVER_ADMIN_PASSWORD `| Password for the server admin. Also used for RCON access. **Do not put spaces in your password.** | `adminpassword` |
 | `ARK_GAME_PORT` | Primary game port. This port +1 will also be used. | `7777` |
@@ -114,19 +169,57 @@ The table below shows all the available environment variables and their default 
 | `ARK_RCON_ENABLED` | Enable RCON on the server. | `True` |
 | `ARK_RCON_PORT`| RCON port for the server. | `27020` |
 | `ARK_MAP` | Map launched on the server. | `TheIsland_WP` |
-| `ARK_MAX_PLAYERS`| Maximum number of players allowed on the server. **This does not currently work, seems to always reset it self to 70. Others have reported the same issue in general with the dedicated server.** | `70` |
+| `ARK_MAX_PLAYERS`| Maximum number of players allowed on the server. | `70` |
 | `ARK_ENABLE_PVE`| Enable PvE mode, otherwise it is a PvPvE. |`False`|
 | `ARK_NO_BATTLEYE` | Disables BattlEye on the server. | `True` |
 | `ARK_EXTRA_LAUNCH_OPTIONS`  | Extra launch options for the server. Allows additional flags that do not have an environment variable provided yet. | EMPTY |
 | `ARK_MOD_LIST` | Comma separated list of mod ids to install. Needs to be wrapped in quotes and whitespace can appear before or after commas. | EMPTY |
-| `ARK_EPIC_PUBLIC_IP` | Public IP of the server, used by Epic game clients. | EMPTY |
-| `ARK_MULTI_HOME_SERVER` | Enable multi home server. | EMPTY |
+| `ARK_EPIC_PUBLIC_IP` | Public IP address of the server, used by Epic game clients. | EMPTY |
+| `ARK_MULTI_HOME_SERVER` | Provide your public IP address when hosting multiple servers on the same machine. | EMPTY |
 
 ### Config Files
 
-Configuration files are primarily used to adjust settings such as such as XP/Gathering/Taming rates and player stats.  The config files are located in the `/ark-server/ShooterGame/Saved/Config/WindowsServer` directory and the primary file you will modify is `GameUserSettings.ini`. The config files are generated on container start, so if you need to make changes to them you will need to restart the container. If you delete the config file a new one will be generated on server start using default values.
+Configuration files are primarily used to adjust settings such as such as XP/Gathering/Taming rates and player stats.  The config files are located in the `/ark-server/ShooterGame/Saved/Config/WindowsServer` directory inside the container and the primary file you will modify is `GameUserSettings.ini`. The config files are generated on container start, so if you need to make changes to them you will need to restart the container. If you delete the config file a new one will be generated on server start using default values.
 
-If you use a bind mount to attach to /ark-server, you can modify the config files directly on the host. If you use a docker volume, you will need to copy the config files out of the volume, make your changes, and then copy them back into the volume. Another alternative for docker volume usage is to open a bash shell in the container while it is running, install a text editor (current builds don't have them preinstalled), modify the files from there, and then restart the container.
+#### Using Bind Mounts
+
+If you use a bind mount to attach to /ark-server, you can modify the config files directly on the host.
+
+**I recommend this approach for those not experienced with Docker. It will allow you to modify files directly with applications such as notepad.**
+
+Bind mounts are when you mount a directory from your host and map it to a directory inside of the container. From a Windows perspective, this is like picking a folder on your computer to store you server data and mapping that folder into the container.
+
+Below is an example of using a bind mount with docker run. This is mapping the `C:\Users\johnny\ark-data ` folder to the containers /ark-server directory:
+
+```bash
+$ docker run -d \
+  ...
+  -v /mnt/c/Users/johnny/ark-data:/ark-server \
+  ...
+```
+
+In docker compose it would look like:
+```yaml
+---
+version: '3'
+services:
+  ark-sa:
+    container_name: ark
+    image: ark-sa-server
+    ...
+    volumes:
+      - '/mnt/c/Users/johnny/ark-data:/ark-server'
+    ...
+```
+#### Using Docker Volumes
+
+When using Docker Volumes you have a few options:
+* If using Docker Desktop
+  * You can use the Docker Desktop UI to manage the volume
+    * Find the container then go to the files section and modify files from there (right click Edit File)
+* If using Bash/Powershell
+  * You will need to copy the config files out of the volume, make your changes, and then copy them back in (will not show an example of this)
+  * Another alternative for docker volume usage is to open a bash shell in the container while it is running, install a text editor (current builds don't have them preinstalled), modify the files from there, and then restart the container.
 
 Here is an example example of installing nano in the container and modifying the config file as it runs:
 
@@ -135,21 +228,23 @@ Here is an example example of installing nano in the container and modifying the
 $ docker exec -it $(docker ps -q --filter "ancestor=ark-sa-server") bash
 
 # Now your inside the container
-root@CONTAINER_ID:/ark-server# apt-get update && apt-get install nano
-root@CONTAINER_ID:/ark-server# nano ./server/ShooterGame/Saved/Config/WindowsServer/GameUserSettings.ini
-root@CONTAINER_ID:/ark-server# exit
+root@CONTAINER_ID:/ark-server$ apt-get update && apt-get install nano
+root@CONTAINER_ID:/ark-server$ nano ./server/ShooterGame/Saved/Config/WindowsServer/GameUserSettings.ini
+root@CONTAINER_ID:/ark-server$ exit
 
 # Now restart the container
 $ docker restart $(docker ps -q --filter "ancestor=ark-sa-server")
 ```
 
-An easy way to find what config files you want to modify/set is to start a single player ARK SA game and configure it as you would want your dedicated server to be setup. Then go to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Saved\Config\Windows` and take a look through the .ini files in that directory. The main file of interest will be `GameUserSettings.ini`. You can also look at the other .ini files to see what other settings are available to you. Then either copy entire ini files into your server config folder or just copy the specific settings you want to change inside the specific ini file on the server.
+#### Finding Config Settings You Want To Change
+
+An easy way to find what config files you want to modify/set is to start a single player ARK SA game and configure it as you would want your dedicated server to be setup. Then go to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Saved\Config\Windows` and take a look through the .ini files in that directory. The main file of interest will be `GameUserSettings.ini`. You can also look at the other .ini files to see what other settings are available to you. Then either copy entire ini files into your server config folder or just copy the specific settings you want to change.
 
 Note - Some of the environment variable settings will also be copied into the config files, such as the server name and passwords. If you manually change these fields in the config file, make sure to also update the environment variables to match otherwise you may experience issues.
 
 ### Mods
 
-Mods are handled via the `ARK_MOD_LIST` environment variable. The variable is a comma separated list of mod ids to install. The mod ids list need to be wrapped in quotes, and there can be white space before/after commas since all whitespace in the quotes will be removed. Right now if you are lucky the mod author will put the id in there mod description, but not all authors do this. An alternative way to get mod ids is by installing them on your local machine then going to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Binaries\Win64\ShooterGame\Mods\RANDOM#` and look at the subdirectories' name. The first number before the `_` in the subdirectories name is the mod id. 
+Mods are handled via the `ARK_MOD_LIST` environment variable. The variable is a comma separated list of mod ids to install. The mod ids list need to be wrapped in quotes, and white space is allowed before/after commas since all whitespace in the quotes will be removed. Right now, if you are lucky, the mod author will put the id in there mod description. An alternative way to get mod ids is by installing them on your local machine then going to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Binaries\Win64\ShooterGame\Mods\RANDOM#` and look at the subdirectories' name. The first number before the `_` in the subdirectories name is the mod id. 
 
 ### Exposed Ports
 
@@ -162,14 +257,25 @@ The table below shows the default ports that are exposed by the container. These
 | 27015 | UDP | Steam query port |
 | 27020 | TCP | RCON Port |
 
-Note - Always ensure that your `-p` port mappings in docker run and the `ports` section of your docker compose match up to the ports specified via the environment variables. If they do not match up, the server will not be accessible.
+Note - Always ensure that your `-p` port mappings if using docker run and the `ports` section of your docker compose match up to the ports specified via the environment variables. If they do not match up, the server will not be accessible.
+
+#### Port Forwarding
+
+Regardless if you use the default ports or specify custom ones, you must setup port forwarding on your router to allow incoming connections to the server. You may also need to setup firewall rules on your host machine to allow incoming connections to the server.
+
+This [guide](https://www.lifewire.com/how-to-port-forward-4163829) is a very high level overview of port forwarding and may be a good starting point if you are new to port forwarding.
+
+There are too many different routers and firewall setups to provide a single guide for port forwarding. If you need help with port forwarding, I would recommend searching for a guide for your specific router and setup.
+
+**Make sure you understand the security implications of opening ports on your router and firewall. If you are unsure, I would recommend buying hosting instead of taking the risk. When opening ports there is always a chance you could end up exposing your computer to bad actors("hackers").**
 
 ### Volumes
+
+Right now only one volume is used by the image. This volume is used to store the server data and mods. 
 
 | Volume | Description |
 | --- | --- |
 | /ark-server | The directory where the server/mod data is stored |
-
 
 ## Deployment
 
@@ -180,6 +286,7 @@ Docker run is mainly good for one off deployments or testing. It is not recommen
 Below is an example of starting an instance of the ARK SA Server using docker run that has more configuration options than the quick start example.
 
 ```bash
+# written for bash, but should work in other shells
 $ docker run -d \
   --name ark-sa-server \
   -p 8888:8888/udp \
@@ -269,6 +376,4 @@ volumes:
 
 ## Contributing
 
-If you notice any issues feel free to submit a PR or open an issue. If you have any questions or need help feel free to open an issue as well.
-
-If anyone wants to help with the devolvement and maintenance of this project, just reach out to me. I am always looking for help and would love to have some people to work with on this project.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute to this project.
