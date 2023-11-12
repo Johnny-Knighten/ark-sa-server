@@ -2,6 +2,40 @@
 
 Docker container images for running an ARK Survival Ascended dedicated server.
 
+# Table of Contents
+
+
+* [Features](#features)
+* [Quick Start](#quick-start)
+   - [Linux Host](#linux-host)
+   - [Windows Host](#windows-host)
+* [System Requirements](#system-requirements)
+* [Game/Server Configs](#gameserver-configs)
+   - [Environment Variables](#environment-variables)
+   - [Config Files](#config-files)
+     - [Using Bind Mounts](#using-bind-mounts)
+     - [Using Docker Volumes](#using-docker-volumes)
+     - [Finding Config Settings](#finding-config-settings)
+   - [Mods](#mods)
+* [Deployment](#deployment)
+   - [Container Specific Deployment Details](#container-specific-deployment-details)
+     - [Exposed Ports](#exposed-ports)
+       - [Port Forwarding](#port-forwarding)
+     - [Volumes](#volumes)
+   - [Docker Run](#docker-run)
+   - [Docker Run + Systemd](#docker-run--systemd)
+   - [Docker Compose](#docker-compose)
+* [Performance Testing](#performance-testing)
+   - [RAM](#ram)
+   - [CPU](#cpu)
+   - [Storage](#storage)
+* [Automated Builds](#automated-builds)
+* [Tags](#tags)
+* [Known Issues](#known-issues)
+* [Roadmap/Future Features](#roadmapfuture-features)
+* [Shout Outs](#shout-outs)
+* [Contributing](#contributing)
+
 ## Features
 
 * Simple automated installation of ARK Survival Ascended (SA) dedicated server
@@ -15,26 +49,9 @@ Docker container images for running an ARK Survival Ascended dedicated server.
   * Windows Containers
     * Windows ARK SA server (Planned)
 
-## Automated Builds
-
-Automated builds are made upon successful Pull Requests merges on the `main` and `next` branches via GitHub Actions. Container images are published to [Docker Hub](https://hub.docker.com/r/johnnyknighten/ark-sa-server).
-
-## Tags
-
-Tags used in this project are focused on the version of the GitHub release and the execution environment it uses. It is not based on the game/server version or mod versions.
-
-Currently the only execution environment is `wine`, which runs the Windows version of the game server in a Linux container via the wine compatibility layer. More specifically it uses [GloriousEggroll's build of wine](https://github.com/GloriousEggroll/wine-ge-custom) that's based on Valves's [Proton experimental wine repo](https://github.com/ValveSoftware/wine).
-
-| Tag | Description | Examples |
-| ---| --- | :---: |
-| latest | latest build from `main` branch, defaults to the `wine` execution environment| `latest` |
-| latest-{execution environment} | latest build from `main` branch for a specific execution environment | `latest-wine` |
-| major.minor.fix | semantic versioned releases, defaults to the `wine` execution environment  | `1.0.0` |
-| major.minor.fix-{execution environment} | semantic versioned releases for a specific execution environment | `1.0.0-wine` |
-
-There are also pre-release tags that are built from the `next` branch. These are used for testing and are not recommended for production use.
-
 ## Quick Start
+
+It is assumed you already have Docker installed on your host machine. See [here](https://docs.docker.com/engine/install/) for instructions on how to install Docker on your host machine.
 
 The commands below will run the latest version of the ARK SA Server in a Linux container using `wine`. It will expose the default ports needed for the game server and RCON. It will also set the server name and admin password. 
 
@@ -121,39 +138,7 @@ General Minimum Spec Recommendation (For Server Only):
 * 4 Cores Modern CPU
 * 20GB of Storage (SSD Recommended)
 
-### Performance Testing
-
-Currently the image has been tested with these two setups:
-
-* Setup 1
-  * Windows 11 Pro
-  * CPU - AMD Ryzen 9 3950X
-  * RAM - 64GB DDR4 @ 3200Mhz
-  * Storage - 2TB PCIe 3.0 NVMe SSD
-* Setup 2
-  * ProxMox Host
-    * Test VM Ubuntu 22.04
-  * CPU - 2x Intel Xeon Gold 6146
-    * Test VM Assigned 4 Host Cores
-  * RAM - 768GB DDR4 @ 3200Mhz
-    * Test VM Assigned 32GB
-  * VM Storage - 8 x 512GB SATA SSDs in 
-    * 4 Mirrored VDEVs That Are Then Striped (2TB Usable)
-    * Test VM Assigned 60GB
-
-Note - All performance testing has been highly informal and based off of my own personal experience with some performance metrics collected over time. Treat these as suggestions rather than hard rules.
-
-### RAM
-
-In both setups an empty server (no players) consumes about 12GB of RAM. With about 6 players (with only 20hrs played - so minimal number of buildings/bases/tamed dinos) I saw RAM usage float around 14GB. For a small private server I think 16GB of RAM would be a good starting place. For a larger server with more players and more time played, I could easily see RAM usage creep up to 20-30+GB.
-
-### CPU
-
-In terms of CPU I didn't see any major CPU usage besides the initial server setup/launch. I would assume a modern CPU with 4 cores should be good enough for a small private server. I cant truly project what large servers would need with the testing performed so far. From the research I have done Ark Survival Evolved benefited from a higher CPU frequency rather than more cores, so I assume the same will be true for Ark Survival Ascended.
-
-### Storage
-
-Storage wise the wine based image is roughly 1.64GB and the docker volume created is about 9.1GB without any mods or backups. I have only tested on SATA and PCIe 3.0 NVMEs SSD drives, so I cant speak to the performance of spinning rust. In my testing there were no noticeable performance difference between SATA and NVME SSDs. Be prepared to use about 12GB of storage minimum, and plan for more for future server updates, mods, and backups.
+Note - Treat these as suggestions rather than hard rules. These recommendations are based on informal performance testing with some metrics collected over time. See the [Performance Testing](#performance-testing) section for more details.
 
 ## Game/Server Configs
 
@@ -248,11 +233,17 @@ An easy way to find what config files you want to modify/set is to start a singl
 
 Note - Some of the environment variable settings will also be copied into the config files, such as the server name and passwords. If you manually change these fields in the config file, make sure to also update the environment variables to match otherwise you may experience issues.
 
+
+
 ### Mods
 
 Mods are handled via the `ARK_MOD_LIST` environment variable. The variable is a comma separated list of mod ids to install. The mod ids list need to be wrapped in quotes, and white space is allowed before/after commas since all whitespace in the quotes will be removed. Right now, if you are lucky, the mod author will put the id in there mod description. An alternative way to get mod ids is by installing them on your local machine then going to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Binaries\Win64\ShooterGame\Mods\RANDOM#` and look at the subdirectories' name. The first number before the `_` in the subdirectories name is the mod id. 
 
-### Exposed Ports
+## Deployment
+
+### Container Specific Deployment Details
+
+#### Exposed Ports
 
 The table below shows the default ports that are exposed by the container. These can be changed by setting the environment variables `ARK_GAME_PORT`, `ARK_QUERY_PORT`, and `ARK_RCON_PORT`.
 
@@ -265,7 +256,7 @@ The table below shows the default ports that are exposed by the container. These
 
 Note - Always ensure that your `-p` port mappings if using docker run and the `ports` section of your docker compose match up to the ports specified via the environment variables. If they do not match up, the server will not be accessible.
 
-#### Port Forwarding
+##### Port Forwarding
 
 Regardless if you use the default ports or specify custom ones, you must setup port forwarding on your router to allow incoming connections to the server. You may also need to setup firewall rules on your host machine to allow incoming connections to the server.
 
@@ -275,15 +266,13 @@ There are too many different routers and firewall setups to provide a single gui
 
 **Make sure you understand the security implications of opening ports on your router and firewall. If you are unsure, I would recommend buying hosting instead of taking the risk. When opening ports there is always a chance you could end up exposing your computer to bad actors("hackers").**
 
-### Volumes
+#### Volumes
 
 Right now only one volume is used by the image. This volume is used to store the server data and mods. 
 
 | Volume | Description |
 | --- | --- |
 | /ark-server | The directory where the server/mod data is stored |
-
-## Deployment
 
 ### Docker Run
 
@@ -344,6 +333,57 @@ services:
 volumes:
   ark-files:
 ```
+
+## Performance Testing
+
+Currently the image has been tested with these two setups:
+
+* Setup 1
+  * Windows 11 Pro
+  * CPU - AMD Ryzen 9 3950X
+  * RAM - 64GB DDR4 @ 3200Mhz
+  * Storage - 2TB PCIe 3.0 NVMe SSD
+* Setup 2
+  * ProxMox Host
+    * Test VM Ubuntu 22.04
+  * CPU - 2x Intel Xeon Gold 6146
+    * Test VM Assigned 4 Host Cores
+  * RAM - 768GB DDR4 @ 3200Mhz
+    * Test VM Assigned 32GB
+  * VM Storage - 8 x 512GB SATA SSDs in 
+    * 4 Mirrored VDEVs That Are Then Striped (2TB Usable)
+    * Test VM Assigned 60GB
+
+### RAM
+
+In both setups an empty server (no players) consumes about 12GB of RAM. With about 6 players (with only 20hrs played - so minimal number of buildings/bases/tamed dinos) I saw RAM usage float around 14GB. For a small private server I think 16GB of RAM would be a good starting place. For a larger server with more players and more time played, I could easily see RAM usage creep up to 20-30+GB.
+
+### CPU
+
+In terms of CPU I didn't see any major CPU usage besides the initial server setup/launch. I would assume a modern CPU with 4 cores should be good enough for a small private server. I cant truly project what large servers would need with the testing performed so far. From the research I have done Ark Survival Evolved benefited from a higher CPU frequency rather than more cores, so I assume the same will be true for Ark Survival Ascended.
+
+### Storage
+
+Storage wise the wine based image is roughly 1.64GB and the docker volume created is about 9.1GB without any mods or backups. I have only tested on SATA and PCIe 3.0 NVMEs SSD drives, so I cant speak to the performance of spinning rust. In my testing there were no noticeable performance difference between SATA and NVME SSDs. Be prepared to use about 12GB of storage minimum, and plan for more for future server updates, mods, and backups.
+
+## Automated Builds
+
+Automated builds are made upon successful Pull Requests merges on the `main` and `next` branches via GitHub Actions. Container images are published to [Docker Hub](https://hub.docker.com/r/johnnyknighten/ark-sa-server).
+
+## Tags
+
+Tags used in this project are focused on the version of the GitHub release and the execution environment it uses. It is not based on the game/server version or mod versions.
+
+Currently the only execution environment is `wine`, which runs the Windows version of the game server in a Linux container via the wine compatibility layer. More specifically it uses [GloriousEggroll's build of wine](https://github.com/GloriousEggroll/wine-ge-custom) that's based on Valves's [Proton experimental wine repo](https://github.com/ValveSoftware/wine).
+
+| Tag | Description | Examples |
+| ---| --- | :---: |
+| latest | latest build from `main` branch, defaults to the `wine` execution environment| `latest` |
+| latest-{execution environment} | latest build from `main` branch for a specific execution environment | `latest-wine` |
+| major.minor.fix | semantic versioned releases, defaults to the `wine` execution environment  | `1.0.0` |
+| major.minor.fix-{execution environment} | semantic versioned releases for a specific execution environment | `1.0.0-wine` |
+
+There are also pre-release tags that are built from the `next` branch. These are used for testing and are not recommended for production use.
 
 ## Known Issues
 
