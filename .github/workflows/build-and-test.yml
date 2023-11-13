@@ -153,4 +153,29 @@ jobs:
           -e ARK_ENABLE_PVE=True \
           johnnyknighten/ark-sa-server:latest)
         echo $OUTPUT | grep -q "ServerPVE=True"
+
+    - name: Test ARK_ENABLE_RCON env var flag (True) (Default Port)
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_ENABLE_RCON=True \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "?RCONEnabled=True?RCONPort=27015"
+
+    - name: Test ARK_ENABLE_RCON env var flag (True) (Non Default Port)
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_ENABLE_RCON=True \
+          -e ARK_RCON_PORT=12345 \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "?RCONEnabled=True?RCONPort=12345"
+
+    - name: Test ARK_ENABLE_RCON env var flag (False)
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_ENABLE_RCON=False \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "?RCONEnabled=False"
   
