@@ -248,3 +248,11 @@ jobs:
           -e ARK_EPIC_PUBLIC_IP=192.168.1.2 \
           johnnyknighten/ark-sa-server:latest)
         echo $OUTPUT | grep -qv "--PublicIPforEpic"
+
+    - name: Test ARK_MAX_PLAYERS env var
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_MAX_PLAYERS=25 \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "-WinLiveMaxPlayers=25"
