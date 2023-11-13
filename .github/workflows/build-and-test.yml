@@ -105,3 +105,11 @@ jobs:
           -e STEAMCMD_SKIP_VALIDATION=True \
           johnnyknighten/ark-sa-server:latest)
         echo $OUTPUT | grep -q "SteamCMD Will Not Validate Ark SA Server Files"
+
+    - name: Test STEAMCMD_SKIP_VALIDATION env var flag
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_MAP="Not_TheIsland_WP" \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "Not_TheIsland_WP"
