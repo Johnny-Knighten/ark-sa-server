@@ -151,3 +151,36 @@ act pull_request --secret-file ./cicd-test/my.secrets -e ./cicd-test/events/pr-s
 ```bash
 act pull_request --secret-file ./cicd-test/my.secrets -e ./cicd-test/events/pr-close.json --reuse
 ```
+
+### Workflow - Release
+
+Triggered on:
+* `push` to `main` or `next` branches
+  * We will rely on branch rules to ensure `main` and `next` branches are protected from pushes and require PRs to add new commits to those branches
+  * Successful PR merges result in a push to either branch
+
+Goal:
+* Trigger a release on GitHub and push new Docker images to DockerHub
+
+See [.github/workflows/release.yml](./.github/workflows/release.yml) for exact details
+
+
+Note if you want to verify releases on the `main`/`next` branch temporally rename your branch to `main`/`next` and then rename it back to to its original when done. The actions/checkout@v3 action will copy your current working copy of your code into the container. So if you are on the `main`/`next` branch when you run the action it will run semantic-release as it being on the `main`/`next`.
+
+#### Test - PR Merge To Main Branch 
+
+```bash
+act push --secret-file ./cicd-test/my.secrets -e ./cicd-test/events/push-to-main-branch.json --reuse
+``` 
+
+#### Test - PR Merge To Next Branch
+
+```bash
+act push --secret-file ./cicd-test/my.secrets -e ./cicd-test/events/push-to-next-branch.json --reuse
+``` 
+
+
+#### Test - PR Merge To Feature Branch (Should Not Trigger Release)
+```bash
+act push --secret-file ./cicd-test/my.secrets -e ./cicd-test/events/push-to-feature-branch.json --reuse
+``` 
