@@ -60,3 +60,40 @@ jobs:
           --entrypoint wget \
           johnnyknighten/ark-sa-server:latest \
           --version
+
+    - name: Test xz-utils is installed
+      run: |
+        docker run --rm \
+          --entrypoint xz \
+          johnnyknighten/ark-sa-server:latest \
+          --version
+
+    - name: Test xz-utils is installed
+      run: |
+          docker run --rm \
+            --entrypoint xvfb-run \
+            johnnyknighten/ark-sa-server:latest \
+            -h
+
+    - name: Test ge-wine-proton is directory present
+      run: |
+        docker run --rm \
+          --entrypoint test \
+          johnnyknighten/ark-sa-server:latest \
+          -d /opt/glorious_eggroll/proton
+
+    - name: Test ge-wine-proton wine executable is present
+      run: |
+        docker run --rm \
+          --entrypoint test \
+          johnnyknighten/ark-sa-server:latest \
+          -f /opt/glorious_eggroll/proton/bin/wine
+          
+    - name: Test ensure ark-sa-container/bin content is present
+      run: |
+        docker run --rm \
+          --entrypoint bash \
+          johnnyknighten/ark-sa-server:latest \
+          -c "test -f /opt/ark-sa-container/bin/docker-entrypoint.sh && \
+              test -f /opt/ark-sa-container/bin/launch-ark-sa.sh && \
+              test -f /opt/ark-sa-container/bin/steam-cmd-install.sh"
