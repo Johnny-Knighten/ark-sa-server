@@ -145,4 +145,12 @@ jobs:
           -e ARK_SERVER_NAME="Test Server" \
           johnnyknighten/ark-sa-server:latest)
         echo $OUTPUT | grep -q "Test Server"
+
+    - name: Test ARK_ENABLE_PVE env var flag
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_ENABLE_PVE=True \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "ServerPVE=True"
   
