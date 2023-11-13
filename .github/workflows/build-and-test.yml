@@ -68,7 +68,7 @@ jobs:
           johnnyknighten/ark-sa-server:latest \
           --version
 
-    - name: Test xz-utils is installed
+    - name: Test xvfb is installed
       run: |
           docker run --rm \
             --entrypoint xvfb-run \
@@ -97,3 +97,11 @@ jobs:
           -c "test -f /opt/ark-sa-container/bin/docker-entrypoint.sh && \
               test -f /opt/ark-sa-container/bin/launch-ark-sa.sh && \
               test -f /opt/ark-sa-container/bin/steam-cmd-install.sh"
+
+    - name: Test STEAMCMD_SKIP_VALIDATION env var flag
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e STEAMCMD_SKIP_VALIDATION=True \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "SteamCMD Will Not Validate Ark SA Server Files"
