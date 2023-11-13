@@ -223,7 +223,7 @@ jobs:
           -e TEST_DRY_RUN=True \
           -e ARK_NO_BATTLEYE=True \
           johnnyknighten/ark-sa-server:latest)
-        echo $OUTPUT | grep -q "-NoBattlEye"
+        echo $OUTPUT | grep -q "\-NoBattlEye"
 
     - name: Test ARK_NO_BATTLEYE env var (False)
       run: |
@@ -231,7 +231,7 @@ jobs:
           -e TEST_DRY_RUN=True \
           -e ARK_NO_BATTLEYE=False \
           johnnyknighten/ark-sa-server:latest)
-        echo $OUTPUT | grep -qv "-NoBattlEye"
+        echo $OUTPUT | grep -qv "\-NoBattlEye"
 
     - name: Test ARK_EPIC_PUBLIC_IP env var
       run: |
@@ -239,7 +239,7 @@ jobs:
           -e TEST_DRY_RUN=True \
           -e ARK_EPIC_PUBLIC_IP=192.168.1.2 \
           johnnyknighten/ark-sa-server:latest)
-        echo $OUTPUT | grep -q "--PublicIPforEpic 192.168.1.2"
+        echo $OUTPUT | grep -q "\--PublicIPforEpic 192.168.1.2"
 
     - name: Test ARK_EPIC_PUBLIC_IP env var (Empty)
       run: |
@@ -247,7 +247,7 @@ jobs:
           -e TEST_DRY_RUN=True \
           -e ARK_EPIC_PUBLIC_IP=192.168.1.2 \
           johnnyknighten/ark-sa-server:latest)
-        echo $OUTPUT | grep -qv "--PublicIPforEpic"
+        echo $OUTPUT | grep -qv "\--PublicIPforEpic"
 
     - name: Test ARK_MAX_PLAYERS env var
       run: |
@@ -255,4 +255,27 @@ jobs:
           -e TEST_DRY_RUN=True \
           -e ARK_MAX_PLAYERS=25 \
           johnnyknighten/ark-sa-server:latest)
-        echo $OUTPUT | grep -q "-WinLiveMaxPlayers=25"
+        echo $OUTPUT | grep -q "\-WinLiveMaxPlayers=25"
+
+    - name: Test ARK_MOD_LIST env var (No Spaces)
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_MOD_LIST="1234,5678" \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "\-automanagedmods \-mods=1234,5678"
+
+    - name: Test ARK_MOD_LIST env var (With Spaces)
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_MOD_LIST=" 1234    ,   5678" \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "\-automanagedmods \-mods=1234,5678"
+
+    - name: Test ARK_MOD_LIST env var (Empty)
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -qv "\-automanagedmods \-mods="
