@@ -178,4 +178,18 @@ jobs:
           -e ARK_ENABLE_RCON=False \
           johnnyknighten/ark-sa-server:latest)
         echo $OUTPUT | grep -q "?RCONEnabled=False"
-  
+
+    - name: Test ARK_MULTI_HOME env var 
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_MULTI_HOME=192.168.1.2 \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "?MultiHome=192.168.1.2"
+
+    - name: Test ARK_MULTI_HOME env var (Empty)
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -qv "?MultiHome="
