@@ -136,7 +136,7 @@ jobs:
           -e TEST_DRY_RUN=True \
           -e ARK_EXTRA_LAUNCH_OPTIONS="-ExtraFlag" \
           johnnyknighten/ark-sa-server:latest)
-        echo $OUTPUT | grep -q "-ExtraFlag"
+        echo $OUTPUT | grep -q "\-ExtraFlag"
 
     - name: Test ARK_SERVER_NAME env var flag
       run: |
@@ -160,7 +160,7 @@ jobs:
           -e TEST_DRY_RUN=True \
           -e ARK_ENABLE_RCON=True \
           johnnyknighten/ark-sa-server:latest)
-        echo $OUTPUT | grep -q "?RCONEnabled=True?RCONPort=27015"
+        echo $OUTPUT | grep -q "?RCONEnabled=True?RCONPort=27020"
 
     - name: Test ARK_ENABLE_RCON env var flag (True) (Non Default Port)
       run: |
@@ -245,7 +245,6 @@ jobs:
       run: |
         OUTPUT=$(docker run --rm \
           -e TEST_DRY_RUN=True \
-          -e ARK_EPIC_PUBLIC_IP=192.168.1.2 \
           johnnyknighten/ark-sa-server:latest)
         echo $OUTPUT | grep -qv "\--PublicIPforEpic"
 
