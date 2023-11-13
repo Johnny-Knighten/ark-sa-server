@@ -137,4 +137,12 @@ jobs:
           -e ARK_EXTRA_LAUNCH_OPTIONS="-ExtraFlag" \
           johnnyknighten/ark-sa-server:latest)
         echo $OUTPUT | grep -q "-ExtraFlag"
+
+    - name: Test ARK_SERVER_NAME env var flag
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_SERVER_NAME="Test Server" \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "Test Server"
   
