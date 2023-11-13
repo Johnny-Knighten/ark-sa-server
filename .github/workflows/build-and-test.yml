@@ -193,3 +193,18 @@ jobs:
           -e TEST_DRY_RUN=True \
           johnnyknighten/ark-sa-server:latest)
         echo $OUTPUT | grep -qv "?MultiHome="
+
+    - name: Test ARK_SERVER_PASSWORD env var 
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          -e ARK_SERVER_PASSWORD=password1234 \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -q "ServerPassword=password1234"
+
+    - name: Test ARK_SERVER_PASSWORD env var (Empoty)
+      run: |
+        OUTPUT=$(docker run --rm \
+          -e TEST_DRY_RUN=True \
+          johnnyknighten/ark-sa-server:latest)
+        echo $OUTPUT | grep -qv "ServerPassword="
