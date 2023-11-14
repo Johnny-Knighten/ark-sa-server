@@ -1,5 +1,24 @@
 # ARK Survival Ascended Server - Docker Containers
 
+[![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/Johnny-Knighten/ark-sa-server?logo=github)](https://github.com/Johnny-Knighten/ark-sa-server/releases)
+
+
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Johnny-Knighten/ark-sa-server/build-and-test.yml?logo=github&label=build%20and%20test%20-%20status)
+](https://github.com/Johnny-Knighten/ark-sa-server/actions/workflows/build-and-test.yml)
+
+
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Johnny-Knighten/ark-sa-server/release.yml?logo=github&label=release%20-%20status)
+](https://github.com/Johnny-Knighten/ark-sa-server/actions/workflows/release.yml)
+
+[![GitHub Repo stars](https://img.shields.io/github/stars/Johnny-Knighten/ark-sa-server?logo=github)
+](https://github.com/Johnny-Knighten/ark-sa-server)
+
+[![GitHub](https://img.shields.io/github/license/Johnny-Knighten/example-github-actions-for-container-release?logo=github)](https://github.com/Johnny-Knighten/example-github-actions-for-container-release/blob/main/LICENSE)
+
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/johnnyknighten/ark-sa-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/ark-sa-server)
+[![Docker Stars](https://img.shields.io/docker/stars/johnnyknighten/ark-sa-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/ark-sa-server)
+[![Docker Pulls](https://img.shields.io/docker/pulls/johnnyknighten/ark-sa-server)](https://hub.docker.com/r/johnnyknighten/ark-sa-server)
+
 Docker container images for running an ARK Survival Ascended dedicated server.
 
 # Table of Contents
