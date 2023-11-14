@@ -7,7 +7,7 @@ perform_test() {
     command=$2
 
     echo "Starting test: $test_description"
-    if eval $command; then
+    if eval "$command"; then
         echo "Test passed: $test_description"
     else
         echo "Test failed: $test_description"

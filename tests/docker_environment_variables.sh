@@ -39,7 +39,7 @@ perform_test "ARK_MAP Not Set - Defaults To TheIsland_WP" \
 perform_test "ARK_GAME_PORT=12345 - Game Port Is Set To 12345" \
              "OUTPUT=\$(docker run --rm \
               -e TEST_DRY_RUN=True \
-              -e ARK_GAME_PORT="12345" \
+              -e ARK_GAME_PORT=12345 \
               johnnyknighten/ark-sa-server:latest);
              echo \$OUTPUT | grep -q '\?Port=12345'"
 
@@ -52,7 +52,7 @@ perform_test "ARK_GAME_PORT Not Set - Defaults To 7777" \
 perform_test "ARK_QUERY_PORT=12345 - Query Port Is Set To 12345" \
              "OUTPUT=\$(docker run --rm \
               -e TEST_DRY_RUN=True \
-              -e ARK_QUERY_PORT="12345" \
+              -e ARK_QUERY_PORT=12345 \
               johnnyknighten/ark-sa-server:latest);
              echo \$OUTPUT | grep -q 'QueryPort=12345'"
 
@@ -65,7 +65,7 @@ perform_test "ARK_QUERY_PORT Not Set - Defaults To 27015" \
 perform_test "ARK_EXTRA_LAUNCH_OPTIONS='-ExtraFlag' - '-ExtraFlag' Appears In Launch Command" \
              "OUTPUT=\$(docker run --rm \
               -e TEST_DRY_RUN=True \
-              -e ARK_EXTRA_LAUNCH_OPTIONS='-ExtraFlag'
+              -e ARK_EXTRA_LAUNCH_OPTIONS='-ExtraFlag' \
               johnnyknighten/ark-sa-server:latest);
              echo \$OUTPUT | grep -q '\-ExtraFlag'"
 
@@ -197,14 +197,14 @@ perform_test "ARK_MAX_PLAYERS Not Set - Default Player Count Is 70" \
 perform_test "ARK_MOD_LIST=\"1234,5678\" - -automanagedmods Flag Present With -mods=1234,5678" \
              "OUTPUT=\$(docker run --rm \
               -e TEST_DRY_RUN=True \
-              -e ARK_MOD_LIST="1234,5678" \
+              -e ARK_MOD_LIST='1234,5678' \
               johnnyknighten/ark-sa-server:latest);
              echo \$OUTPUT | grep -q '\-automanagedmods \-mods=1234,5678'"
 
 perform_test "ARK_MOD_LIST=\"    1234   ,    5678\" - -automanagedmods Flag Present With -mods=1234,5678 (Spaces Removed)" \
              "OUTPUT=\$(docker run --rm \
               -e TEST_DRY_RUN=True \
-              -e ARK_MOD_LIST="1234,5678" \
+              -e ARK_MOD_LIST='1234,5678' \
               johnnyknighten/ark-sa-server:latest);
              echo \$OUTPUT | grep -q '\-automanagedmods \-mods=1234,5678'"
 
