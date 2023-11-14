@@ -54,6 +54,9 @@ jobs:
         tags: johnnyknighten/ark-sa-server:latest
         cache-from: type=gha
 
+    - name: Set Execute Permission For All Test Scripts
+      run: chmod -R +x ./tests/
+
     - name: Peform Dependencies Tests
       run: |
         ./tests/docker_dependencies.sh
