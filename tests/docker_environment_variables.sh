@@ -213,6 +213,6 @@ perform_test "ARK_MOD_LIST=\"    1234   ,    5678\" - -automanagedmods Flag Pres
               -e TEST_DRY_RUN=True \
               johnnyknighten/ark-sa-server:latest);
              echo \$OUTPUT | grep -qv '\-automanagedmods' &&\
-             echo \$OUTPUT | grep -qv '\-mods='"               
+             echo \$OUTPUT | grep -qv '\-mods='"
 
 log_failed_tests

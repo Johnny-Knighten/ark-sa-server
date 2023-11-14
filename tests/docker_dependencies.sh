@@ -33,5 +33,5 @@ perform_test "Verify ark-sa-container/bin Content is Present" \
               -c \"test -f /opt/ark-sa-container/bin/docker-entrypoint.sh && \
                   test -f /opt/ark-sa-container/bin/launch-ark-sa.sh && \
                   test -f /opt/ark-sa-container/bin/steam-cmd-install.sh\""
-        
+
 log_failed_tests

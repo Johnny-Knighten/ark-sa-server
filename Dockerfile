@@ -43,7 +43,7 @@ RUN PROTON_GE_FILE="$PROTON_GE_VAR-$PROTON_GE_VER-$PROTON_GE_ARCH" && \
     mkdir -p ~/.proton && \
     mv "lutris-$PROTON_GE_VER-$PROTON_GE_ARCH" ./proton && \
     rm -r "$PROTON_GE_FILE.tar.xz"
-   
+
 COPY bin/ ${CONTAINER_BIN_DIR}
 
 VOLUME [ "${ARK_SERVER_DIR}" ]

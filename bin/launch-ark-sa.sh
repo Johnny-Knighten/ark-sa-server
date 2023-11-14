@@ -58,7 +58,7 @@ fi
 xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe "$CMD_ARGS" -log $BATTLE_EYE_FLAG $EPIC_IP_FLAG $PLAYER_COUNT_FLAG $MOD_ARGS $ARK_EXTRA_LAUNCH_OPTIONS &> proton-wine.log &
 
 log_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
-timeout=300 
+timeout=300
 
 while [ ! -f "$log_file" ] && [ $timeout -gt 0 ]; do
   echo "Waiting for file $log_file to exist..."
