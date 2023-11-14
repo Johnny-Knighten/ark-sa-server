@@ -1,0 +1,47 @@
+---
+branches: 
+  - name: main
+    prerelease: false
+    channel: latest
+  - name: next
+    prerelease: true
+    channel: next
+
+ci: true
+debug: true
+dryRun: false
+tagFormat: '${version}'
+
+plugins:
+  - "@semantic-release/commit-analyzer"
+  - "@semantic-release/changelog"
+  - "@semantic-release/git"
+  - "@semantic-release/github"
+
+preset: 'conventionalcommits'
+
+verifyConditions:
+  - '@semantic-release/changelog'
+  - '@semantic-release/git'
+  - '@semantic-release/github'
+
+analyzeCommits:
+  - path: '@semantic-release/commit-analyzer'
+
+generateNotes:
+  - path: '@semantic-release/release-notes-generator'
+    writerOpts:
+      groupBy: 'type'
+      commitGroupsSort: 'title'
+      commitsSort: 'header'
+    linkCompare: true
+    linkReferences: true
+
+prepare:
+  - path: '@semantic-release/changelog'
+  - path: '@semantic-release/git'
+    message: 'RELEASE: ${nextRelease.version}'
+    assets: ['CHANGELOG.md']
+
+publish:
+  - path: '@semantic-release/github'
