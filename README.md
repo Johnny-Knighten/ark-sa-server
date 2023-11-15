@@ -7,7 +7,7 @@
 ](https://github.com/Johnny-Knighten/ark-sa-server/actions/workflows/release.yml)
 [![GitHub Repo stars](https://img.shields.io/github/stars/Johnny-Knighten/ark-sa-server?logo=github)
 ](https://github.com/Johnny-Knighten/ark-sa-server)
-[![GitHub](https://img.shields.io/github/license/Johnny-Knighten/example-github-actions-for-container-release?logo=github)](https://github.com/Johnny-Knighten/example-github-actions-for-container-release/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/github/license/Johnny-Knighten/ark-sa-server?logo=github)](https://github.com/Johnny-Knighten/ark-sa-server/blob/main/LICENSE)
 
 [![Docker Image Version (latest semver)](https://img.shields.io/docker/v/johnnyknighten/ark-sa-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/ark-sa-server)
 [![Docker Stars](https://img.shields.io/docker/stars/johnnyknighten/ark-sa-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/ark-sa-server)
