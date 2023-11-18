@@ -1,3 +1,10 @@
+## [1.0.1-next.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.0.0...1.0.1-next.1) (2023-11-18)
+
+
+### Bug Fixes
+
+* updated main README to reflect windows container dev ([a6f6d5a](https://github.com/Johnny-Knighten/ark-sa-server/commit/a6f6d5a03ceaf7cc8079d58d0f8644d8515de62f))
+
 ## [1.0.0](https://github.com/Johnny-Knighten/ark-sa-server/compare/...1.0.0) (2023-11-14)
 
 
