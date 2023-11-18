@@ -17,7 +17,6 @@ Docker container images for running an ARK Survival Ascended dedicated server.
 
 # Table of Contents
 
-
 * [Features](#features)
 * [Quick Start](#quick-start)
    - [Linux Host](#linux-host)
@@ -55,12 +54,8 @@ Docker container images for running an ARK Survival Ascended dedicated server.
 * Configuration via environment variables and config files
 * Automatic updating of server, but can be frozen to a specific version that is already downloaded
 * Automatic mod deployment, management, and updating
-* Multiple container builds based upon different execution environments
-  * Linux Containers
-    * Windows ARK SA server Via Wine (Available Now)
-    * Linux ARK SA server (if a Linux Server is ever released)
-  * Windows Containers
-    * Windows ARK SA server (Planned)
+* Is a Linux Container that runs the Windows version of the game server via wine/proton
+    * Will switch to Linux game server if it is ever released
 
 ## Quick Start
 
@@ -246,8 +241,6 @@ An easy way to find what config files you want to modify/set is to start a singl
 
 Note - Some of the environment variable settings will also be copied into the config files, such as the server name and passwords. If you manually change these fields in the config file, make sure to also update the environment variables to match otherwise you may experience issues.
 
-
-
 ### Mods
 
 Mods are handled via the `ARK_MOD_LIST` environment variable. The variable is a comma separated list of mod ids to install. The mod ids list need to be wrapped in quotes, and white space is allowed before/after commas since all whitespace in the quotes will be removed. Right now, if you are lucky, the mod author will put the id in there mod description. An alternative way to get mod ids is by installing them on your local machine then going to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Binaries\Win64\ShooterGame\Mods\RANDOM#` and look at the subdirectories' name. The first number before the `_` in the subdirectories name is the mod id. 
@@ -387,7 +380,9 @@ Automated builds are made upon successful Pull Requests merges on the `main` and
 
 Tags used in this project are focused on the version of the GitHub release and the execution environment it uses. It is not based on the game/server version or mod versions.
 
-Currently the only execution environment is `wine`, which runs the Windows version of the game server in a Linux container via the wine compatibility layer. More specifically it uses [GloriousEggroll's build of wine](https://github.com/GloriousEggroll/wine-ge-custom) that's based on Valves's [Proton experimental wine repo](https://github.com/ValveSoftware/wine).
+### Container Tags
+
+Currently the only execution environment is `wine`, which runs the Windows version of the game server in a Linux container via the wine compatibility layer. More specifically it uses [GloriousEggroll's build of wine](https://github.com/GloriousEggroll/wine-ge-custom) that's based on Valves's [Proton experimental wine repo](https://github.com/ValveSoftware/wine). In the future depending on the direction of this project and the release of the Linux version of the game server, there may be a `linux` and `windows` execution environment.
 
 | Tag | Description | Examples |
 | ---| --- | :---: |
@@ -407,10 +402,10 @@ There are also pre-release tags that are built from the `next` branch. These are
 * Core Features
   * Automated Server Restarts
   * Automated Server Backups
-  * Windows Container
+  * Windows Container (Paused See [Windows Container](#windows-container-paused) Below)
   * Linux Container Running Linux Server (if ever released)
 * Additional Features
-  * CLI Took For Simple Server Management via RCON
+  * CLI Tool For Simple Server Management via RCON
   * Event Hooks To Allow For Custom Scripts Execution On Server Events
     * Such As:
       * Server Pre/Post Start
@@ -420,10 +415,14 @@ There are also pre-release tags that are built from the `next` branch. These are
   * Discord Integration
   * Matrix Integration
 * Documentation
-  * Deployment
+  * Other Deployment Methods
     * Kubernetes
     * AWS ECS
     * AWS Lightsail
+
+## Windows Container (Paused)
+
+There is a WIP branch of this project that contains a Windows container for running the Windows version of the game server. For now its development is paused to focus on more impactful features; the container builds and runs the server, but there are some issues with the server not being accessible(current belief is that it is a networking issue). If anyone wants to take a stab at fixing it, feel free to submit a PR. You can find it in the [wip/windows-container](https://github.com/Johnny-Knighten/ark-sa-server/tree/wip/windows-container) branch, check the README in the windows directory.
 
 ## Shout Outs
 
