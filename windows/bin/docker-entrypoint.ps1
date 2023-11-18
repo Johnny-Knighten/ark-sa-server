@@ -1,7 +1,12 @@
 Set-StrictMode -Version Latest
 
 function Handle-SteamCmdInstallError {
-  Write-Host "An error occurred in steam-cmd-install.sh"
+  Write-Host "An error occurred in steam-cmd-install.ps1"
+  exit 1
+}
+
+function Handle-LaunchArkSaError {
+  Write-Host "An error occurred in launch-ark-sa.ps1"
   exit 1
 }
 
@@ -24,4 +29,8 @@ foreach ($subDir in $requiredSubDirs) {
 
 trap { Handle-SteamCmdInstallError; continue }
 & "$env:CONTAINER_BIN_DIR\steam-cmd-install.ps1"
+trap { }
+
+trap { Handle-LaunchArkSaError; continue }
+& "$env:CONTAINER_BIN_DIR\launch-ark-sa.ps1"
 trap { }
