@@ -26,7 +26,8 @@ ENV DEBUG=false \
     ARK_EPIC_PUBLIC_IP= \
     ARK_MULTI_HOME= \
     ARK_ENABLE_PVE=False\
-    TEST_DRY_RUN=False
+    TEST_DRY_RUN=False \
+    ARK_REBUILD_CONFIG=False
 
 RUN set -x && \
     apt-get update && \
