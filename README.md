@@ -165,7 +165,7 @@ The table below shows all the available environment variables and their default 
 | `ARK_SERVER_ADMIN_PASSWORD `| Password for the server admin. Also used for RCON access. **Do not put spaces in your password.** | `adminpassword` |
 | `ARK_GAME_PORT` | Primary game port. This port +1 will also be used. | `7777` |
 | `ARK_QUERY_PORT` | Steam query port. | `27015` |
-| `ARK_RCON_ENABLED` | Enable RCON on the server. | `True` |
+| `ARK_ENABLE_RCON` | Enable RCON on the server. | `True` |
 | `ARK_RCON_PORT`| RCON port for the server. | `27020` |
 | `ARK_MAP` | Map launched on the server. | `TheIsland_WP` |
 | `ARK_MAX_PLAYERS`| Maximum number of players allowed on the server. | `70` |
@@ -175,10 +175,29 @@ The table below shows all the available environment variables and their default 
 | `ARK_MOD_LIST` | Comma separated list of mod ids to install. Needs to be wrapped in quotes and whitespace can appear before or after commas. | EMPTY |
 | `ARK_EPIC_PUBLIC_IP` | Public IP address of the server, used by Epic game clients. | EMPTY |
 | `ARK_MULTI_HOME_SERVER` | Provide your public IP address when hosting multiple servers on the same machine. | EMPTY |
+| `ARK_REBUILD_CONFIG` | Force rebuild of GameUserSettings.ini on container start. Mainly used to force updated variables to appear in GameUserSettings.ini. *Note - this overwrites your current GameUserSettings.ini, so make a copy if needed.*| `False` |
 
 ### Config Files
 
-Configuration files are primarily used to adjust settings such as such as XP/Gathering/Taming rates and player stats.  The config files are located in the `/ark-server/ShooterGame/Saved/Config/WindowsServer` directory inside the container and the primary file you will modify is `GameUserSettings.ini`. The config files are generated on container start, so if you need to make changes to them you will need to restart the container. If you delete the config file a new one will be generated on server start using default values.
+Configuration files are primarily used to adjust settings such as such as XP/Gathering/Taming rates and player stats. The config files are located in the `/ark-server/ShooterGame/Saved/Config/WindowsServer` directory inside the container and the primary file you will modify is `GameUserSettings.ini`.
+
+#### New GameUserSettings.ini Template Process (11/19/2023)
+
+As of 11/19/2023 the way `GameUserSettings.ini` is generated in this container has changed. Somewhere around server version 26.38, a number of server launch command args stopped working. To work around this, the only option was to ensure those cmd args appeared in `GameUserSettings.ini`. A long term goal of this project is to make `GameUserSettings.ini` 100% configurable via Environment Variables, but since this impacted the current use of the image, a quick fix was needed. The quick fix is in the form of a simple `GameUserSettings.ini` template script that injects the cmd args environment variables into a `GameUserSettings.ini` template. See [bin/ark-sa/configs](bin/ark-sa/configs) for more implementation details. 
+
+The only environment variables impacted by this change are: `ARK_SERVER_NAME`, `ARK_ENABLE_RCON`, `ARK_RCON_PORT`, `ARK_MAX_PLAYERS`, `ARK_SERVER_PASSWORD`, `ARK_SERVER_ADMIN_PASSWORD`, and `ARK_ENABLE_PVE`.
+
+If you make any changes to the above environment variables, you will need to restart the container with `ARK_REBUILD_CONFIG=True` to force the template script to run again. This will overwrite your GameUserSettings.ini with the values in [`GameUserSettings.template.ini`](ark-sa/config-templating/GameUserSettings.template.ini) and update it with your new environment variable values. Make a copy of your existing config if needed and update the newly generated `GameUserSettings.ini` with your old values. Another alternative is to manually update the `GameUserSettings.ini` file to match your new environment variable values with your changes and then restart the container.
+
+Remember to set `ARK_REBUILD_CONFIG=False` unless you want `GameUserSettings.ini` to be rewritten with the template every container launch (not recommended). This will make `GameUserSettings.ini` always match the values in [`GameUserSettings.template.ini`](ark-sa/config-templating/GameUserSettings.template.ini).
+
+##### New Users
+
+For new users of this image, there is nothing you need to do. The new template script will execute in your first launch of your server. 
+
+##### Existing users
+
+Make a copy of your existing `GameUserSettings.ini` then set `ARK_REBUILD_CONFIG=True` and restart your container. This will overwrite your current `GameUserSettings.ini` with the values in [`GameUserSettings.template.ini`](ark-sa/config-templating/GameUserSettings.template.ini). Then copy any of your old settings into the new `GameUserSettings.ini` and restart the container with `ARK_REBUILD_CONFIG=False`.
 
 #### Using Bind Mounts
 
