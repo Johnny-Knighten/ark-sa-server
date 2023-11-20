@@ -1,3 +1,11 @@
+## [1.0.2-next.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.0.1...1.0.2-next.1) (2023-11-20)
+
+
+### Bug Fixes
+
+* introduced GameUserSettings templating system ([4912e9c](https://github.com/Johnny-Knighten/ark-sa-server/commit/4912e9c0022d63ca8bd23592f3c598b4be1a08db))
+* **config:** introduced GameUserSettings.ini template ([40e9f3b](https://github.com/Johnny-Knighten/ark-sa-server/commit/40e9f3bde4e758d5fd177a7426780930a66d985d))
+
 ## [1.0.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.0.0...1.0.1) (2023-11-18)
 
 
