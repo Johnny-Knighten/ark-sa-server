@@ -3,8 +3,7 @@ FROM steamcmd/steamcmd:ubuntu-22
 LABEL maintainer="https://github.com/Johnny-Knighten"
 
 ENV DEBUG=false \
-    CONTAINER_BIN_DIR="/opt/ark-sa-container/bin" \
-    STEAMCMD_ARK_SA_APP_ID=2430930 \
+    DRY_RUN=False \
     STEAMCMD_SKIP_VALIDATION=False \
     PROTON_GE_VAR=wine-lutris \
     PROTON_GE_VER=GE-Proton8-21 \
@@ -26,7 +25,6 @@ ENV DEBUG=false \
     ARK_EPIC_PUBLIC_IP= \
     ARK_MULTI_HOME= \
     ARK_ENABLE_PVE=False\
-    TEST_DRY_RUN=False \
     ARK_REBUILD_CONFIG=False
 
 RUN set -x && \
@@ -34,7 +32,8 @@ RUN set -x && \
     apt-get install --no-install-recommends -y  \
                         wget=1.21.2-2ubuntu1 \
                         xz-utils=5.2.5-2ubuntu1 \
-                        xvfb=2:21.1.4-2ubuntu1.7~22.04.2 && \
+                        xvfb=2:21.1.4-2ubuntu1.7~22.04.2 \
+                        supervisor=4.2.1-1ubuntu1 && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll
@@ -45,8 +44,9 @@ RUN PROTON_GE_FILE="$PROTON_GE_VAR-$PROTON_GE_VER-$PROTON_GE_ARCH" && \
     mv "lutris-$PROTON_GE_VER-$PROTON_GE_ARCH" ./proton && \
     rm -r "$PROTON_GE_FILE.tar.xz"
 
-COPY bin/ ${CONTAINER_BIN_DIR}
-RUN ["chmod", "-R", "+x", "/opt/ark-sa-container/bin"]
+COPY bin/ /usr/local/bin
+COPY supervisord.conf /usr/local/etc/supervisord.conf
+RUN ["chmod", "-R", "+x", "/usr/local/bin"]
 
 VOLUME [ "${ARK_SERVER_DIR}" ]
 WORKDIR ${ARK_SERVER_DIR}
@@ -56,5 +56,5 @@ EXPOSE 7778/udp
 EXPOSE 27015/udp
 EXPOSE 27020/tcp
 
-ENTRYPOINT ["/opt/ark-sa-container/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/system-bootstrap.sh"]
 CMD []
