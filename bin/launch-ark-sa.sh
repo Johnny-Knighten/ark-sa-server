@@ -5,26 +5,12 @@ set -e
 [[ -z "${DEBUG}" ]] || [[ "${DEBUG,,}" = "false" ]] || [[ "${DEBUG,,}" = "0" ]] || set -x
 
 CMD_ARGS="$ARK_MAP?listen"
-CMD_ARGS+="?SessionName=$ARK_SERVER_NAME"
 CMD_ARGS+="?Port=$ARK_GAME_PORT"
 CMD_ARGS+="?QueryPort=$ARK_QUERY_PORT"
-CMD_ARGS+="?ServerPVE=$ARK_ENABLE_PVE"
-
-if [[ "$ARK_ENABLE_RCON" = "True" ]]; then
-  CMD_ARGS+="?RCONEnabled=$ARK_ENABLE_RCON?RCONPort=$ARK_RCON_PORT"
-else
-  CMD_ARGS+="?RCONEnabled=False"
-fi
 
 if [[ -n "$ARK_MULTI_HOME" ]]; then
   CMD_ARGS+="?MultiHome=$ARK_MULTI_HOME"
 fi
-
-if [[ -n "$ARK_SERVER_PASSWORD" ]]; then
-  CMD_ARGS+="?ServerPassword=$ARK_SERVER_PASSWORD"
-fi
-
-CMD_ARGS+="?ServerAdminPassword=$ARK_SERVER_ADMIN_PASSWORD"
 
 if [[ "$ARK_NO_BATTLEYE" = "True" ]]; then
   BATTLE_EYE_FLAG="-NoBattlEye"

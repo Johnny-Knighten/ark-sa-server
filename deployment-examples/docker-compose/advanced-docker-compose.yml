@@ -8,19 +8,19 @@ services:
     environment:
       - ARK_GAME_PORT=8888
       - ARK_QUERY_PORT=27016
-      - ARK_MAX_PLAYERS=20
-      - ARK_SERVER_NAME="Containerized Ark Server"
-      - ARK_SERVER_PASSWORD=password2
-      - ARK_SERVER_ADMIN_PASSWORD=adminpassword2
-      - ARK_ENABLE_PVE=True
-      - STEAMCMD_SKIP_VALIDATION=True
-      - ARK_PREVENT_AUTO_UPDATE=True
-      - ARK_RCON_ENABLED=True
+      - ARK_MAX_PLAYERS=55
+      - ARK_SERVER_NAME="Containerized Server Test223"
+      - ARK_SERVER_PASSWORD=
+      - ARK_SERVER_ADMIN_PASSWORD=adminpassword25
+      - ARK_ENABLE_PVE=False
+      - STEAMCMD_SKIP_VALIDATION=False
+      - ARK_PREVENT_AUTO_UPDATE=False
+      - ARK_ENABLE_RCON=True
       - ARK_RCON_PORT=27021
       - ARK_MOD_LIST="927131, 893657"
       - ARK_MULTI_HOME=0.0.0.0      # Make Your Public IP
       - ARK_EPIC_PUBLIC_IP=0.0.0.0  # Make Your Public IP
-      - ARK_NO_BATTLEYE=False
+      - ARK_NO_BATTLEYE=True
     volumes:
       - 'ark-files:/ark-server'
     ports:
