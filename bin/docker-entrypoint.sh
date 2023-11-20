@@ -7,6 +7,11 @@ handle_steam_cmd_install_error() {
     exit 1
 }
 
+handle_ark_sa_config_bootstrap_error() {
+    echo "An error occurred in ark-sa/config-templating/bootstrap-configs.sh"
+    exit 1
+}
+
 handle_launch_ark_sa_error() {
     echo "An error occurred in launch-ark-sa.sh"
     exit 1
@@ -25,6 +30,10 @@ done
 
 trap 'handle_steam_cmd_install_error' ERR
 "$CONTAINER_BIN_DIR/steam-cmd-install.sh"
+trap - ERR
+
+trap 'handle_ark_sa_config_bootstrap_error' ERR
+"$CONTAINER_BIN_DIR/ark-sa/config-templating/bootstrap-configs.sh"
 trap - ERR
 
 trap 'handle_launch_ark_sa_error' ERR
