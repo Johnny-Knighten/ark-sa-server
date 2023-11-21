@@ -18,7 +18,6 @@ main() {
     fi
 
   fi
-  exit 0
 }
 
 download_ark_sa_server() {
@@ -34,3 +33,6 @@ download_ark_sa_server() {
 }
 
 main
+exit_status=$?
+echo $exit_status > /ark-server/logs/ark-sa-updater.status
+exit $exit_status

@@ -6,7 +6,7 @@ main() {
 }
 
 create_required_sub_dirs() {
-  local required_sub_dirs=("server")
+  local required_sub_dirs=("server" "logs")
   for sub_dir in "${required_sub_dirs[@]}"; do
       if [[ ! -d "${ARK_SERVER_DIR}/${sub_dir}" ]]; then
           mkdir -p "${ARK_SERVER_DIR}/${sub_dir}" || echo "Failed to create directory: ${ARK_SERVER_DIR}/${sub_dir}"

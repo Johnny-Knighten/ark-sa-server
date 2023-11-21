@@ -6,6 +6,7 @@ echo "Starting Ark Server Bootstrap..."
 main() {
   create_config_from_template
   supervisorctl start ark-sa-updater
+  supervisorctl start ark-sa-server
   exit 0
 }
 
