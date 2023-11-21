@@ -28,6 +28,8 @@ ENV DEBUG=false \
     ARK_REBUILD_CONFIG=False
 
 RUN set -x && \
+    groupadd -g "${PGID:-0}" -o ark-sa && \
+    useradd -g "${PGID:-0}" -u "${PUID:-0}" -o --create-home ark-sa && \
     apt-get update && \
     apt-get install --no-install-recommends -y  \
                         wget=1.21.2-2ubuntu1 \

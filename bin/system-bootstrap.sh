@@ -11,7 +11,7 @@ create_required_sub_dirs() {
       if [[ ! -d "${ARK_SERVER_DIR}/${sub_dir}" ]]; then
           mkdir -p "${ARK_SERVER_DIR}/${sub_dir}" || echo "Failed to create directory: ${ARK_SERVER_DIR}/${sub_dir}"
       fi
-      chown "${CONTAINER_USER}". "${ARK_SERVER_DIR}/${sub_dir}" || echo "Failed setting rights on ${ARK_SERVER_DIR}/${sub_dir}, continuing startup..."
+      chown ark-sa. "${ARK_SERVER_DIR}/${sub_dir}" || echo "Failed setting rights on ${ARK_SERVER_DIR}/${sub_dir}, continuing startup..."
   done
 }
 
