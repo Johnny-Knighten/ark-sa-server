@@ -29,14 +29,13 @@ ENV DEBUG=false \
     ARK_REBUILD_CONFIG=False
 
 RUN set -x && \
-    groupadd -g "${PGID:-0}" -o ark-sa && \
-    useradd -g "${PGID:-0}" -u "${PUID:-0}" -o --create-home ark-sa && \
     apt-get update && \
     apt-get install --no-install-recommends -y  \
                         wget=1.21.2-2ubuntu1 \
                         xz-utils=5.2.5-2ubuntu1 \
                         xvfb=2:21.1.4-2ubuntu1.7~22.04.2 \
-                        supervisor=4.2.1-1ubuntu1 && \
+                        supervisor=4.2.1-1ubuntu1 \
+                        cron=3.0pl1-137ubuntu3  && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll
@@ -46,6 +45,10 @@ RUN PROTON_GE_FILE="$PROTON_GE_VAR-$PROTON_GE_VER-$PROTON_GE_ARCH" && \
     mkdir -p ~/.proton && \
     mv "lutris-$PROTON_GE_VER-$PROTON_GE_ARCH" ./proton && \
     rm -r "$PROTON_GE_FILE.tar.xz"
+
+RUN groupadd -g "${PGID:-0}" -o ark-sa && \
+    useradd -g "${PGID:-0}" -u "${PUID:-0}" -o --create-home ark-sa && \
+    usermod -a -G crontab ark-sa
 
 COPY bin/ /usr/local/bin
 COPY supervisord.conf /usr/local/etc/supervisord.conf
