@@ -5,7 +5,6 @@ LABEL maintainer="https://github.com/Johnny-Knighten"
 ENV DEBUG=false \
     DRY_RUN=False \
     STEAMCMD_SKIP_VALIDATION=False \
-    UPDATE_TIMEOUT=300 \
     PROTON_GE_VAR=wine-lutris \
     PROTON_GE_VER=GE-Proton8-21 \
     PROTON_GE_ARCH=x86_64 \

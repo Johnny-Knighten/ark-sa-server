@@ -2,15 +2,14 @@
 
 echo "Starting Ark Server Updater"
 
-trap 'write_status $?' EXIT
-
-write_status() {
-  local exit_status=$1
-  echo "$exit_status" > /ark-server/logs/ark-sa-updater.status
-}
-
 main() {
  download_and_update_ark_sa_server
+ launch_ark_sa_server
+}
+
+launch_ark_sa_server() {
+  echo "Launching Ark SA Server"
+  supervisorctl start ark-sa-server
 }
 
 download_and_update_ark_sa_server() {
@@ -23,9 +22,6 @@ download_and_update_ark_sa_server() {
 
   local install_dir="+force_install_dir $ARK_SERVER_DIR/server"
   steamcmd +login anonymous "$install_dir" "$app_update" +quit
-
-  local steamcmd_exit_status=$?
-  exit $steamcmd_exit_status
 }
 
 main
