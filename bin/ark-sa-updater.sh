@@ -1,28 +1,21 @@
 #!/usr/bin/env bash
 
-echo "Starting Ark Server Updater..."
+echo "Starting Ark Server Updater"
 
-main() {
-  if [ "$(find $ARK_SERVER_DIR/server -mindepth 1 -maxdepth 1 | wc -l)" -eq 0 ]; then
-    echo "No Server Files Found, Downloading..."
-    echo "Downloading Ark SA Server to $ARK_SERVER_DIR/server"
-    download_ark_sa_server
-  else
+trap 'write_status $?' EXIT
 
-    echo "Server Files Found, Skipping Download..."
-    if [ "$ARK_PREVENT_AUTO_UPDATE" != "True" ]; then
-      echo "Updating Ark SA Server"
-      download_ark_sa_server
-    else
-      echo "Skipping Auto-Update of Ark SA Server"
-    fi
-
-  fi
+write_status() {
+  local exit_status=$1
+  echo "$exit_status" > /ark-server/logs/ark-sa-updater.status
 }
 
-download_ark_sa_server() {
+main() {
+ download_and_update_ark_sa_server
+}
+
+download_and_update_ark_sa_server() {
   if [ "$STEAMCMD_SKIP_VALIDATION" = "True" ]; then
-    echo "SteamCMD Will Not Validate Ark SA Server Files"
+    echo "Skipping SteamCMD Validation of Server Files"
     local app_update="+app_update 2430930"
   else
     local app_update="+app_update 2430930 validate"
@@ -30,9 +23,9 @@ download_ark_sa_server() {
 
   local install_dir="+force_install_dir $ARK_SERVER_DIR/server"
   steamcmd +login anonymous "$install_dir" "$app_update" +quit
+
+  local steamcmd_exit_status=$?
+  exit $steamcmd_exit_status
 }
 
 main
-exit_status=$?
-echo $exit_status > /ark-server/logs/ark-sa-updater.status
-exit $exit_status

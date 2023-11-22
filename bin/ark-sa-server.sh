@@ -2,57 +2,70 @@
 
 trap cleanup SIGTERM SIGINT
 
-echo "Starting Ark Server Launcher..."
+start_time=$(date +%s)
+echo "Starting Ark Server Launcher At: $start_time"
 
 main() {
-  wait_for_update
+  check_for_update
   start_server
 }
 
-wait_for_update() {
-  local start_time=$(date +%s)
-  echo "Start Time For wait_for_update: $start_time"
+check_for_update() {
+  if [ "$(find "$ARK_SERVER_DIR"/server -mindepth 1 -maxdepth 1 | wc -l)" -eq 0 ]; then
+    echo "No Server Files Found, Downloading Server"
+    launch_update_service
+  else
+    if [ "$ARK_PREVENT_AUTO_UPDATE" != "True" ]; then
+      echo "Checking Updating Ark SA Server"
+      launch_update_service
+    else
+      echo "Skipping Update of Ark SA Server"
+    fi
+  fi
+}
 
-  echo "Waiting for ark-sa-updater to finish (timeout: ${UPDATE_TIMEOUT} seconds)..."
+launch_update_service() {
+  echo "Launching Updater Service"
+  supervisorctl start ark-sa-updater
+  wait_for_update
+}
+
+wait_for_update() {
+  echo "Waiting For Updater Service to Finish (Update Timeout Limit: ${UPDATE_TIMEOUT} Seconds)"
 
   while true; do
-    local status=$(supervisorctl status ark-sa-updater)
-    
-    if [[ $status = *"EXITED"* ]]; then
+    if [[ $(supervisorctl status ark-sa-updater) = *"EXITED"* ]]; then
       local status_file="/ark-server/logs/ark-sa-updater.status"
 
       if [ -f "$status_file" ]; then
-        local lower_bound=$((start_time - 2*UPDATE_TIMEOUT))
-        local upper_bound=$((start_time + 2*UPDATE_TIMEOUT))
-        local mod_time=$(date -r "$status_file" +%s)
+        local mod_time
+        mod_time=$(date -r "$status_file" +%s)
 
-        if [ "$mod_time" -ge "$lower_bound" ] && [ "$mod_time" -le "$upper_bound" ]; then
-          read exit_status < "$status_file"
+        if [ "$mod_time" -ge "$start_time" ]; then
+          read -r exit_code < "$status_file"
 
-          if [ "$exit_status" = "0" ]; then
-              echo "Updater finished successfully. Launching Ark Server..."
+          if [ "$exit_code" = "0" ]; then
+              echo "Updater Finished Successfully"
               break
           else
-              echo "Updater failed with exit status $exit_status. Not launching Ark Server."
+              echo "Updater Failed (Exit Code: $exit_code)"
               exit 10
           fi
-
         else
-          echo "Updater status file is older than start time. Not launching Ark Server."
+          echo "Updater Failed - Status File is Older Than Start Time"
           exit 30
-
         fi
       else
-          echo "Updater status file not found. Not launching Ark Server."
+          echo "Updater Failed - Status File Not Found"
           exit 20
-          
       fi
     fi
 
-    local current_time=$(date +%s)
+    local current_time
+    current_time=$(date +%s)
     local elapsed=$((current_time - start_time))
     if [ "$elapsed" -ge "${UPDATE_TIMEOUT:-300}" ]; then
-      echo "Timeout exceeded while waiting for ark-sa-updater."
+      echo "Updater Failed - Did Not Finish Before Timeout"
       exit 40
     fi
 
@@ -61,7 +74,7 @@ wait_for_update() {
 }
 
 start_server() {
-  echo "Starting Ark Server..."
+  echo "Starting Ark Server"
 
   CMD_ARGS="$ARK_MAP?listen"
   CMD_ARGS+="?Port=$ARK_GAME_PORT"
@@ -94,7 +107,12 @@ start_server() {
     MOD_ARGS=""
   fi
 
-  xvfb-run /opt/glorious_eggroll/proton/bin/wine ./server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe "$CMD_ARGS" -log $BATTLE_EYE_FLAG $EPIC_IP_FLAG $PLAYER_COUNT_FLAG $MOD_ARGS $ARK_EXTRA_LAUNCH_OPTIONS &> /ark-server/logs/proton-wine.log &
+  local proton_wine=/opt/glorious_eggroll/proton/bin/wine
+  local proton_wine_log=/ark-server/logs/proton-wine.log
+  local server_exe=/ark-server/server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe
+  local cmd_flags="-log $BATTLE_EYE_FLAG $EPIC_IP_FLAG $PLAYER_COUNT_FLAG $MOD_ARGS $ARK_EXTRA_LAUNCH_OPTIONS"
+
+  xvfb-run "$proton_wine" "$server_exe" "$CMD_ARGS" "$cmd_flags" &> "$proton_wine_log" &
 
   log_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
   timeout=300
@@ -111,12 +129,12 @@ start_server() {
     echo "File $log_file did not appear within the timeout period"
     exit 1
   fi
-
 }
 
 cleanup() {
     echo "Cleaning up before stopping..."
     /opt/glorious_eggroll/proton/bin/wineserver -k
+    rm /ark-server/logs/ark-sa-updater.status
     echo "Cleanup complete."
 }
 
