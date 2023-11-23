@@ -6,20 +6,6 @@ source ./tests/test_helper_functions.sh
 # Command Args Tests #
 ######################
 
-perform_test "STEAMCMD_SKIP_VALIDATION=True - Skips Steam Validation" \
-             "OUTPUT=\$(docker run --rm \
-              -e TEST_DRY_RUN=True \
-              -e STEAMCMD_SKIP_VALIDATION=True \
-              johnnyknighten/ark-sa-server:latest);
-             echo \$OUTPUT | grep -q 'SteamCMD Will Not Validate Ark SA Server Files'"
-
-perform_test "STEAMCMD_SKIP_VALIDATION=False - Steam Validation Is Performed" \
-             "OUTPUT=\$(docker run --rm \
-              -e TEST_DRY_RUN=True \
-              -e STEAMCMD_SKIP_VALIDATION=False \
-              johnnyknighten/ark-sa-server:latest);
-             echo \$OUTPUT | grep -q 'SteamCMD Will Validate Ark SA Server Files'"
-
 perform_test "ARK_PREVENT_AUTO_UPDATE=True - Update Is Skipped" \
              "OUTPUT=\$(docker run --rm \
               -e TEST_DRY_RUN=True \

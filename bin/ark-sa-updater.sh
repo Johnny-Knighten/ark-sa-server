@@ -13,7 +13,11 @@ main() {
 
 launch_ark_sa_server() {
   echo " Updater - Launching Ark SA Server"
-  supervisorctl start ark-sa-server
+  if [[ "$DRY_RUN" = "True" ]]; then
+    echo "DRY_RUN - supervisorctl start ark-sa-server."
+  else
+    supervisorctl start ark-sa-server
+  fi
 }
 
 download_and_update_ark_sa_server() {
@@ -25,7 +29,12 @@ download_and_update_ark_sa_server() {
   fi
 
   local install_dir="+force_install_dir $ARK_SERVER_DIR/server"
-  steamcmd +login anonymous "$install_dir" "$app_update" +quit
+
+  if [[ "$DRY_RUN" = "True" ]]; then
+    echo "$DRY_RUN_MSG steamcmd +login anonymous \"$install_dir\" \"$app_update\" +quit"
+  else
+    steamcmd +login anonymous "$install_dir" "$app_update" +quit
+  fi
 }
 
 main
