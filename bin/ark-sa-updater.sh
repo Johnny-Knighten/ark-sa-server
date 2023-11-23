@@ -8,13 +8,13 @@ main() {
 }
 
 launch_ark_sa_server() {
-  echo "Launching Ark SA Server"
+  echo " Updater - Launching Ark SA Server"
   supervisorctl start ark-sa-server
 }
 
 download_and_update_ark_sa_server() {
   if [ "$STEAMCMD_SKIP_VALIDATION" = "True" ]; then
-    echo "Skipping SteamCMD Validation of Server Files"
+    echo "Updater - Skipping SteamCMD Validation of Server Files"
     local app_update="+app_update 2430930"
   else
     local app_update="+app_update 2430930 validate"

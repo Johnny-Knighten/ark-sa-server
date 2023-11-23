@@ -19,7 +19,7 @@ ENV DEBUG=false \
     ARK_RCON_PORT=27020 \
     ARK_MAX_PLAYERS=70  \
     ARK_SERVER_NAME="Ark Server" \
-    ARK_PREVENT_AUTO_UPDATE=False \
+    ARK_UPDATE_ON_BOOT=True \
     ARK_MOD_LIST= \
     ARK_NO_BATTLEYE=True \
     ARK_EPIC_PUBLIC_IP= \
@@ -27,7 +27,9 @@ ENV DEBUG=false \
     ARK_ENABLE_PVE=False \
     ARK_REBUILD_CONFIG=False \
     ARK_SCHEDULED_RESTART=False \
-    ARK_RESTART_CRON="0 4 * * 0"
+    ARK_RESTART_CRON="0 4 * * *" \
+    ARK_SCHEDULED_UPDATE=False \
+    ARK_UPDATE_CRON="0 5 * * 0"
 
 RUN set -x && \
     apt-get update && \
