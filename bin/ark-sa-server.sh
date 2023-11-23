@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
+set -e
+
+[[ -z "${DEBUG}" ]] || [[ "${DEBUG,,}" = "false" ]] || [[ "${DEBUG,,}" = "0" ]] || set -x
+
+
 trap cleanup SIGTERM SIGINT
 
 start_time=$(date +%s)
-echo "Starting Ark Server Launcher At: $start_time"
+echo "Ark Server - Starting at $start_time"
 
 main() {
   start_server
@@ -45,7 +50,7 @@ start_server() {
   timeout=300
 
   while [ ! -f "$log_file" ] && [ $timeout -gt 0 ]; do
-    echo "Waiting for File $log_file to Exist"
+    echo "Ark Server - Waiting for File $log_file to Exist"
     sleep 1
     ((timeout--))
   done
@@ -53,15 +58,15 @@ start_server() {
   if [ -f "$log_file" ]; then
     tail -f "$log_file"
   else
-    echo "File $log_file Did Not Appear Within the Timeout Period"
+    echo "Ark Server - File $log_file Did Not Appear Within the Timeout Period"
     exit 1
   fi
 }
 
 cleanup() {
-  echo "Cleaning up before stopping..."
+  echo "Ark Server - Cleaning up before stopping..."
   /opt/glorious_eggroll/proton/bin/wineserver -k
-  echo "Cleanup complete."
+  echo "Ark Server - Cleanup complete."
 }
 
 main

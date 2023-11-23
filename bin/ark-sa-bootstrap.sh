@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-echo "Starting Ark Server Bootstrap..."
+set -e
+
+[[ -z "${DEBUG}" ]] || [[ "${DEBUG,,}" = "false" ]] || [[ "${DEBUG,,}" = "0" ]] || set -x
+
+echo "ARK SA Bootstrap - Starting"
 
 main() {
   create_config_from_template

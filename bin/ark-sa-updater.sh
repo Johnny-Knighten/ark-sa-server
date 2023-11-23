@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-echo "Starting Ark Server Updater"
+set -e
+
+[[ -z "${DEBUG}" ]] || [[ "${DEBUG,,}" = "false" ]] || [[ "${DEBUG,,}" = "0" ]] || set -x
+
+echo "Updater - Starting"
 
 main() {
  download_and_update_ark_sa_server

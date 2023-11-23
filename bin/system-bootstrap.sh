@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+set -e
+
+[[ -z "${DEBUG}" ]] || [[ "${DEBUG,,}" = "false" ]] || [[ "${DEBUG,,}" = "0" ]] || set -x
+
+echo "System Bootstrap - Starting"
+
 main() {
   setup_cron_jobs
   exec /usr/bin/supervisord -c /usr/local/etc/supervisord.conf
