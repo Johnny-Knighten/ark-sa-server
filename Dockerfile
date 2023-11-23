@@ -4,6 +4,7 @@ LABEL maintainer="https://github.com/Johnny-Knighten"
 
 ENV DEBUG=false \
     DRY_RUN=False \
+    TZ=America/New_York \
     STEAMCMD_SKIP_VALIDATION=False \
     PROTON_GE_VAR=wine-lutris \
     PROTON_GE_VER=GE-Proton8-21 \
@@ -38,7 +39,8 @@ RUN set -x && \
                         xz-utils=5.2.5-2ubuntu1 \
                         xvfb=2:21.1.4-2ubuntu1.7~22.04.2 \
                         supervisor=4.2.1-1ubuntu1 \
-                        cron=3.0pl1-137ubuntu3  && \
+                        cron=3.0pl1-137ubuntu3 \
+                        tzdata=2023c-0ubuntu0.22.04.2 && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll
