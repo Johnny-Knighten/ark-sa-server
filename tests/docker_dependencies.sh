@@ -30,10 +30,11 @@ perform_test "Verify ark-sa-container/bin Content is Present" \
             "docker run --rm \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
-              -c \"test -f /opt/ark-sa-container/bin/docker-entrypoint.sh && \
-                  test -f /opt/ark-sa-container/bin/launch-ark-sa.sh && \
-                  test -f /opt/ark-sa-container/bin/steam-cmd-install.sh && \
-                  test -f /opt/ark-sa-container/bin/ark-sa/config-templating/bootstrap-configs.sh && \
-                  test -f /opt/ark-sa-container/bin/ark-sa/config-templating/GameUserSettings.template.ini \""
+              -c \"test -f /usr/local/bin/system-bootstrap.sh && \
+                  test -f /usr/local/bin/ark-sa-bootstrap.sh && \
+                  test -f /usr/local/bin/ark-sa-server.sh && \
+                  test -f /usr/local/bin/ark-sa-updater.sh && \
+                  test -f /usr/local/bin/ark-sa/config-templating/bootstrap-configs.sh && \
+                  test -f /usr/local/bin/ark-sa/config-templating/GameUserSettings.template.ini \""
 
 log_failed_tests
