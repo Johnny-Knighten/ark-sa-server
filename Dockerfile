@@ -24,8 +24,10 @@ ENV DEBUG=false \
     ARK_NO_BATTLEYE=True \
     ARK_EPIC_PUBLIC_IP= \
     ARK_MULTI_HOME= \
-    ARK_ENABLE_PVE=False\
-    ARK_REBUILD_CONFIG=False
+    ARK_ENABLE_PVE=False \
+    ARK_REBUILD_CONFIG=False \
+    ARK_SCHEDULED_RESTART=False \
+    ARK_RESTART_CRON="0 4 * * 0"
 
 RUN set -x && \
     apt-get update && \

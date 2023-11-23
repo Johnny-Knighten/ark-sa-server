@@ -21,6 +21,9 @@ services:
       - ARK_MULTI_HOME=0.0.0.0      # Make Your Public IP
       - ARK_EPIC_PUBLIC_IP=0.0.0.0  # Make Your Public IP
       - ARK_NO_BATTLEYE=True
+      - ARK_REBUILD_CONFIG=True
+      - ARK_SCHEDULED_RESTART=True
+      - ARK_RESTART_CRON=*/6 * * * *
     volumes:
       - 'ark-files:/ark-server'
     ports:
