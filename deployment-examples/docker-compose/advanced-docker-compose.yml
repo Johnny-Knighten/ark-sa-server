@@ -6,6 +6,7 @@ services:
     image: johnnyknighten/ark-sa-server:latest
     restart: unless-stopped
     environment:
+      #- TZ=America/Los_Angeles
       - ARK_GAME_PORT=8888
       - ARK_QUERY_PORT=27016
       - ARK_MAX_PLAYERS=55
@@ -23,9 +24,9 @@ services:
       - ARK_NO_BATTLEYE=True
       - ARK_REBUILD_CONFIG=True
       - ARK_SCHEDULED_RESTART=False
-      - ARK_RESTART_CRON=*/15 * * * *
+      - ARK_RESTART_CRON=0 4 * * 0,3
       - ARK_SCHEDULED_UPDATE=True
-      - ARK_UPDATE_CRON=*/5 * * * *
+      - ARK_UPDATE_CRON=0 5 * * 6
     volumes:
       - 'ark-files:/ark-server'
     ports:

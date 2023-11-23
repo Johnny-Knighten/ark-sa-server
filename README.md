@@ -52,7 +52,8 @@ Docker container images for running an ARK Survival Ascended dedicated server.
 
 * Simple automated installation of ARK Survival Ascended (SA) dedicated server
 * Configuration via environment variables and config files
-* Automatic updating of server, but can be frozen to a specific version that is already downloaded
+* Schedule server restarts and updates via Cron
+  * Can be frozen to a specific version that is already downloaded
 * Automatic mod deployment, management, and updating
 * Is a Linux Container that runs the Windows version of the game server via wine/proton
     * Will switch to Linux game server if it is ever released
@@ -159,7 +160,12 @@ The table below shows all the available environment variables and their default 
 | Variable | Description | Default |
 | --- | --- | :---: |
 | `STEAMCMD_SKIP_VALIDATION` | Skips SteamCMD validation of the server files. Can speed up server start time, but could risk not detecting corrupted files. | `False` |
-| `ARK_PREVENT_AUTO_UPDATE` | Prevents the server from automatically updating. If you do need to update after having this set to `True`, then flip the Value to `False` then restart the container. Afterwards, set it back to `True` and restart again to prevent any further updates. | `False` |
+| `TZ` | Sets the timezone of the container. See the table [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and look in the TZ identifier column. Highly recommend to set this if you will be using any of the CRON variables. | `America/New_York` |
+| `ARK_SCHEDULED_RESTART` | Enable scheduled restarts of the server. | `False` |
+| `ARK_RESTART_CRON` | Cron expression for scheduled restarts. Default is everyday at 4am. | `0 4 * * *` |
+| `ARK_SCHEDULED_UPDATE` | Enable scheduled updates of the server. | `False` |
+| `ARK_UPDATE_CRON` | Cron expression for scheduled updates.Default is every Sunday at 5am. | `0 5 * * 0` |
+| `ARK_UPDATE_ON_BOOT` | Determines if the server should update itself when it starts. If this is set to `False` then the server will only update if `ARK_SCHEDULED_UPDATE=True`, then it will update on the schedule specified by `ARK_UPDATE_CRON`.  | `True` |
 | `ARK_SERVER_NAME` | Name of the server that appears in the server list. If the name contains a space wrap the name in quotes, depending on your system you may need to add escaped quotes `\"`. | `"ARK SA Server"` |
 | `ARK_SERVER_PASSWORD` | Password to login to the server. Defaults to no password aka a public server. **Do not put spaces in your password.** | EMPTY |
 | `ARK_SERVER_ADMIN_PASSWORD `| Password for the server admin. Also used for RCON access. **Do not put spaces in your password.** | `adminpassword` |
@@ -175,7 +181,9 @@ The table below shows all the available environment variables and their default 
 | `ARK_MOD_LIST` | Comma separated list of mod ids to install. Needs to be wrapped in quotes and whitespace can appear before or after commas. | EMPTY |
 | `ARK_EPIC_PUBLIC_IP` | Public IP address of the server, used by Epic game clients. | EMPTY |
 | `ARK_MULTI_HOME_SERVER` | Provide your public IP address when hosting multiple servers on the same machine. | EMPTY |
-| `ARK_REBUILD_CONFIG` | Force rebuild of GameUserSettings.ini on container start. Mainly used to force updated variables to appear in GameUserSettings.ini. *Note - this overwrites your current GameUserSettings.ini, so make a copy if needed.*| `False` |
+| `ARK_REBUILD_CONFIG` | Force rebuild of GameUserSettings.ini on container start. If you update any of the configuration variables use this to force rewrite GameUserSettings.ini to include the new values. *Note - this overwrites your current GameUserSettings.ini, so make a copy if needed.*| `False` |
+
+**Note - If you are new to CRON, check here to get help understanding the syntax: [crontab guru](https://crontab.guru/).**
 
 ### Config Files
 
@@ -326,6 +334,10 @@ $ docker run -d \
   -e ARK_RCON_ENABLED=True \
   -e ARK_RCON_PORT=27021 \
   -e ARK_MOD_LIST="\"927131, 893657\"" \
+  -e ARK_SCHEDULED_RESTART=True \
+  -e ARK_RESTART_CRON=0 4 * * 0,3 \
+  -e ARK_SCHEDULED_UPDATE=True \
+  -e ARK_UPDATE_CRON=0 5 * * 6 \
   johnnyknighten/ark-sa-server:1.0.0
 ```
 
@@ -419,7 +431,6 @@ There are also pre-release tags that are built from the `next` branch. These are
 ## Roadmap/Future Features
 
 * Core Features
-  * Automated Server Restarts
   * Automated Server Backups
   * Windows Container (Paused See [Windows Container](#windows-container-paused) Below)
   * Linux Container Running Linux Server (if ever released)
