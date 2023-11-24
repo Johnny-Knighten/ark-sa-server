@@ -6,6 +6,7 @@ services:
     image: johnnyknighten/ark-sa-server:latest
     restart: unless-stopped
     environment:
+      #- TZ=America/Los_Angeles
       - ARK_GAME_PORT=8888
       - ARK_QUERY_PORT=27016
       - ARK_MAX_PLAYERS=55
@@ -14,13 +15,18 @@ services:
       - ARK_SERVER_ADMIN_PASSWORD=adminpassword25
       - ARK_ENABLE_PVE=False
       - STEAMCMD_SKIP_VALIDATION=False
-      - ARK_PREVENT_AUTO_UPDATE=False
+      - ARK_UPDATE_ON_BOOT=True
       - ARK_ENABLE_RCON=True
       - ARK_RCON_PORT=27021
       - ARK_MOD_LIST="927131, 893657"
       - ARK_MULTI_HOME=0.0.0.0      # Make Your Public IP
       - ARK_EPIC_PUBLIC_IP=0.0.0.0  # Make Your Public IP
       - ARK_NO_BATTLEYE=True
+      - ARK_REBUILD_CONFIG=True
+      - ARK_SCHEDULED_RESTART=False
+      - ARK_RESTART_CRON=0 4 * * 0,3
+      - ARK_SCHEDULED_UPDATE=True
+      - ARK_UPDATE_CRON=0 5 * * 6
     volumes:
       - 'ark-files:/ark-server'
     ports:

@@ -4,7 +4,7 @@ set -e
 
 [[ -z "${DEBUG}" ]] || [[ "${DEBUG,,}" = "false" ]] || [[ "${DEBUG,,}" = "0" ]] || set -x
 
-config_template="${CONTAINER_BIN_DIR}/ark-sa/config-templating/GameUserSettings.template.ini"
+config_template="/usr/local/bin/ark-sa/config-templating/GameUserSettings.template.ini"
 config_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Config/WindowsServer/GameUserSettings.ini"
 
 if [[ ! -f "$config_file" ]] || [[ "$ARK_REBUILD_CONFIG" = "True" ]]; then
