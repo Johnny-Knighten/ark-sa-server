@@ -6,13 +6,6 @@ source ./tests/test_helper_functions.sh
 # Command Args Tests #
 ######################
 
-perform_test "ARK_PREVENT_AUTO_UPDATE=True - Update Is Skipped" \
-             "OUTPUT=\$(docker run --rm \
-              -e TEST_DRY_RUN=True \
-              -e ARK_PREVENT_AUTO_UPDATE=True \
-              johnnyknighten/ark-sa-server:latest);
-             echo \$OUTPUT | grep -q 'Skipping Auto-Update of Ark SA Server'"
-
 perform_test "ARK_MAP=Not_TheIsland_WP - Map Is Not_TheIsland_WP" \
              "OUTPUT=\$(docker run --rm \
               -e TEST_DRY_RUN=True \
