@@ -2,6 +2,9 @@ FROM steamcmd/steamcmd:ubuntu-22
 
 LABEL maintainer="https://github.com/Johnny-Knighten"
 
+ARG PGID=0 \
+    PUID=0
+
 ENV DEBUG=false \
     DRY_RUN=False \
     TZ=America/New_York \
@@ -51,8 +54,8 @@ RUN PROTON_GE_FILE="$PROTON_GE_VAR-$PROTON_GE_VER-$PROTON_GE_ARCH" && \
     mv "lutris-$PROTON_GE_VER-$PROTON_GE_ARCH" ./proton && \
     rm -r "$PROTON_GE_FILE.tar.xz"
 
-RUN groupadd -g "${PGID:-0}" -o ark-sa && \
-    useradd -g "${PGID:-0}" -u "${PUID:-0}" -o --create-home ark-sa && \
+RUN groupadd -g "$PGID" -o ark-sa && \
+    useradd -l -g "$PGID" -u "$PUID" -o --create-home ark-sa && \
     usermod -a -G crontab ark-sa
 
 COPY bin/ /usr/local/bin
