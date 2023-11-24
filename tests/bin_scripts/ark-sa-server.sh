@@ -157,4 +157,14 @@ perform_test "ARK_MAX_PLAYERS Not Set - Default Player Count Is 70" \
               -c "/usr/local/bin/ark-sa-server.sh");
              echo $OUTPUT | grep -q "\-WinLiveMaxPlayers=70"'
 
+perform_test "Existing ShooterGame File Are Deleted To Avoid Premature Log Tail" \
+            'docker run --rm \
+            -e DRY_RUN=True \
+            --entrypoint bash \
+            johnnyknighten/ark-sa-server:latest \
+            -c "mkdir -p /ark-server/server/ShooterGame/Saved/Logs && \
+                touch /ark-server/server/ShooterGame/Saved/Logs/ShooterGame.log && \
+                /usr/local/bin/ark-sa-server.sh | grep -q "Deleting Old Shooter Logs"  \
+                test ! -f /ark-server/server/ShooterGame/Saved/Logs/ShooterGame.log"'
+
 log_failed_tests
