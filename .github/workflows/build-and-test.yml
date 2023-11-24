@@ -57,10 +57,26 @@ jobs:
     - name: Set Execute Permission For All Test Scripts
       run: chmod -R +x ./tests/
 
-    - name: Peform Dependencies Tests
+    - name: Dependencies Tests
       run: |
-        ./tests/docker_dependencies.sh
+        ./tests/dependencies.sh
 
-    - name: Peform Environment Variable Tests
+    - name: Config File Generation Tests
       run: |
-        ./tests/docker_environment_variables.sh
+        ./tests/config_file_generation.sh
+
+    - name: system-bootstrap Tests
+      run: |
+        ./tests/bin_scripts/system-bootstrap.sh
+
+    - name: ark-sa-boostrap Tests
+      run: |
+        ./tests/bin_scripts/ark-sa-bootstrap.sh
+
+    - name: ark-sa-updater Tests
+      run: |
+        ./tests/bin_scripts/ark-sa-updater.sh
+
+    - name: ark-sa-server Tests
+      run: |
+        ./tests/bin_scripts/ark-sa-server.sh
