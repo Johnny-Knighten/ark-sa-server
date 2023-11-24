@@ -122,8 +122,8 @@ jobs:
           echo "The Following Images Would Have Been Pushed:"
           echo "${{ steps.meta-dry-run.outputs.tags }}"
 
-      - name: Update DockerHub description
-        if: ${{ !env.ACT }}
+      - name: Update DockerHub Description
+        if: ${{ !env.ACT && github.ref == 'refs/heads/main' }}
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -131,3 +131,8 @@ jobs:
           repository: johnnyknighten/ark-sa-server
           short-description: ${{ github.event.repository.description }}
           enable-url-completion: true
+
+      - name: Update DockerHub Description (DRY RUN)
+        if: ${{ env.ACT && github.ref == 'refs/heads/main' }}
+        run: |
+          echo "DRY RUN - Pushing Dockerhub Description Update"
