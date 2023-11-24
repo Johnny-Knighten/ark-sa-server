@@ -7,8 +7,13 @@ set -e
 echo "System Bootstrap - Starting"
 
 main() {
+  create_required_sub_dirs
   setup_cron_jobs
-  exec /usr/bin/supervisord -c /usr/local/etc/supervisord.conf
+  if [[ "$DRY_RUN" = "True" ]]; then
+    echo "DRY_RUN - exec /usr/bin/supervisord -c /usr/local/etc/supervisord.conf"
+  else
+    exec /usr/bin/supervisord -c /usr/local/etc/supervisord.conf
+  fi
 }
 
 create_required_sub_dirs() {
@@ -24,31 +29,30 @@ create_required_sub_dirs() {
 setup_cron_jobs() {
   if [[ "$ARK_SCHEDULED_RESTART" = "True" ]]; then
     echo "System Bootstrap - Setting Up Scheduled Restart"
-    setup_cron_scheduled_restart
+    setup_cron_scheduled_restart >> /usr/local/bin/ark-sa-cron-jobs
   fi
 
   if [[ "$ARK_SCHEDULED_UPDATE" = "True" ]]; then
     echo "System Bootstrap - Setting Up Scheduled Update"
-    setp_cron_scheduled_update
+     setup_cron_scheduled_update >> /usr/local/bin/ark-sa-cron-jobs
+  fi
+
+  if [[ -f /usr/local/bin/ark-sa-cron-jobs ]]; then
+    echo "System Bootstrap - Updating Crontab"
+    crontab /usr/local/bin/ark-sa-cron-jobs
   fi
 }
-
+  
 setup_cron_scheduled_restart() {
   echo "$(date) - Server Restart RCON Scheduled For: $ARK_RESTART_CRON" >> /ark-server/logs/cron.log
   echo "$ARK_RESTART_CRON supervisorctl restart ark-sa-server && \
-    echo \"\$(date) - CRON Restart - ark-sa-server\" >> /ark-server/logs/cron.log" \
-    > /usr/local/bin/ark-sa-restart-crontab
-  crontab /usr/local/bin/ark-sa-restart-crontab
-  rm /usr/local/bin/ark-sa-restart-crontab
+    echo \"\$(date) - CRON Restart - ark-sa-server\" >> /ark-server/logs/cron.log"
 }
 
-setp_cron_scheduled_update() {
+setup_cron_scheduled_update() {
   echo "$(date) - Server Update Scheduled For: $ARK_UPDATE_CRON" >> /ark-server/logs/cron.log
   echo "$ARK_UPDATE_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-updater && \
-    echo \"\$(date) - CRON Update - ark-sa-updater\" >> /ark-server/logs/cron.log" \
-    > /usr/local/bin/ark-sa-update-crontab
-  crontab /usr/local/bin/ark-sa-update-crontab
-  rm /usr/local/bin/ark-sa-update-crontab
+    echo \"\$(date) - CRON Update - ark-sa-updater\" >> /ark-server/logs/cron.log"
 }
 
 main
