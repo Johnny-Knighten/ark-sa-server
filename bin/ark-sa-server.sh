@@ -40,9 +40,16 @@ start_server() {
     launch_flags+=" -automanagedmods -mods=$ARK_MOD_LIST"
   fi
 
+  launch_flags+=" $ARK_EXTRA_LAUNCH_OPTIONS"
+
   local proton_wine=/opt/glorious_eggroll/proton/bin/wine
   local proton_wine_log=/ark-server/logs/proton-wine.log
   local server_exe=/ark-server/server/ShooterGame/Binaries/Win64/ArkAscendedServer.exe
+
+  if [[ "$DRY_RUN" = "True" ]]; then
+    echo "DRY_RUN - $proton_wine $server_exe \"$cmd_args\" $launch_flags"
+    return
+  fi
 
   xvfb-run $proton_wine $server_exe "$cmd_args" $launch_flags &> $proton_wine_log &
 
