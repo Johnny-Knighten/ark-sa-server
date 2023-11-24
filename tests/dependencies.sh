@@ -14,6 +14,24 @@ perform_test "Verify xvfb is Installed" \
                 johnnyknighten/ark-sa-server:latest \
                 -h > /dev/null 2>&1"
 
+perform_test "Verify Supervisor is Installed" \
+             "docker run --rm \
+                --entrypoint supervisord \
+                johnnyknighten/ark-sa-server:latest \
+                -v > /dev/null 2>&1"
+
+perform_test "Verify CRON is Installed" \
+             'docker run --rm \
+                --entrypoint bash \
+                johnnyknighten/ark-sa-server:latest \
+                -c "echo \"* * * * * test\" > crontab.txt && crontab crontab.txt && crontab -l" > /dev/null 2>&1'
+
+perform_test "Verify tzdata is Installed" \
+             'docker run --rm \
+                --entrypoint bash \
+                johnnyknighten/ark-sa-server:latest \
+                -c "cat /usr/share/zoneinfo/tzdata.zi | head -n 1 | grep \"# version 2023c\"" > /dev/null 2>&1'
+
 perform_test "Verify GE's Wine Proton Fork's Directory Exists" \
             "docker run --rm \
               --entrypoint test \
