@@ -1,3 +1,11 @@
+## [1.1.0-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.1.0-next.1...1.1.0-next.2) (2023-11-24)
+
+
+### Bug Fixes
+
+* prevent early shootergame log tail by deleteing old logs first ([0524b82](https://github.com/Johnny-Knighten/ark-sa-server/commit/0524b8279f7434b9d7924c10337395321837c343))
+* removes user/pw from supervisord conf due to launch issues ([91cf811](https://github.com/Johnny-Knighten/ark-sa-server/commit/91cf81191882de245ecaf4bd2f6f3535c38ce2fe))
+
 ## [1.1.0-next.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.0.2...1.1.0-next.1) (2023-11-24)
 
 
