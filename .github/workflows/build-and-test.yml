@@ -23,6 +23,12 @@ jobs:
       with:
         dockerfile: "Dockerfile"
 
+    - name: Run ShellCheck
+      uses: ludeeus/action-shellcheck@master
+      with:
+        severity: error
+        scandir: './bin'
+
     - name: Build Docker image (Push To Cache)
       uses: docker/build-push-action@v3
       with:
