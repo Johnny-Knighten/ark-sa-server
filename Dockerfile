@@ -3,15 +3,15 @@ FROM steamcmd/steamcmd:ubuntu-22
 LABEL maintainer="https://github.com/Johnny-Knighten"
 
 ARG PGID=0 \
-    PUID=0
+    PUID=0 \
+    PROTON_GE_VAR=wine-lutris \
+    PROTON_GE_VER=GE-Proton8-21 \
+    PROTON_GE_ARCH=x86_64
 
 ENV DEBUG=false \
     DRY_RUN=False \
     TZ=America/New_York \
     STEAMCMD_SKIP_VALIDATION=False \
-    PROTON_GE_VAR=wine-lutris \
-    PROTON_GE_VER=GE-Proton8-21 \
-    PROTON_GE_ARCH=x86_64 \
     ARK_SERVER_DIR="/ark-server" \
     ARK_MAP="TheIsland_WP" \
     ARK_GAME_PORT=7777 \
