@@ -6,24 +6,21 @@ set -e
 
 echo "System Bootstrap - Starting"
 
+cleanup() {
+    supervisorctl stop all
+    supervisorctl exit
+    echo "System Bootstrap - Stopping" >> /ark-server/logs/system-bootstrap.log
+}
+
 main() {
-  create_required_sub_dirs
   setup_cron_jobs
   if [[ "$DRY_RUN" = "True" ]]; then
     echo "DRY_RUN - exec /usr/bin/supervisord -c /usr/local/etc/supervisord.conf"
   else
-    exec /usr/bin/supervisord -c /usr/local/etc/supervisord.conf
+    trap 'cleanup' SIGTERM
+    /usr/bin/supervisord -c /usr/local/etc/supervisord.conf &
+    wait $!
   fi
-}
-
-create_required_sub_dirs() {
-  local required_sub_dirs=("server" "logs")
-  for sub_dir in "${required_sub_dirs[@]}"; do
-      if [[ ! -d "${ARK_SERVER_DIR}/${sub_dir}" ]]; then
-          mkdir -p "${ARK_SERVER_DIR}/${sub_dir}" || echo "System Bootstrap - Failed to create directory: ${ARK_SERVER_DIR}/${sub_dir}"
-      fi
-      chown ark-sa. "${ARK_SERVER_DIR}/${sub_dir}" || echo "System Bootstrap - Failed setting rights on ${ARK_SERVER_DIR}/${sub_dir}, continuing startup..."
-  done
 }
 
 setup_cron_jobs() {
@@ -40,6 +37,7 @@ setup_cron_jobs() {
   if [[ -f /usr/local/bin/ark-sa-cron-jobs ]]; then
     echo "System Bootstrap - Updating Crontab"
     crontab /usr/local/bin/ark-sa-cron-jobs
+    rm /usr/local/bin/ark-sa-cron-jobs
   fi
 }
   

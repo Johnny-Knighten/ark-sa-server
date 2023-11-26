@@ -12,7 +12,9 @@ ENV DEBUG=false \
     DRY_RUN=False \
     TZ=America/New_York \
     STEAMCMD_SKIP_VALIDATION=False \
-    ARK_SERVER_DIR="/ark-server" \
+    ARK_SERVER_DIR="/ark-server/server" \
+    ARK_BACKUPS_DIR="/ark-server/backups" \
+    ARK_LOGS_DIR="/ark-server/logs" \
     ARK_MAP="TheIsland_WP" \
     ARK_GAME_PORT=7777 \
     ARK_QUERY_PORT=27015 \
@@ -33,7 +35,8 @@ ENV DEBUG=false \
     ARK_SCHEDULED_RESTART=False \
     ARK_RESTART_CRON="0 4 * * *" \
     ARK_SCHEDULED_UPDATE=False \
-    ARK_UPDATE_CRON="0 5 * * 0"
+    ARK_UPDATE_CRON="0 5 * * 0" \
+    ARK_BACKUP_ON_STOP=False
 
 RUN set -x && \
     apt-get update && \
@@ -62,7 +65,11 @@ COPY bin/ /usr/local/bin
 COPY supervisord.conf /usr/local/etc/supervisord.conf
 RUN ["chmod", "-R", "+x", "/usr/local/bin"]
 
+
 VOLUME [ "${ARK_SERVER_DIR}" ]
+VOLUME [ "${ARK_BACKUPS_DIR}" ]
+VOLUME [ "${ARK_LOGS_DIR}" ]
+
 WORKDIR ${ARK_SERVER_DIR}
 
 EXPOSE 7777/udp

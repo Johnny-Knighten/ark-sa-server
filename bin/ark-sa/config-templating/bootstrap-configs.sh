@@ -5,7 +5,7 @@ set -e
 [[ -z "${DEBUG}" ]] || [[ "${DEBUG,,}" = "false" ]] || [[ "${DEBUG,,}" = "0" ]] || set -x
 
 config_template="/usr/local/bin/ark-sa/config-templating/GameUserSettings.template.ini"
-config_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Config/WindowsServer/GameUserSettings.ini"
+config_file="${ARK_SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer/GameUserSettings.ini"
 
 if [[ ! -f "$config_file" ]] || [[ "$ARK_REBUILD_CONFIG" = "True" ]]; then
 
@@ -16,7 +16,7 @@ if [[ ! -f "$config_file" ]] || [[ "$ARK_REBUILD_CONFIG" = "True" ]]; then
   fi
 
   if [ -f "$config_template" ]; then
-    mkdir -p "${ARK_SERVER_DIR}/server/ShooterGame/Saved/Config/WindowsServer"
+    mkdir -p "${ARK_SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer"
     cp "$config_template" "$config_file"
     sed -i "s/SessionName=<<ARK_SERVER_NAME>>/SessionName=$ARK_SERVER_NAME/" "$config_file"
     sed -i "s/RCONEnabled=<<ARK_ENABLE_RCON>>/RCONEnabled=$ARK_ENABLE_RCON/" "$config_file"

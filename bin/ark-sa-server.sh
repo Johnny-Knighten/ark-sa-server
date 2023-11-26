@@ -16,7 +16,7 @@ main() {
 }
 
 handle_old_shooter_log() {
-  local shooter_log="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
+  local shooter_log="${ARK_SERVER_DIR}/ShooterGame/Saved/Logs/ShooterGame.log"
   if [[ -f "$shooter_log" ]]; then
     echo "Ark Server - Deleting Old Shooter Logs"
     rm "$shooter_log"
@@ -62,7 +62,7 @@ start_server() {
 
   xvfb-run $proton_wine $server_exe "$cmd_args" $launch_flags &> $proton_wine_log &
 
-  local log_file="${ARK_SERVER_DIR}/server/ShooterGame/Saved/Logs/ShooterGame.log"
+  local log_file="${ARK_SERVER_DIR}/ShooterGame/Saved/Logs/ShooterGame.log"
   local timeout=300
 
   while [ ! -f "$log_file" ] && [ $timeout -gt 0 ]; do
