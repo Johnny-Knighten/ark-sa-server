@@ -118,9 +118,11 @@ The table below shows all the available environment variables and their default 
 | `STEAMCMD_SKIP_VALIDATION` | Skips SteamCMD validation of the server files. Can speed up server start time, but could risk not detecting corrupted files. | `False` |
 | `TZ` | Sets the timezone of the container. See the table [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and look in the TZ identifier column. Highly recommend to set this if you will be using any of the CRON variables. | `America/New_York` |
 | `ARK_SCHEDULED_RESTART` | Enable scheduled restarts of the server. | `False` |
+| `ARK_BACKUP_ON_SCHEDULED_RESTART` | Determines if the server should backup itself before restarting. | `False` |
 | `ARK_RESTART_CRON` | Cron expression for scheduled restarts. Default is everyday at 4am. | `0 4 * * *` |
 | `ARK_SCHEDULED_UPDATE` | Enable scheduled updates of the server. | `False` |
 | `ARK_UPDATE_CRON` | Cron expression for scheduled updates. Default is every Sunday at 5am. | `0 5 * * 0` |
+| `ARK_BACKUP_BEFORE_UPDATE` | Determines if the server should backup itself before updating. | `False` |
 | `ARK_UPDATE_ON_BOOT` | Determines if the server should update itself when it starts. If this is set to `False` then the server will only update if `ARK_SCHEDULED_UPDATE=True`, then it will update on the schedule specified by `ARK_UPDATE_CRON`.  | `True` |
 | `ARK_BACKUP_ON_STOP` | Determines if the server should backup itself when the container stops. | `True` |
 | `ARK_ZIP_BACKUPS` | If this is set to `True` then it will zip your backups instead of the default tar and gzip. | `False` |
@@ -171,6 +173,11 @@ There are thee volumes used by the container
 ### Backups
 
 Backups can be performed automatically if configured. Backups are performed by making a copy the `/ark-server/server/ShooterGame/Saved` directory to the `/ark-server/backups` volume. The backups are named using the following format: `server-backup-{datetime}`. The backups are compressed using `tar` and `gzip` and are stored in the `/ark-server/backups` volume. The backups are not deleted automatically, so you will need to manage them yourself.
+
+Backup Automation Options
+* `ARK_BACKUP_ON_SCHEDULED_RESTART` - Backup the server before a scheduled restart
+* `ARK_BACKUP_BEFORE_UPDATE` - Backup the server before an update
+* `ARK_BACKUP_ON_STOP` - Backup the server when the container stops
 
 **If you are using `ARK_BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker run/stop/compose` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.**
 

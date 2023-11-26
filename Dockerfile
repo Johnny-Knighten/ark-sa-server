@@ -33,11 +33,13 @@ ENV DEBUG=false \
     ARK_ENABLE_PVE=False \
     ARK_REBUILD_CONFIG=False \
     ARK_SCHEDULED_RESTART=False \
+    ARK_BACKUP_ON_SCHEDULED_RESTART=False \
     ARK_RESTART_CRON="0 4 * * *" \
     ARK_SCHEDULED_UPDATE=False \
+    ARK_BACKUP_BEFORE_UPDATE=False \
     ARK_UPDATE_CRON="0 5 * * 0" \
     ARK_BACKUP_ON_STOP=False \
-    ARK_ZIP_BACKUPS=False
+    ARK_ZIP_BACKUPS=False 
 
 RUN set -x && \
     apt-get update && \

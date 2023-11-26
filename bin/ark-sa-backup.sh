@@ -6,8 +6,34 @@ set -e
 
 echo "Backup Process - Starting"
 
+SCRIPT_PARAM="$1"
+
 main() {
   backup_ark_sa_server
+  start_ark_sa_server
+  start_ark_sa_update
+}
+
+start_ark_sa_server() {
+  if [[ "$SCRIPT_PARAM" = "restart" ]]; then
+     echo "Backup Process - Starting Ark SA Server After Backup"
+    if [[ "$DRY_RUN" = "True" ]]; then
+      echo "DRY_RUN - supervisorctl start ark-sa-server"
+    else
+      supervisorctl start ark-sa-server
+    fi
+  fi
+}
+
+start_ark_sa_update() {
+  if [[ "$SCRIPT_PARAM" = "update" ]]; then
+    echo "Backup Process - Starting Ark SA Update After Backup"
+    if [[ "$DRY_RUN" = "True" ]]; then
+      echo "DRY_RUN - supervisorctl start ark-sa-updater"
+    else
+      supervisorctl start ark-sa-updater
+    fi
+  fi
 }
 
 zip_backup() {
