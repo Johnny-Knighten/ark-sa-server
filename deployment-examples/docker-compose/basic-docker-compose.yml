@@ -9,11 +9,15 @@ services:
       - ARK_SERVER_NAME="Simple ARK SA Server"
       - ARK_SERVER_ADMIN_PASSWORD=secretpassword
     volumes:
-      - 'ark-files:/ark-server'
+      - 'ark-server:/ark-server/server'
+      - 'ark-backups:/ark-server/backups'
+      - 'ark-logs:/ark-server/logs'
     ports:
       - 7777:7777/udp
       - 7778:7778/udp
       - 27015:27015/udp
       - 27020:27020/tcp
 volumes:
-  ark-files:
+  ark-server:
+  ark-backups:
+  ark-logs:

@@ -44,7 +44,9 @@ ExecStart=/usr/bin/docker run \
           --name %n \
           --pull=always \ # may want to remove if using locally built image
           --rm \
-          -v /opt/ark-sa-server:/ark-server\
+          -v /opt/ark-sa/server:/ark-server/server\
+          -v /opt/ark-sa/backups:/ark-server/backups\
+          -v /opt/ark-sa/logs:/ark-server/logs\
           -p 8888:8888/udp \
           -p 8889:8889/udp \
           -p 27016:27016/udp \

@@ -122,7 +122,9 @@ services:
   ark-sa:
     ... # all other config before the volumes section
     volumes:
-      - '/desired/directory/to/store/ark/files:/ark-server'
+      - '/desired/directory/to/store/ark/server:/ark-server/server'
+      - '/desired/directory/to/store/ark/backups:/ark-server/backups'
+      - '/desired/directory/to/store/ark/logs:/ark-server/logs'
     ...
 # removed or commented out
 #volumes:
