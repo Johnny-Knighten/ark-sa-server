@@ -120,9 +120,10 @@ The table below shows all the available environment variables and their default 
 | `ARK_SCHEDULED_RESTART` | Enable scheduled restarts of the server. | `False` |
 | `ARK_RESTART_CRON` | Cron expression for scheduled restarts. Default is everyday at 4am. | `0 4 * * *` |
 | `ARK_SCHEDULED_UPDATE` | Enable scheduled updates of the server. | `False` |
-| `ARK_UPDATE_CRON` | Cron expression for scheduled updates.Default is every Sunday at 5am. | `0 5 * * 0` |
+| `ARK_UPDATE_CRON` | Cron expression for scheduled updates. Default is every Sunday at 5am. | `0 5 * * 0` |
 | `ARK_UPDATE_ON_BOOT` | Determines if the server should update itself when it starts. If this is set to `False` then the server will only update if `ARK_SCHEDULED_UPDATE=True`, then it will update on the schedule specified by `ARK_UPDATE_CRON`.  | `True` |
 | `ARK_BACKUP_ON_STOP` | Determines if the server should backup itself when the container stops. | `True` |
+| `ARK_ZIP_BACKUPS` | If this is set to `True` then it will zip your backups instead of the default tar and gzip. | `False` |
 | `ARK_SERVER_NAME` | Name of the server that appears in the server list. If the name contains a space wrap the name in quotes, depending on your system you may need to add escaped quotes `\"`. | `"ARK SA Server"` |
 | `ARK_SERVER_PASSWORD` | Password to login to the server. Defaults to no password aka a public server. **Do not put spaces in your password.** | EMPTY |
 | `ARK_SERVER_ADMIN_PASSWORD `| Password for the server admin. Also used for RCON access. **Do not put spaces in your password.** | `adminpassword` |
@@ -170,6 +171,8 @@ There are thee volumes used by the container
 ### Backups
 
 Backups can be performed automatically if configured. Backups are performed by making a copy the `/ark-server/server/ShooterGame/Saved` directory to the `/ark-server/backups` volume. The backups are named using the following format: `server-backup-{datetime}`. The backups are compressed using `tar` and `gzip` and are stored in the `/ark-server/backups` volume. The backups are not deleted automatically, so you will need to manage them yourself.
+
+**If you are using `ARK_BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker run/stop/compose` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.**
 
 If desired, you can also manually trigger a backup. See the [Manual Backup](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#manual-backup) section of the wiki.
 

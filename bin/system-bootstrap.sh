@@ -8,6 +8,28 @@ echo "System Bootstrap - Starting"
 
 cleanup() {
     supervisorctl stop all
+
+    local counter=0
+    local max_wait_time=600 
+
+    while true; do
+        local status=$(supervisorctl status ark-sa-backup)
+        if [[ "$status" == *"RUNNING"* ]] || [[ "$status" == *"STARTING"* ]]; then
+            echo "Waiting for ark-sa-backup to complete..."
+        elif [[ "$status" == *"STOPPED"* ]] || [[ "$status" == *"EXITED"* ]] || [[ "$status" == *"FATAL"* ]]; then
+            echo "ark-sa-backup is not running."
+            break
+        fi
+
+        sleep 5
+        ((counter += 5))
+
+        if [[ "$counter" -ge "$max_wait_time" ]]; then
+            echo "Timeout reached while waiting for ark-sa-backup to complete."
+            break
+        fi
+    done
+
     supervisorctl exit
     echo "System Bootstrap - Stopping" >> /ark-server/logs/system-bootstrap.log
 }

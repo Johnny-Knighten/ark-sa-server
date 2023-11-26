@@ -36,7 +36,8 @@ ENV DEBUG=false \
     ARK_RESTART_CRON="0 4 * * *" \
     ARK_SCHEDULED_UPDATE=False \
     ARK_UPDATE_CRON="0 5 * * 0" \
-    ARK_BACKUP_ON_STOP=False
+    ARK_BACKUP_ON_STOP=False \
+    ARK_ZIP_BACKUPS=False
 
 RUN set -x && \
     apt-get update && \
@@ -46,7 +47,8 @@ RUN set -x && \
                         xvfb=2:21.1.4-2ubuntu1.7~22.04.2 \
                         supervisor=4.2.1-1ubuntu1 \
                         cron=3.0pl1-137ubuntu3 \
-                        tzdata=2023c-0ubuntu0.22.04.2 && \
+                        tzdata=2023c-0ubuntu0.22.04.2 \
+                        zip=3.0-12build2&& \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll

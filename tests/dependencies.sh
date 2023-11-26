@@ -32,6 +32,18 @@ perform_test "Verify tzdata is Installed" \
                 johnnyknighten/ark-sa-server:latest \
                 -c "cat /usr/share/zoneinfo/tzdata.zi | head -n 1 | grep \"# version 2023c\"" > /dev/null 2>&1'
 
+perform_test "Verify tar is Installed" \
+             'docker run --rm \
+                --entrypoint tar \
+                johnnyknighten/ark-sa-server:latest \
+                --version > /dev/null 2>&1'
+
+perform_test "Verify zip is Installed" \
+             'docker run --rm \
+                --entrypoint zip \
+                johnnyknighten/ark-sa-server:latest \
+                -v > /dev/null 2>&1'
+
 perform_test "Verify GE's Wine Proton Fork's Directory Exists" \
             "docker run --rm \
               --entrypoint test \
