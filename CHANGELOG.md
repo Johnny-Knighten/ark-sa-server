@@ -1,3 +1,18 @@
+## [2.0.0-next.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.1.0-next.2...2.0.0-next.1) (2023-11-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* breaking out into multiple volumes will require data transfer
+
+### Features
+
+* added backup on container stop ([e4c704c](https://github.com/Johnny-Knighten/ark-sa-server/commit/e4c704c72f447678ef6891b8512d1c04d72f7abd))
+* added option to limit # of backups stored ([dbe7dfd](https://github.com/Johnny-Knighten/ark-sa-server/commit/dbe7dfd1bbd80d7fa234b6f4feca446f141ed72a))
+* added scheduled update cron ([51bf6a5](https://github.com/Johnny-Knighten/ark-sa-server/commit/51bf6a527f37d563ef15278e1b8ba70972be7135))
+* introduce the option to store backups as zip instead of tar.gz ([1a26e08](https://github.com/Johnny-Knighten/ark-sa-server/commit/1a26e08f24e1c39987f780a40f4feaad76b3987b))
+* introduced backups on restarts and before updates ([183629f](https://github.com/Johnny-Knighten/ark-sa-server/commit/183629f19a8ac466c3536b6050eae2bf0cc97bfe))
+
 ## [1.1.0-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.1.0-next.1...1.1.0-next.2) (2023-11-24)
 
 
