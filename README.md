@@ -68,8 +68,8 @@ $ docker run -d \
   -p 7778:7778/udp \
   -p 27015:27015/udp \
   -p 27020:27020/tcp \
-  -e ARK_SERVER_NAME="\"Simple ARK SA Server\"" \
-  -e ARK_SERVER_ADMIN_PASSWORD=secretpassword \
+  -e SERVER_NAME="\"Simple ARK SA Server\"" \
+  -e ADMIN_PASSWORD=secretpassword \
   -v $HOME/ark-data:/ark-server \
   johnnyknighten/ark-sa-server:latest
 ```
@@ -88,7 +88,7 @@ To stop the container:
 $ docker stop ark-sa-server
 ```
 
-Note - When setting `ARK_SERVER_NAME` in the docker run command, you must escape the quotes with a backslash. This is because the value is passed to the server as a command line argument and the quotes are needed to keep the name together. When using docker compose, the escaped quotes are not needed and standard quotes are good enough.
+Note - When setting `SERVER_NAME` in the docker run command, you must escape the quotes with a backslash. This is because the value is passed to the server as a command line argument and the quotes are needed to keep the name together. When using docker compose, the escaped quotes are not needed and standard quotes are good enough.
 
 ### Windows Host
 
@@ -115,42 +115,42 @@ The table below shows all the available environment variables and their default 
 
 | Variable | Description | Default |
 | --- | --- | :---: |
-| `STEAMCMD_SKIP_VALIDATION` | Skips SteamCMD validation of the server files. Can speed up server start time, but could risk not detecting corrupted files. | `False` |
+| `SKIP_FILE_VALIDATION` | Skips SteamCMD validation of the server files. Can speed up server start time, but could risk not detecting corrupted files. | `False` |
 | `TZ` | Sets the timezone of the container. See the table [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and look in the TZ identifier column. Highly recommend to set this if you will be using any of the CRON variables. | `America/New_York` |
-| `ARK_SCHEDULED_RESTART` | Enable scheduled restarts of the server. | `False` |
-| `ARK_BACKUP_ON_SCHEDULED_RESTART` | Determines if the server should backup itself before restarting. | `False` |
-| `ARK_RESTART_CRON` | Cron expression for scheduled restarts. Default is everyday at 4am. | `0 4 * * *` |
-| `ARK_SCHEDULED_UPDATE` | Enable scheduled updates of the server. | `False` |
-| `ARK_UPDATE_CRON` | Cron expression for scheduled updates. Default is every Sunday at 5am. | `0 5 * * 0` |
-| `ARK_BACKUP_BEFORE_UPDATE` | Determines if the server should backup itself before updating. | `False` |
-| `ARK_UPDATE_ON_BOOT` | Determines if the server should update itself when it starts. If this is set to `False` then the server will only update if `ARK_SCHEDULED_UPDATE=True`, then it will update on the schedule specified by `ARK_UPDATE_CRON`.  | `True` |
-| `ARK_SCHEDULED_BACKUP` | Enable scheduled backups of the server. | `False` |
-| `ARK_BACKUP_CRON` | Cron expression for scheduled backups. Default is every day at 6am. | `0 6 * * *` |
-| `ARK_BACKUP_ON_STOP` | Determines if the server should backup itself when the container stops. | `True` |
-| `ARK_ZIP_BACKUPS` | If this is set to `True` then it will zip your backups instead of the default tar and gzip. | `False` |
-| `ARK_NUMBER_OF_BACKUPS` | Number of backups to keep. | `5` |
-| `ARK_SERVER_NAME` | Name of the server that appears in the server list. If the name contains a space wrap the name in quotes, depending on your system you may need to add escaped quotes `\"`. | `"ARK SA Server"` |
-| `ARK_SERVER_PASSWORD` | Password to login to the server. Defaults to no password aka a public server. **Do not put spaces in your password.** | EMPTY |
-| `ARK_SERVER_ADMIN_PASSWORD `| Password for the server admin. Also used for RCON access. **Do not put spaces in your password.** | `adminpassword` |
-| `ARK_GAME_PORT` | Primary game port. This port +1 will also be used. | `7777` |
-| `ARK_QUERY_PORT` | Steam query port. | `27015` |
-| `ARK_ENABLE_RCON` | Enable RCON on the server. | `True` |
-| `ARK_RCON_PORT`| RCON port for the server. | `27020` |
-| `ARK_MAP` | Map launched on the server. | `TheIsland_WP` |
-| `ARK_MAX_PLAYERS`| Maximum number of players allowed on the server. | `70` |
-| `ARK_ENABLE_PVE`| Enable PvE mode, otherwise it is a PvPvE. |`False`|
-| `ARK_NO_BATTLEYE` | Disables BattlEye on the server. | `True` |
-| `ARK_EXTRA_LAUNCH_OPTIONS`  | Extra launch options for the server. Allows additional flags that do not have an environment variable provided yet. | EMPTY |
-| `ARK_MOD_LIST` | Comma separated list of mod ids to install. Needs to be wrapped in quotes and whitespace can appear before or after commas. | EMPTY |
-| `ARK_EPIC_PUBLIC_IP` | Public IP address of the server, used by Epic game clients. | EMPTY |
-| `ARK_MULTI_HOME_SERVER` | Provide your public IP address when hosting multiple servers on the same machine. | EMPTY |
-| `ARK_REBUILD_CONFIG` | Force rebuild of GameUserSettings.ini on container start. If you update any of the configuration variables use this to force rewrite GameUserSettings.ini to include the new values. *Note - this overwrites your current GameUserSettings.ini, so make a copy if needed.*| `False` |
+| `SCHEDULED_RESTART` | Enable scheduled restarts of the server. | `False` |
+| `BACKUP_ON_SCHEDULED_RESTART` | Determines if the server should backup itself before restarting. | `False` |
+| `RESTART_CRON` | Cron expression for scheduled restarts. Default is everyday at 4am. | `0 4 * * *` |
+| `SCHEDULED_UPDATE` | Enable scheduled updates of the server. | `False` |
+| `UPDATE_CRON` | Cron expression for scheduled updates. Default is every Sunday at 5am. | `0 5 * * 0` |
+| `BACKUP_BEFORE_UPDATE` | Determines if the server should backup itself before updating. | `False` |
+| `UPDATE_ON_BOOT` | Determines if the server should update itself when it starts. If this is set to `False` then the server will only update if `SCHEDULED_UPDATE=True`, then it will update on the schedule specified by `UPDATE_CRON`.  | `True` |
+| `SCHEDULED_BACKUP` | Enable scheduled backups of the server. | `False` |
+| `BACKUP_CRON` | Cron expression for scheduled backups. Default is every day at 6am. | `0 6 * * *` |
+| `BACKUP_ON_STOP` | Determines if the server should backup itself when the container stops. | `True` |
+| `ZIP_BACKUPS` | If this is set to `True` then it will zip your backups instead of the default tar and gzip. | `False` |
+| `RETAIN_BACKUPS` | Number of backups to keep. | `5` |
+| `SERVER_NAME` | Name of the server that appears in the server list. If the name contains a space wrap the name in quotes, depending on your system you may need to add escaped quotes `\"`. | `"ARK SA Server"` |
+| `SERVER_PASSWORD` | Password to login to the server. Defaults to no password aka a public server. **Do not put spaces in your password.** | EMPTY |
+| `ADMIN_PASSWORD `| Password for the server admin. Also used for RCON access. **Do not put spaces in your password.** | `adminpassword` |
+| `GAME_PORT` | Primary game port. This port +1 will also be used. | `7777` |
+| `QUERY_PORT` | Steam query port. | `27015` |
+| `ENABLE_RCON` | Enable RCON on the server. | `True` |
+| `RCON_PORT`| RCON port for the server. | `27020` |
+| `MAP` | Map launched on the server. | `TheIsland_WP` |
+| `MAX_PLAYERS`| Maximum number of players allowed on the server. | `70` |
+| `ENABLE_PVE`| Enable PvE mode, otherwise it is a PvPvE. |`False`|
+| `NO_BATTLEYE` | Disables BattlEye on the server. | `True` |
+| `EXTRA_LAUNCH_OPTIONS`  | Extra launch options for the server. Allows additional flags that do not have an environment variable provided yet. | EMPTY |
+| `MOD_LIST` | Comma separated list of mod ids to install. Needs to be wrapped in quotes and whitespace can appear before or after commas. | EMPTY |
+| `EPIC_PUBLIC_IP` | Public IP address of the server, used by Epic game clients. | EMPTY |
+| `MULTI_HOME_SERVER` | Provide your public IP address when hosting multiple servers on the same machine. | EMPTY |
+| `REBUILD_CONFIG` | Force rebuild of GameUserSettings.ini on container start. If you update any of the configuration variables use this to force rewrite GameUserSettings.ini to include the new values. *Note - this overwrites your current GameUserSettings.ini, so make a copy if needed.*| `False` |
 
 **Note - If you are new to CRON, check here to get help understanding the syntax: [crontab guru](https://crontab.guru/).**
 
 ### Exposed Ports
 
-The table below shows the default ports that are exposed by the container. These can be changed by setting the environment variables `ARK_GAME_PORT`, `ARK_QUERY_PORT`, and `ARK_RCON_PORT`.
+The table below shows the default ports that are exposed by the container. These can be changed by setting the environment variables `GAME_PORT`, `QUERY_PORT`, and `RCON_PORT`.
 
 | Port | Protocol | Description |
 | :---: | :---: | --- |
@@ -175,15 +175,15 @@ There are thee volumes used by the container
 
 ### Backups
 
-Backups can be performed automatically if configured. Backups are performed by making a copy the `/ark-server/server/ShooterGame/Saved` directory to the `/ark-server/backups` volume. The backups are named using the following format: `server-backup-{datetime}`. They are compressed as `tar.gz` files by default(can be set to zip via `ARK_ZIP_BACKUPS=True`) and are stored in the `/ark-server/backups` volume. You can configure the number of backups to keep using `ARK_NUMBER_OF_BACKUPS`, otherwise you will need to manually delete old backups.
+Backups can be performed automatically if configured. Backups are performed by making a copy the `/ark-server/server/ShooterGame/Saved` directory to the `/ark-server/backups` volume. The backups are named using the following format: `server-backup-{datetime}`. They are compressed as `tar.gz` files by default(can be set to zip via `ZIP_BACKUPS=True`) and are stored in the `/ark-server/backups` volume. You can configure the number of backups to keep using `RETAIN_BACKUPS`, otherwise you will need to manually delete old backups.
 
 Backup Automation Options
-* `ARK_BACKUP_ON_SCHEDULED_RESTART` - Backup the server before a scheduled restart
-* `ARK_BACKUP_BEFORE_UPDATE` - Backup the server before an update
-* `ARK_BACKUP_ON_STOP` - Backup the server when the container stops
-* `ARK_SCHEDULED_BACKUP` - Backup the server on a schedule
+* `BACKUP_ON_SCHEDULED_RESTART` - Backup the server before a scheduled restart
+* `BACKUP_BEFORE_UPDATE` - Backup the server before an update
+* `BACKUP_ON_STOP` - Backup the server when the container stops
+* `SCHEDULED_BACKUP` - Backup the server on a schedule
 
-**If you are using `ARK_BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker run/stop/compose` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.**
+**If you are using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker run/stop/compose` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.**
 
 If desired, you can also manually trigger a backup. See the [Manual Backup](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#manual-backup) section of the wiki.
 
@@ -199,7 +199,7 @@ For more info see the [Config Files](https://github.com/Johnny-Knighten/ark-sa-s
 
 ### Mods
 
-Mods are handled via the `ARK_MOD_LIST` environment variable. The variable is a comma separated list of mod ids to install. The mod ids list need to be wrapped in quotes, and white space is allowed before/after commas since all whitespace in the quotes will be removed. Right now, if you are lucky, the mod author will put the id in there mod description. An alternative way to get mod ids is by installing them on your local machine then going to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Binaries\Win64\ShooterGame\Mods\RANDOM#` and look at the subdirectories' name. The first number before the `_` in the subdirectories name is the mod id. 
+Mods are handled via the `MOD_LIST` environment variable. The variable is a comma separated list of mod ids to install. The mod ids list need to be wrapped in quotes, and white space is allowed before/after commas since all whitespace in the quotes will be removed. Right now, if you are lucky, the mod author will put the id in there mod description. An alternative way to get mod ids is by installing them on your local machine then going to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Binaries\Win64\ShooterGame\Mods\RANDOM#` and look at the subdirectories' name. The first number before the `_` in the subdirectories name is the mod id. 
 
 ## Deployment
 

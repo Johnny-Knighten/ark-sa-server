@@ -9,18 +9,18 @@ Start by creating a file to hold all of your variables. Consider the permissions
 Create a service config file [`/etc/sysconfig/ark-sa-server.env`](ark-sa-server.env):
 
 ```
-ARK_SERVER_NAME="Simple ARK SA Server"
-ARK_GAME_PORT=8888
-ARK_QUERY_PORT=27016
-ARK_MAX_PLAYERS=20
-ARK_SERVER_PASSWORD=password2
-ARK_SERVER_ADMIN_PASSWORD=adminpassword2
-ARK_ENABLE_PVE=True
-STEAMCMD_SKIP_VALIDATION=True
+SERVER_NAME="Simple ARK SA Server"
+GAME_PORT=8888
+QUERY_PORT=27016
+MAX_PLAYERS=20
+SERVER_PASSWORD=password2
+ADMIN_PASSWORD=adminpassword2
+ENABLE_PVE=True
+SKIP_FILE_VALIDATION=True
 ARK_PREVENT_AUTO_UPDATE=True
 ARK_RCON_ENABLED=True
-ARK_RCON_PORT=27021
-ARK_MOD_LIST="927131, 893657"
+RCON_PORT=27021
+MOD_LIST="927131, 893657"
 ```
 
 ## Create Systemd Service Unit File

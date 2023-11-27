@@ -7,29 +7,29 @@ services:
     restart: unless-stopped
     environment:
       #- TZ=America/Los_Angeles
-      - ARK_GAME_PORT=8888
-      - ARK_QUERY_PORT=27016
-      - ARK_MAX_PLAYERS=55
-      - ARK_SERVER_NAME="Containerized Server Test223"
-      - ARK_SERVER_PASSWORD=
-      - ARK_SERVER_ADMIN_PASSWORD=adminpassword25
-      - ARK_ENABLE_PVE=False
-      - STEAMCMD_SKIP_VALIDATION=False
-      - ARK_UPDATE_ON_BOOT=True
-      - ARK_ENABLE_RCON=True
-      - ARK_RCON_PORT=27021
-      - ARK_MOD_LIST="927131, 893657"
-      - ARK_MULTI_HOME=0.0.0.0      # Make Your Public IP
-      - ARK_EPIC_PUBLIC_IP=0.0.0.0  # Make Your Public IP
-      - ARK_NO_BATTLEYE=True
-      - ARK_REBUILD_CONFIG=True
-      - ARK_SCHEDULED_RESTART=False
-      - ARK_BACKUP_ON_SCHEDULED_RESTART=False
-      - ARK_RESTART_CRON=0 4 * * 0,3
-      - ARK_SCHEDULED_UPDATE=False
-      - ARK_UPDATE_CRON=0 5 * * 6
-      - ARK_BACKUP_ON_STOP=True
-      - ARK_NUMBER_OF_BACKUPS=10
+      - GAME_PORT=8888
+      - QUERY_PORT=27016
+      - MAX_PLAYERS=55
+      - SERVER_NAME="Containerized Server Test223"
+      - SERVER_PASSWORD=
+      - ADMIN_PASSWORD=adminpassword25
+      - ENABLE_PVE=False
+      - SKIP_FILE_VALIDATION=False
+      - UPDATE_ON_BOOT=True
+      - ENABLE_RCON=True
+      - RCON_PORT=27021
+      - MOD_LIST="927131, 893657"
+      - MULTI_HOME=0.0.0.0      # Make Your Public IP
+      - EPIC_PUBLIC_IP=0.0.0.0  # Make Your Public IP
+      - NO_BATTLEYE=True
+      - REBUILD_CONFIG=True
+      - SCHEDULED_RESTART=False
+      - BACKUP_ON_SCHEDULED_RESTART=False
+      - RESTART_CRON=0 4 * * 0,3
+      - SCHEDULED_UPDATE=False
+      - UPDATE_CRON=0 5 * * 6
+      - BACKUP_ON_STOP=True
+      - RETAIN_BACKUPS=10
     volumes:
       - 'ark-server:/ark-server/server'
       - 'ark-backups:/ark-server/backups'

@@ -39,23 +39,23 @@ start_ark_sa_update() {
 
 zip_backup() {
 if [[ "$DRY_RUN" = "True" ]]; then
-    echo "DRY_RUN - zip -r \"${ARK_BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).zip\" \"${ARK_SERVER_DIR}/ShooterGame/Saved\""
+    echo "DRY_RUN - zip -r \"${BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).zip\" \"${SERVER_DIR}/ShooterGame/Saved\""
   else
-    zip -r "${ARK_BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).zip" "${ARK_SERVER_DIR}/ShooterGame/Saved"
+    zip -r "${BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).zip" "${SERVER_DIR}/ShooterGame/Saved"
   fi
 }
 
 tar_gz_backup() {
   if [[ "$DRY_RUN" = "True" ]]; then
-    echo "DRY_RUN - tar -czf \"${ARK_BACKUPS_DIR}/server-backup-$(date +%Y%m%d%H%M%S).tar.gz\" \"${ARK_SERVER_DIR}/ShooterGame/Saved\""
+    echo "DRY_RUN - tar -czf \"${BACKUPS_DIR}/server-backup-$(date +%Y%m%d%H%M%S).tar.gz\" \"${SERVER_DIR}/ShooterGame/Saved\""
   else
-    tar -czf "${ARK_BACKUPS_DIR}"/ark-sa-server-$(date +%Y%m%d%H%M%S).tar.gz "${ARK_SERVER_DIR}"/ShooterGame/Saved
+    tar -czf "${BACKUPS_DIR}"/ark-sa-server-$(date +%Y%m%d%H%M%S).tar.gz "${SERVER_DIR}"/ShooterGame/Saved
   fi
 }
 
 backup_ark_sa_server() {
   echo "Backup Process - Backing Up Ark SA Server"
-  if [[ "$ARK_ZIP_BACKUPS" = "True" ]]; then
+  if [[ "$ZIP_BACKUPS" = "True" ]]; then
     zip_backup
   else
     tar_gz_backup
@@ -64,19 +64,19 @@ backup_ark_sa_server() {
 }
 
 clean_up_backups_dir() {
-  if [[ -n "$ARK_NUMBER_OF_BACKUPS" ]]; then
+  if [[ -n "$RETAIN_BACKUPS" ]]; then
     echo "Backup Process - Cleaning Up Backup Directory"
     count_files() {
-      find "$ARK_BACKUPS_DIR" -type f | wc -l
+      find "$BACKUPS_DIR" -type f | wc -l
     }
 
     delete_oldest_file() {
-        find "$ARK_BACKUPS_DIR" -type f -print0 | xargs -0 ls -tr | head -n 1 | xargs rm -f
+        find "$BACKUPS_DIR" -type f -print0 | xargs -0 ls -tr | head -n 1 | xargs rm -f
     }
 
     current_file_count=$(count_files)
 
-    while [ "$current_file_count" -gt "$((ARK_NUMBER_OF_BACKUPS - 1))" ]; do
+    while [ "$current_file_count" -gt "$((RETAIN_BACKUPS - 1))" ]; do
         echo "Backup Process - File Limit Exceded: ($current_file_count),  Deleting Oldest"
         delete_oldest_file
         current_file_count=$(count_files)

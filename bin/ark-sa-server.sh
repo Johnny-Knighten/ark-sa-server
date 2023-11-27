@@ -16,7 +16,7 @@ main() {
 }
 
 handle_old_shooter_log() {
-  local shooter_log="${ARK_SERVER_DIR}/ShooterGame/Saved/Logs/ShooterGame.log"
+  local shooter_log="${SERVER_DIR}/ShooterGame/Saved/Logs/ShooterGame.log"
   if [[ -f "$shooter_log" ]]; then
     echo "Ark Server - Deleting Old Shooter Logs"
     rm "$shooter_log"
@@ -24,32 +24,32 @@ handle_old_shooter_log() {
 }
 
 start_server() {
-  local cmd_args="$ARK_MAP?listen"
-  cmd_args+="?Port=$ARK_GAME_PORT"
-  cmd_args+="?QueryPort=$ARK_QUERY_PORT"
+  local cmd_args="$MAP?listen"
+  cmd_args+="?Port=$GAME_PORT"
+  cmd_args+="?QueryPort=$QUERY_PORT"
 
-  if [[ -n "$ARK_MULTI_HOME" ]]; then
-    cmd_args+="?MultiHome=$ARK_MULTI_HOME"
+  if [[ -n "$MULTI_HOME" ]]; then
+    cmd_args+="?MultiHome=$MULTI_HOME"
   fi
 
   local launch_flags="-log"
 
-  if [[ "$ARK_NO_BATTLEYE" = "True" ]]; then
+  if [[ "$NO_BATTLEYE" = "True" ]]; then
     launch_flags+=" -NoBattlEye"
   fi
 
-  if [[ -n "$ARK_EPIC_PUBLIC_IP" ]]; then
-    launch_flags+=" --PublicIPforEpic $ARK_EPIC_PUBLIC_IP"
+  if [[ -n "$EPIC_PUBLIC_IP" ]]; then
+    launch_flags+=" --PublicIPforEpic $EPIC_PUBLIC_IP"
   fi
   
-  launch_flags+=" -WinLiveMaxPlayers=$ARK_MAX_PLAYERS"
+  launch_flags+=" -WinLiveMaxPlayers=$MAX_PLAYERS"
 
-  ARK_MOD_LIST="$(echo -e "$ARK_MOD_LIST" | tr -d '[:space:]')"
-  if [[ -n "$ARK_MOD_LIST" ]]; then
-    launch_flags+=" -automanagedmods -mods=$ARK_MOD_LIST"
+  MOD_LIST="$(echo -e "$MOD_LIST" | tr -d '[:space:]')"
+  if [[ -n "$MOD_LIST" ]]; then
+    launch_flags+=" -automanagedmods -mods=$MOD_LIST"
   fi
 
-  launch_flags+=" $ARK_EXTRA_LAUNCH_OPTIONS"
+  launch_flags+=" $EXTRA_LAUNCH_OPTIONS"
 
   local proton_wine=/opt/glorious_eggroll/proton/bin/wine
   local proton_wine_log=/ark-server/logs/proton-wine.log
@@ -62,7 +62,7 @@ start_server() {
 
   xvfb-run $proton_wine $server_exe "$cmd_args" $launch_flags &> $proton_wine_log &
 
-  local log_file="${ARK_SERVER_DIR}/ShooterGame/Saved/Logs/ShooterGame.log"
+  local log_file="${SERVER_DIR}/ShooterGame/Saved/Logs/ShooterGame.log"
   local timeout=300
 
   while [ ! -f "$log_file" ] && [ $timeout -gt 0 ]; do
