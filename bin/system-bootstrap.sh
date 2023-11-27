@@ -47,6 +47,11 @@ setup_cron_jobs() {
     fi
   fi
 
+  if [[ "$ARK_SCHEDULED_BACKUP" = "True" ]]; then
+    echo "System Bootstrap - Setting Up Scheduled Backup"
+    setup_cron_scheduled_backup >> /usr/local/bin/ark-sa-cron-jobs
+  fi
+
   if [[ -f /usr/local/bin/ark-sa-cron-jobs ]]; then
     echo "System Bootstrap - Updating Crontab"
     crontab /usr/local/bin/ark-sa-cron-jobs
@@ -76,6 +81,12 @@ setup_cron_scheduled_update_with_backup() {
   echo "$(date) - Server Update and Backup Scheduled For: $ARK_UPDATE_CRON" >> /ark-server/logs/cron.log
   echo "$ARK_UPDATE_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-update && \
     echo \"\$(date) - CRON Update + Backup - ark-sa-updater\" >> /ark-server/logs/cron.log"
+}
+
+setup_cron_scheduled_backup() {
+  echo "$(date) - Server Backup Scheduled For: $ARK_BACKUP_CRON" >> /ark-server/logs/cron.log
+  echo "$ARK_BACKUP_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-restart && \
+    echo \"\$(date) - CRON Backup - ark-sa-backup\" >> /ark-server/logs/cron.log"
 }
 
 wait_for_backup_completion() {

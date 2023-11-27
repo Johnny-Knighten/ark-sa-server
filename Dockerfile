@@ -39,6 +39,8 @@ ENV DEBUG=false \
     ARK_BACKUP_BEFORE_UPDATE=False \
     ARK_UPDATE_CRON="0 5 * * 0" \
     ARK_BACKUP_ON_STOP=True \
+    ARK_SCHEDULED_BACKUP=False \
+    ARK_BACKUP_CRON="0 6 * * *" \
     ARK_ZIP_BACKUPS=False \
     ARK_NUMBER_OF_BACKUPS=
 
