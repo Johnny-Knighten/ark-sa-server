@@ -5,16 +5,16 @@ source ./tests/test_helper_functions.sh
 perform_test "Verify Default Scheduled Restart CRON Job" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_RESTART=True \
+              -e SCHEDULED_RESTART=True \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
                crontab -l | grep -q \"0 4 \* \* \*\""'
 
-perform_test "Verify No Scheduled CRON If ARK_SCHEDULED_RESTART=False" \
+perform_test "Verify No Scheduled CRON If SCHEDULED_RESTART=False" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_RESTART=False \
+              -e SCHEDULED_RESTART=False \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -23,8 +23,8 @@ perform_test "Verify No Scheduled CRON If ARK_SCHEDULED_RESTART=False" \
 perform_test "Verify Restart CRON Job Scheduled Correctly" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_RESTART=True \
-              -e ARK_RESTART_CRON="10 * * * *" \
+              -e SCHEDULED_RESTART=True \
+              -e RESTART_CRON="10 * * * *" \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -33,8 +33,8 @@ perform_test "Verify Restart CRON Job Scheduled Correctly" \
 perform_test "Verify Restart With Backup CRON Job Scheduled Correctly (Default Schedule)" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_RESTART=True \
-              -e ARK_BACKUP_ON_SCHEDULED_RESTART=True \
+              -e SCHEDULED_RESTART=True \
+              -e BACKUP_ON_SCHEDULED_RESTART=True \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -44,9 +44,9 @@ perform_test "Verify Restart With Backup CRON Job Scheduled Correctly (Default S
 perform_test "Verify Restart With Backup CRON Job Scheduled Correctly (Non Default Schedule)" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_RESTART=True \
-              -e ARK_BACKUP_ON_SCHEDULED_RESTART=True \
-              -e ARK_RESTART_CRON="10 * * * *" \
+              -e SCHEDULED_RESTART=True \
+              -e BACKUP_ON_SCHEDULED_RESTART=True \
+              -e RESTART_CRON="10 * * * *" \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -56,16 +56,16 @@ perform_test "Verify Restart With Backup CRON Job Scheduled Correctly (Non Defau
 perform_test "Verify Default Scheduled Update CRON Job" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_UPDATE=True \
+              -e SCHEDULED_UPDATE=True \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 && 
               crontab -l | grep -q \"0 5 \* \* 0\""'
 
-perform_test "Verify No Scheduled CRON If ARK_SCHEDULED_UPDATE=False" \
+perform_test "Verify No Scheduled CRON If SCHEDULED_UPDATE=False" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_UPDATE=False \
+              -e SCHEDULED_UPDATE=False \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -74,8 +74,8 @@ perform_test "Verify No Scheduled CRON If ARK_SCHEDULED_UPDATE=False" \
 perform_test "Verify Update CRON Job Scheduled Correctly" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_UPDATE=True \
-              -e ARK_UPDATE_CRON="10 * * * *" \
+              -e SCHEDULED_UPDATE=True \
+              -e UPDATE_CRON="10 * * * *" \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -84,8 +84,8 @@ perform_test "Verify Update CRON Job Scheduled Correctly" \
 perform_test "Verify Update With Backup CRON Job Scheduled Correctly (Default Schedule)" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_UPDATE=True \
-              -e ARK_BACKUP_BEFORE_UPDATE=True \
+              -e SCHEDULED_UPDATE=True \
+              -e BACKUP_BEFORE_UPDATE=True \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -95,9 +95,9 @@ perform_test "Verify Update With Backup CRON Job Scheduled Correctly (Default Sc
 perform_test "Verify Update With Backup CRON Job Scheduled Correctly (Non Default Schedule)" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_UPDATE=True \
-              -e ARK_BACKUP_BEFORE_UPDATE=True \
-              -e ARK_UPDATE_CRON="10 * * * *" \
+              -e SCHEDULED_UPDATE=True \
+              -e BACKUP_BEFORE_UPDATE=True \
+              -e UPDATE_CRON="10 * * * *" \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -107,16 +107,16 @@ perform_test "Verify Update With Backup CRON Job Scheduled Correctly (Non Defaul
 perform_test "Verify Default Scheduled Backup CRON Job" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_BACKUP=True \
+              -e SCHEDULED_BACKUP=True \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 && 
               crontab -l | grep -q \"0 6 \* \* \*\""'
 
-perform_test "Verify No Scheduled CRON If ARK_SCHEDULED_BACKUP=False" \
+perform_test "Verify No Scheduled CRON If SCHEDULED_BACKUP=False" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_BACKUP=False \
+              -e SCHEDULED_BACKUP=False \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -125,8 +125,8 @@ perform_test "Verify No Scheduled CRON If ARK_SCHEDULED_BACKUP=False" \
 perform_test "Verify Backup CRON Job Scheduled Correctly" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_BACKUP=True \
-              -e ARK_BACKUP_CRON="10 * * * *" \
+              -e SCHEDULED_BACKUP=True \
+              -e BACKUP_CRON="10 * * * *" \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 &&
@@ -135,9 +135,9 @@ perform_test "Verify Backup CRON Job Scheduled Correctly" \
 perform_test "Verify Both Update, Restart, and Backup Can Be Scheduled Together" \
              'docker run --rm \
               -e DRY_RUN=True \
-              -e ARK_SCHEDULED_RESTART=True \
-              -e ARK_SCHEDULED_UPDATE=True \
-              -e ARK_SCHEDULED_BACKUP=True \
+              -e SCHEDULED_RESTART=True \
+              -e SCHEDULED_UPDATE=True \
+              -e SCHEDULED_BACKUP=True \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
               -c "/usr/local/bin/system-bootstrap.sh > /dev/null 2>&1 && 

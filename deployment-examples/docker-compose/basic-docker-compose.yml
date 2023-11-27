@@ -6,8 +6,8 @@ services:
     image: johnnyknighten/ark-sa-server:latest
     restart: unless-stopped
     environment:
-      - ARK_SERVER_NAME="Simple ARK SA Server"
-      - ARK_SERVER_ADMIN_PASSWORD=secretpassword
+      - SERVER_NAME="Simple ARK SA Server"
+      - ADMIN_PASSWORD=secretpassword
     volumes:
       - 'ark-server:/ark-server/server'
       - 'ark-backups:/ark-server/backups'

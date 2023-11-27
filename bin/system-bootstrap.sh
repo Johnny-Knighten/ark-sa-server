@@ -27,8 +27,8 @@ main() {
 }
 
 setup_cron_jobs() {
-  if [[ "$ARK_SCHEDULED_RESTART" = "True" ]]; then
-    if [[ "$ARK_BACKUP_ON_SCHEDULED_RESTART" = "True" ]]; then
+  if [[ "$SCHEDULED_RESTART" = "True" ]]; then
+    if [[ "$BACKUP_ON_SCHEDULED_RESTART" = "True" ]]; then
       echo "System Bootstrap - Setting Up Scheduled Restart With Backup"
       setup_cron_scheduled_restart_with_backup >> /usr/local/bin/ark-sa-cron-jobs
     else
@@ -37,8 +37,8 @@ setup_cron_jobs() {
     fi
   fi
 
-  if [[ "$ARK_SCHEDULED_UPDATE" = "True" ]]; then
-    if [[ "$ARK_BACKUP_BEFORE_UPDATE" = "True" ]]; then
+  if [[ "$SCHEDULED_UPDATE" = "True" ]]; then
+    if [[ "$BACKUP_BEFORE_UPDATE" = "True" ]]; then
       echo "System Bootstrap - Setting Up Scheduled Update With Backup"
       setup_cron_scheduled_update_with_backup >> /usr/local/bin/ark-sa-cron-jobs
     else
@@ -47,7 +47,7 @@ setup_cron_jobs() {
     fi
   fi
 
-  if [[ "$ARK_SCHEDULED_BACKUP" = "True" ]]; then
+  if [[ "$SCHEDULED_BACKUP" = "True" ]]; then
     echo "System Bootstrap - Setting Up Scheduled Backup"
     setup_cron_scheduled_backup >> /usr/local/bin/ark-sa-cron-jobs
   fi
@@ -60,32 +60,32 @@ setup_cron_jobs() {
 }
   
 setup_cron_scheduled_restart() {
-  echo "$(date) - Server Restart CRON Scheduled For: $ARK_RESTART_CRON" >> /ark-server/logs/cron.log
-  echo "$ARK_RESTART_CRON supervisorctl restart ark-sa-server && \
+  echo "$(date) - Server Restart CRON Scheduled For: $RESTART_CRON" >> /ark-server/logs/cron.log
+  echo "$RESTART_CRON supervisorctl restart ark-sa-server && \
     echo \"\$(date) - CRON Restart - ark-sa-server\" >> /ark-server/logs/cron.log"
 }
 
 setup_cron_scheduled_restart_with_backup() {
-  echo "$(date) - Server Restart and Backup CRON Scheduled For: $ARK_RESTART_CRON" >> /ark-server/logs/cron.log
-  echo "$ARK_RESTART_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-restart &&\
+  echo "$(date) - Server Restart and Backup CRON Scheduled For: $RESTART_CRON" >> /ark-server/logs/cron.log
+  echo "$RESTART_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-restart &&\
     echo \"\$(date) - CRON Restart + Backup - ark-sa-server\" >> /ark-server/logs/cron.log"
 }
 
 setup_cron_scheduled_update() {
-  echo "$(date) - Server Update Scheduled For: $ARK_UPDATE_CRON" >> /ark-server/logs/cron.log
-  echo "$ARK_UPDATE_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-updater && \
+  echo "$(date) - Server Update Scheduled For: $UPDATE_CRON" >> /ark-server/logs/cron.log
+  echo "$UPDATE_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-updater && \
     echo \"\$(date) - CRON Update - ark-sa-updater\" >> /ark-server/logs/cron.log"
 }
 
 setup_cron_scheduled_update_with_backup() {
-  echo "$(date) - Server Update and Backup Scheduled For: $ARK_UPDATE_CRON" >> /ark-server/logs/cron.log
-  echo "$ARK_UPDATE_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-update && \
+  echo "$(date) - Server Update and Backup Scheduled For: $UPDATE_CRON" >> /ark-server/logs/cron.log
+  echo "$UPDATE_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-update && \
     echo \"\$(date) - CRON Update + Backup - ark-sa-updater\" >> /ark-server/logs/cron.log"
 }
 
 setup_cron_scheduled_backup() {
-  echo "$(date) - Server Backup Scheduled For: $ARK_BACKUP_CRON" >> /ark-server/logs/cron.log
-  echo "$ARK_BACKUP_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-restart && \
+  echo "$(date) - Server Backup Scheduled For: $BACKUP_CRON" >> /ark-server/logs/cron.log
+  echo "$BACKUP_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-restart && \
     echo \"\$(date) - CRON Backup - ark-sa-backup\" >> /ark-server/logs/cron.log"
 }
 

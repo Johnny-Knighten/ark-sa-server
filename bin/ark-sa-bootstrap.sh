@@ -38,14 +38,14 @@ create_config_from_template() {
 
 # -eq 1  below because we assume the single config file is generate at this point
 check_if_server_files_exist() {
-  if [ "$(find "$ARK_SERVER_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ]; then
+  if [ "$(find "$SERVER_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ]; then
     echo "ARK SA Bootstrap - No Server Files Found, Downloading Server"
     launch_update_service
   fi
 }
 
 auto_update_server() {
-  if [ "$ARK_UPDATE_ON_BOOT" = "True" ]; then
+  if [ "$UPDATE_ON_BOOT" = "True" ]; then
     echo "ARK SA Bootstrap - Update On Boot Enabled"
     launch_update_service
   else

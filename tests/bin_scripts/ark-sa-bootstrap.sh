@@ -25,7 +25,7 @@ perform_test "Server Files Not Present - Download ARK Server" \
                 echo $OUTPUT | grep -q "supervisorctl start ark-sa-updater" && \
                 echo $OUTPUT | grep -qv "supervisorctl start ark-sa-server"'
 
-perform_test "Server Files Present With Default ARK_UPDATE_ON_BOOT (Default = True)" \
+perform_test "Server Files Present With Default UPDATE_ON_BOOT (Default = True)" \
             'OUTPUT=$(docker run --rm \
             -e DRY_RUN=True \
             --entrypoint bash \
@@ -38,10 +38,10 @@ perform_test "Server Files Present With Default ARK_UPDATE_ON_BOOT (Default = Tr
               echo $OUTPUT | grep -q "supervisorctl start ark-sa-updater" && \
               echo $OUTPUT | grep -qv "supervisorctl start ark-sa-server"'
 
-perform_test "Server Files Present With ARK_UPDATE_ON_BOOT=False" \
+perform_test "Server Files Present With UPDATE_ON_BOOT=False" \
             'OUTPUT=$(docker run --rm \
             -e DRY_RUN=True \
-            -e ARK_UPDATE_ON_BOOT=False \
+            -e UPDATE_ON_BOOT=False \
             --entrypoint bash \
             johnnyknighten/ark-sa-server:latest \
             -c "/usr/local/bin/system-bootstrap.sh && \
