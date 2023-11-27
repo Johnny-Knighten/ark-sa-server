@@ -9,6 +9,7 @@ echo "Backup Process - Starting"
 SCRIPT_PARAM="$1"
 
 main() {
+  clean_up_backups_dir
   backup_ark_sa_server
   start_ark_sa_server
   start_ark_sa_update
@@ -60,6 +61,29 @@ backup_ark_sa_server() {
     tar_gz_backup
   fi
   echo "Backup Process - Backup Finished"
+}
+
+clean_up_backups_dir() {
+  if [[ -n "$ARK_NUMBER_OF_BACKUPS" ]]; then
+    echo "Backup Process - Cleaning Up Backup Directory"
+    count_files() {
+      find "$ARK_BACKUPS_DIR" -type f | wc -l
+    }
+
+    delete_oldest_file() {
+        find "$ARK_BACKUPS_DIR" -type f -print0 | xargs -0 ls -tr | head -n 1 | xargs rm -f
+    }
+
+    current_file_count=$(count_files)
+
+    while [ "$current_file_count" -gt "$((ARK_NUMBER_OF_BACKUPS - 1))" ]; do
+        echo "Backup Process - File Limit Exceded: ($current_file_count),  Deleting Oldest"
+        delete_oldest_file
+        current_file_count=$(count_files)
+    done
+
+    echo "Backup Process - File Count Post Cleanup: $(count_files)"
+  fi
 }
 
 main

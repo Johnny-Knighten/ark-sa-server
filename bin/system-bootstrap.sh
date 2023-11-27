@@ -7,31 +7,12 @@ set -e
 echo "System Bootstrap - Starting"
 
 cleanup() {
+    echo "System Bootstrap - Cleanup Starting"
     supervisorctl stop all
-
-    local counter=0
-    local max_wait_time=600 
-
-    while true; do
-        local status=$(supervisorctl status ark-sa-backup)
-        if [[ "$status" == *"RUNNING"* ]] || [[ "$status" == *"STARTING"* ]]; then
-            echo "Waiting for ark-sa-backup to complete..."
-        elif [[ "$status" == *"STOPPED"* ]] || [[ "$status" == *"EXITED"* ]] || [[ "$status" == *"FATAL"* ]]; then
-            echo "ark-sa-backup is not running."
-            break
-        fi
-
-        sleep 5
-        ((counter += 5))
-
-        if [[ "$counter" -ge "$max_wait_time" ]]; then
-            echo "Timeout reached while waiting for ark-sa-backup to complete."
-            break
-        fi
-    done
-
+    supervisorctl start ark-sa-backup
+    wait_for_backup_completion
     supervisorctl exit
-    echo "System Bootstrap - Stopping" >> /ark-server/logs/system-bootstrap.log
+    echo "System Bootstrap - Cleanup Stopping"
 }
 
 main() {
@@ -95,6 +76,29 @@ setup_cron_scheduled_update_with_backup() {
   echo "$(date) - Server Update and Backup Scheduled For: $ARK_UPDATE_CRON" >> /ark-server/logs/cron.log
   echo "$ARK_UPDATE_CRON supervisorctl stop ark-sa-server && supervisorctl start ark-sa-backup-and-update && \
     echo \"\$(date) - CRON Update + Backup - ark-sa-updater\" >> /ark-server/logs/cron.log"
+}
+
+wait_for_backup_completion() {
+  local counter=0
+  local max_wait_time=600 
+
+  while true; do
+    local status
+    status=$(supervisorctl status ark-sa-backup)
+    if [[ "$status" == *"RUNNING"* ]] || [[ "$status" == *"STARTING"* ]]; then
+      echo "System Bootstrap - Waiting For Backup Process To Finish."
+    elif [[ "$status" == *"STOPPED"* ]] || [[ "$status" == *"EXITED"* ]] || [[ "$status" == *"FATAL"* ]]; then
+      echo "System Bootstrap - Backup Process Has Finished"
+    fi
+
+    sleep 5
+    ((counter += 5))
+
+    if [[ "$counter" -ge "$max_wait_time" ]]; then
+      echo "System Bootstrap - Timeout Duration Exceeded, Closing Supervisor Without Complete Backup"
+      break
+    fi
+  done
 }
 
 main
