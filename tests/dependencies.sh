@@ -44,6 +44,12 @@ perform_test "Verify zip is Installed" \
                 johnnyknighten/ark-sa-server:latest \
                 -v > /dev/null 2>&1'
 
+perform_test "Verify unzip is Installed" \
+             'docker run --rm \
+                --entrypoint unzip \
+                johnnyknighten/ark-sa-server:latest \
+                -v > /dev/null 2>&1'
+
 perform_test "Verify GE's Wine Proton Fork's Directory Exists" \
             "docker run --rm \
               --entrypoint test \

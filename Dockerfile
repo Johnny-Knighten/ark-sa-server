@@ -53,7 +53,8 @@ RUN set -x && \
                         supervisor=4.2.1-1ubuntu1 \
                         cron=3.0pl1-137ubuntu3 \
                         tzdata=2023c-0ubuntu0.22.04.2 \
-                        zip=3.0-12build2&& \
+                        zip=3.0-12build2 \
+                        unzip=6.0-26ubuntu3.1 && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll
