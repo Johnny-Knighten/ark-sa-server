@@ -1,3 +1,10 @@
+## [2.0.0-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0-next.1...2.0.0-next.2) (2023-11-27)
+
+
+### Bug Fixes
+
+* added unzip to container and related test ([470e128](https://github.com/Johnny-Knighten/ark-sa-server/commit/470e128cbccde16c5dfde081ee4c7396010616cb))
+
 ## [2.0.0-next.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.1.0-next.2...2.0.0-next.1) (2023-11-27)
 
 
