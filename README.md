@@ -124,8 +124,11 @@ The table below shows all the available environment variables and their default 
 | `ARK_UPDATE_CRON` | Cron expression for scheduled updates. Default is every Sunday at 5am. | `0 5 * * 0` |
 | `ARK_BACKUP_BEFORE_UPDATE` | Determines if the server should backup itself before updating. | `False` |
 | `ARK_UPDATE_ON_BOOT` | Determines if the server should update itself when it starts. If this is set to `False` then the server will only update if `ARK_SCHEDULED_UPDATE=True`, then it will update on the schedule specified by `ARK_UPDATE_CRON`.  | `True` |
+| `ARK_SCHEDULED_BACKUP` | Enable scheduled backups of the server. | `False` |
+| `ARK_BACKUP_CRON` | Cron expression for scheduled backups. Default is every day at 6am. | `0 6 * * *` |
 | `ARK_BACKUP_ON_STOP` | Determines if the server should backup itself when the container stops. | `True` |
 | `ARK_ZIP_BACKUPS` | If this is set to `True` then it will zip your backups instead of the default tar and gzip. | `False` |
+| `ARK_NUMBER_OF_BACKUPS` | Number of backups to keep. | `5` |
 | `ARK_SERVER_NAME` | Name of the server that appears in the server list. If the name contains a space wrap the name in quotes, depending on your system you may need to add escaped quotes `\"`. | `"ARK SA Server"` |
 | `ARK_SERVER_PASSWORD` | Password to login to the server. Defaults to no password aka a public server. **Do not put spaces in your password.** | EMPTY |
 | `ARK_SERVER_ADMIN_PASSWORD `| Password for the server admin. Also used for RCON access. **Do not put spaces in your password.** | `adminpassword` |
@@ -172,12 +175,13 @@ There are thee volumes used by the container
 
 ### Backups
 
-Backups can be performed automatically if configured. Backups are performed by making a copy the `/ark-server/server/ShooterGame/Saved` directory to the `/ark-server/backups` volume. The backups are named using the following format: `server-backup-{datetime}`. The backups are compressed using `tar` and `gzip` and are stored in the `/ark-server/backups` volume. The backups are not deleted automatically, so you will need to manage them yourself.
+Backups can be performed automatically if configured. Backups are performed by making a copy the `/ark-server/server/ShooterGame/Saved` directory to the `/ark-server/backups` volume. The backups are named using the following format: `server-backup-{datetime}`. They are compressed as `tar.gz` files by default(can be set to zip via `ARK_ZIP_BACKUPS=True`) and are stored in the `/ark-server/backups` volume. You can configure the number of backups to keep using `ARK_NUMBER_OF_BACKUPS`, otherwise you will need to manually delete old backups.
 
 Backup Automation Options
 * `ARK_BACKUP_ON_SCHEDULED_RESTART` - Backup the server before a scheduled restart
 * `ARK_BACKUP_BEFORE_UPDATE` - Backup the server before an update
 * `ARK_BACKUP_ON_STOP` - Backup the server when the container stops
+* `ARK_SCHEDULED_BACKUP` - Backup the server on a schedule
 
 **If you are using `ARK_BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker run/stop/compose` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.**
 

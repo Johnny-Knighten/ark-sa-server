@@ -24,10 +24,12 @@ services:
       - ARK_NO_BATTLEYE=True
       - ARK_REBUILD_CONFIG=True
       - ARK_SCHEDULED_RESTART=False
+      - ARK_BACKUP_ON_SCHEDULED_RESTART=False
       - ARK_RESTART_CRON=0 4 * * 0,3
       - ARK_SCHEDULED_UPDATE=False
       - ARK_UPDATE_CRON=0 5 * * 6
       - ARK_BACKUP_ON_STOP=True
+      - ARK_NUMBER_OF_BACKUPS=10
     volumes:
       - 'ark-server:/ark-server/server'
       - 'ark-backups:/ark-server/backups'
