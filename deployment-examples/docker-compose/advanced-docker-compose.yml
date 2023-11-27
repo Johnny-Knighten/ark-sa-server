@@ -24,15 +24,22 @@ services:
       - ARK_NO_BATTLEYE=True
       - ARK_REBUILD_CONFIG=True
       - ARK_SCHEDULED_RESTART=False
+      - ARK_BACKUP_ON_SCHEDULED_RESTART=False
       - ARK_RESTART_CRON=0 4 * * 0,3
-      - ARK_SCHEDULED_UPDATE=True
+      - ARK_SCHEDULED_UPDATE=False
       - ARK_UPDATE_CRON=0 5 * * 6
+      - ARK_BACKUP_ON_STOP=True
+      - ARK_NUMBER_OF_BACKUPS=10
     volumes:
-      - 'ark-files:/ark-server'
+      - 'ark-server:/ark-server/server'
+      - 'ark-backups:/ark-server/backups'
+      - 'ark-logs:/ark-server/logs'
     ports:
       - 8888:8888/udp
       - 8889:8889/udp
       - 27016:27016/udp
       - 27021:27021/tcp
 volumes:
-  ark-files:
+  ark-server:
+  ark-backups:
+  ark-logs:

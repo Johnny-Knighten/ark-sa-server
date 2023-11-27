@@ -32,6 +32,18 @@ perform_test "Verify tzdata is Installed" \
                 johnnyknighten/ark-sa-server:latest \
                 -c "cat /usr/share/zoneinfo/tzdata.zi | head -n 1 | grep \"# version 2023c\"" > /dev/null 2>&1'
 
+perform_test "Verify tar is Installed" \
+             'docker run --rm \
+                --entrypoint tar \
+                johnnyknighten/ark-sa-server:latest \
+                --version > /dev/null 2>&1'
+
+perform_test "Verify zip is Installed" \
+             'docker run --rm \
+                --entrypoint zip \
+                johnnyknighten/ark-sa-server:latest \
+                -v > /dev/null 2>&1'
+
 perform_test "Verify GE's Wine Proton Fork's Directory Exists" \
             "docker run --rm \
               --entrypoint test \
@@ -52,6 +64,7 @@ perform_test "Verify ark-sa-container/bin Content is Present" \
                   test -f /usr/local/bin/ark-sa-bootstrap.sh && \
                   test -f /usr/local/bin/ark-sa-server.sh && \
                   test -f /usr/local/bin/ark-sa-updater.sh && \
+                  test -f /usr/local/bin/ark-sa-backup.sh && \
                   test -f /usr/local/bin/ark-sa/config-templating/bootstrap-configs.sh && \
                   test -f /usr/local/bin/ark-sa/config-templating/GameUserSettings.template.ini \""
 

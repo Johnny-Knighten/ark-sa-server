@@ -12,7 +12,9 @@ ENV DEBUG=false \
     DRY_RUN=False \
     TZ=America/New_York \
     STEAMCMD_SKIP_VALIDATION=False \
-    ARK_SERVER_DIR="/ark-server" \
+    ARK_SERVER_DIR="/ark-server/server" \
+    ARK_BACKUPS_DIR="/ark-server/backups" \
+    ARK_LOGS_DIR="/ark-server/logs" \
     ARK_MAP="TheIsland_WP" \
     ARK_GAME_PORT=7777 \
     ARK_QUERY_PORT=27015 \
@@ -31,9 +33,16 @@ ENV DEBUG=false \
     ARK_ENABLE_PVE=False \
     ARK_REBUILD_CONFIG=False \
     ARK_SCHEDULED_RESTART=False \
+    ARK_BACKUP_ON_SCHEDULED_RESTART=False \
     ARK_RESTART_CRON="0 4 * * *" \
     ARK_SCHEDULED_UPDATE=False \
-    ARK_UPDATE_CRON="0 5 * * 0"
+    ARK_BACKUP_BEFORE_UPDATE=False \
+    ARK_UPDATE_CRON="0 5 * * 0" \
+    ARK_BACKUP_ON_STOP=True \
+    ARK_SCHEDULED_BACKUP=False \
+    ARK_BACKUP_CRON="0 6 * * *" \
+    ARK_ZIP_BACKUPS=False \
+    ARK_NUMBER_OF_BACKUPS=
 
 RUN set -x && \
     apt-get update && \
@@ -43,7 +52,8 @@ RUN set -x && \
                         xvfb=2:21.1.4-2ubuntu1.7~22.04.2 \
                         supervisor=4.2.1-1ubuntu1 \
                         cron=3.0pl1-137ubuntu3 \
-                        tzdata=2023c-0ubuntu0.22.04.2 && \
+                        tzdata=2023c-0ubuntu0.22.04.2 \
+                        zip=3.0-12build2&& \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll
@@ -62,7 +72,11 @@ COPY bin/ /usr/local/bin
 COPY supervisord.conf /usr/local/etc/supervisord.conf
 RUN ["chmod", "-R", "+x", "/usr/local/bin"]
 
+
 VOLUME [ "${ARK_SERVER_DIR}" ]
+VOLUME [ "${ARK_BACKUPS_DIR}" ]
+VOLUME [ "${ARK_LOGS_DIR}" ]
+
 WORKDIR ${ARK_SERVER_DIR}
 
 EXPOSE 7777/udp

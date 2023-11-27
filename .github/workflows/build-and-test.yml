@@ -87,3 +87,7 @@ jobs:
     - name: ark-sa-server Tests
       run: |
         ./tests/bin_scripts/ark-sa-server.sh
+
+    - name: ark-sa-backup Tests
+      run: |
+        ./tests/bin_scripts/ark-sa-backup.sh

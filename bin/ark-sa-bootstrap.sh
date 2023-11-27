@@ -38,7 +38,7 @@ create_config_from_template() {
 
 # -eq 1  below because we assume the single config file is generate at this point
 check_if_server_files_exist() {
-  if [ "$(find "$ARK_SERVER_DIR"/server -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ]; then
+  if [ "$(find "$ARK_SERVER_DIR" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ]; then
     echo "ARK SA Bootstrap - No Server Files Found, Downloading Server"
     launch_update_service
   fi
