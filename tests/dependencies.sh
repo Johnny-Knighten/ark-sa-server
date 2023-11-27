@@ -64,6 +64,7 @@ perform_test "Verify ark-sa-container/bin Content is Present" \
                   test -f /usr/local/bin/ark-sa-bootstrap.sh && \
                   test -f /usr/local/bin/ark-sa-server.sh && \
                   test -f /usr/local/bin/ark-sa-updater.sh && \
+                  test -f /usr/local/bin/ark-sa-backup.sh && \
                   test -f /usr/local/bin/ark-sa/config-templating/bootstrap-configs.sh && \
                   test -f /usr/local/bin/ark-sa/config-templating/GameUserSettings.template.ini \""
 
