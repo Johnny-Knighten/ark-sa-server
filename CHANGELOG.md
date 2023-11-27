@@ -1,3 +1,14 @@
+## [2.0.0-next.3](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0-next.2...2.0.0-next.3) (2023-11-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* every existing container deployment will need their env var names updated
+
+### Code Refactoring
+
+* renamed all env vars to drop ARK prefix ([d77c80c](https://github.com/Johnny-Knighten/ark-sa-server/commit/d77c80ce2620ec2dbdb0224e97ab46ebf0e4be8b))
+
 ## [2.0.0-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0-next.1...2.0.0-next.2) (2023-11-27)
 
 
