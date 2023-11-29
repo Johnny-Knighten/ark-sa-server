@@ -1,7 +1,7 @@
 import os
 import logging
 from argparse import ArgumentParser
-from configparser import ConfigParser
+from configparser import ConfigParser, RawConfigParser
 from pathlib import Path
 import sys
 from typing import Dict
@@ -10,6 +10,11 @@ from typing import Dict
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
+
+
+class MaintainCaseConfigParser(RawConfigParser):
+    def optionxform(self, optionstr):
+        return optionstr
 
 
 def process_env_vars() -> Dict[str, Dict[str, Dict[str, str]]]:
@@ -25,7 +30,7 @@ def process_env_vars() -> Dict[str, Dict[str, Dict[str, str]]]:
             continue
 
         file_name = tokens[1]
-        var_name = tokens[-1].split("=")[0]
+        var_name = tokens[-1]
         section_name = "_".join(tokens[2:-1]).replace("SLASH", "/").replace("DOT", ".")
         section_name = (
             section_name.replace("_/_", "/").replace("/_", "/").replace("_._", ".")
@@ -45,7 +50,7 @@ def update_ini_files(
     config_data: Dict[str, Dict[str, Dict[str, str]]], path: str
 ) -> None:
     for file_name, sections in config_data.items():
-        config_parser = ConfigParser()
+        config_parser = MaintainCaseConfigParser()
         file_path = os.path.join(path, f"{file_name}.ini")
 
         try:
@@ -62,7 +67,7 @@ def update_ini_files(
                     config_parser.set(section, var, value)
 
             with open(file_path, "w") as config_file:
-                config_parser.write(config_file)
+                config_parser.write(config_file, space_around_delimiters=False)
 
         except Exception as e:
             logging.error(f"Error updating file {file_name}.ini: {e}")

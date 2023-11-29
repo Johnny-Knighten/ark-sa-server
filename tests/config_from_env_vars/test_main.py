@@ -144,7 +144,7 @@ class TestConfigFromEnvVars(unittest.TestCase):
 
         m = mock_open()
         with patch("builtins.open", m), patch(
-            "config_from_env_vars.main.ConfigParser"
+            "config_from_env_vars.main.MaintainCaseConfigParser"
         ) as mock_config:
             update_ini_files(mock_config_data, "/fake/path")
 
@@ -172,7 +172,7 @@ class TestConfigFromEnvVars(unittest.TestCase):
 
         m = mock_open()
         with patch("builtins.open", m), patch(
-            "config_from_env_vars.main.ConfigParser"
+            "config_from_env_vars.main.MaintainCaseConfigParser"
         ) as mock_config:
             update_ini_files(mock_config_data, "/fake/path")
 
