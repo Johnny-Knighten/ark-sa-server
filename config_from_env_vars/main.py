@@ -50,7 +50,7 @@ def update_ini_files(
     config_data: Dict[str, Dict[str, Dict[str, str]]], path: str
 ) -> None:
     for file_name, sections in config_data.items():
-        config_parser = MaintainCaseConfigParser()
+        config_parser = MaintainCaseConfigParser(strict=False)
         file_path = os.path.join(path, f"{file_name}.ini")
 
         try:
@@ -65,6 +65,7 @@ def update_ini_files(
                     config_parser.add_section(section)
                 for var, value in vars.items():
                     config_parser.set(section, var, value)
+                    logging.info(f"Saving {section} {var}={value} to {file_path}")
 
             with open(file_path, "w") as config_file:
                 config_parser.write(config_file, space_around_delimiters=False)
