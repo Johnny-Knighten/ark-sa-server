@@ -31,7 +31,6 @@ ENV DEBUG=False \
     EPIC_PUBLIC_IP= \
     MULTI_HOME= \
     ENABLE_PVE=False \
-    REBUILD_CONFIG=False \
     SCHEDULED_RESTART=False \
     BACKUP_ON_SCHEDULED_RESTART=False \
     RESTART_CRON="0 4 * * *" \
@@ -70,6 +69,7 @@ RUN groupadd -g "$PGID" -o ark-sa && \
     usermod -a -G crontab ark-sa
 
 COPY bin/ /usr/local/bin
+COPY config_from_env_vars/ /usr/local/bin/config_from_env_vars
 COPY supervisord.conf /usr/local/etc/supervisord.conf
 RUN ["chmod", "-R", "+x", "/usr/local/bin"]
 

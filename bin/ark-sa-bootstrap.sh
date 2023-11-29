@@ -7,7 +7,7 @@ set -e
 echo "ARK SA Bootstrap - Starting"
 
 main() {
-  create_config_from_template
+  generate_config_files
   check_if_server_files_exist
   auto_update_server
   launch_ark_sa_server
@@ -32,8 +32,18 @@ launch_update_service() {
   exit 0
 }
 
-create_config_from_template() {
-  /usr/local/bin/ark-sa/config-templating/bootstrap-configs.sh
+generate_config_files() {
+  mkdir -p "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer"
+
+  export CONFIG_GameUserSettings_SessionSettings_SessionName="${SERVER_NAME}"
+  export CONFIG_GameUserSettings_ServerSettings_RCONEnabled="${ENABLE_RCON}"
+  export CONFIG_GameUserSettings_ServerSettings_RCONPort="${RCON_PORT}"
+  export CONFIG_GameUserSettings_SLASH_Script_SLASH_Engine_DOT_GameSession_MaxPlayers="${MAX_PLAYERS}"
+  export CONFIG_GameUserSettings_ServerSettings_ServerPassword="${SERVER_PASSWORD}"
+  export CONFIG_GameUserSettings_ServerSettings_ServerAdminPassword="${ADMIN_PASSWORD}"
+  export CONFIG_GameUserSettings_ServerSettings_ServerPVE="${ENABLE_PVE}"
+
+  python3 /usr/local/bin/config_from_env_vars/main.py --path "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer"
 }
 
 # -eq 1  below because we assume the single config file is generate at this point
