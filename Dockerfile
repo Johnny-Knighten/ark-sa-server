@@ -53,7 +53,8 @@ RUN set -x && \
                         cron=3.0pl1-137ubuntu3 \
                         tzdata=2023c-0ubuntu0.22.04.2 \
                         zip=3.0-12build2 \
-                        unzip=6.0-26ubuntu3.1 && \
+                        unzip=6.0-26ubuntu3.1 \
+                        python3=3.10.6-1~22.04 && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll
