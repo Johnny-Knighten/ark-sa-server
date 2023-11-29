@@ -1,8 +1,10 @@
+import filecmp
 import os
 import logging
 from argparse import ArgumentParser
-from configparser import ConfigParser, RawConfigParser
+from configparser import RawConfigParser
 from pathlib import Path
+import shutil
 import sys
 from typing import Dict
 
@@ -75,6 +77,50 @@ def update_ini_files(
             continue
 
 
+def backup_existing_ini_files(path: str) -> None:
+    for file_name in os.listdir(path):
+        if not file_name.endswith(".ini"):
+            continue
+
+        file_path = os.path.join(path, file_name)
+        backup_path = os.path.join(path, f"{file_name}.backup")
+
+        counter = 1
+        while Path(backup_path).exists():
+            backup_path = os.path.join(path, f"{file_name}.backup{counter}")
+            counter += 1
+
+        try:
+            logging.info(f"Creating backup of {file_path} to {backup_path}")
+            shutil.copyfile(file_path, backup_path)
+        except Exception as e:
+            logging.error(f"Error creating backup of {file_name}: {e}")
+            continue
+
+
+def get_latest_backup_file(base_file_path: str):
+    base_file_name = os.path.basename(base_file_path)
+    directory = os.path.dirname(base_file_path)
+    backup_files = sorted(
+        Path(directory).glob(f"{base_file_name}.backup*"), reverse=True
+    )
+    return str(backup_files[0]) if backup_files else f"{base_file_path}.backup"
+
+
+def compare_and_cleanup_configs(path: str):
+    for file in Path(path).glob("*.ini"):
+        latest_backup = get_latest_backup_file(str(file))
+        if Path(latest_backup).exists() and filecmp.cmp(
+            file, latest_backup, shallow=False
+        ):
+            os.remove(latest_backup)
+            logging.info(f"New config matches old, backup removed: {latest_backup}")
+        else:
+            logging.info(
+                f"Configuration changed, latest backup retained: {latest_backup}"
+            )
+
+
 def main():
     parser = ArgumentParser(
         description="Update ini configuration files based on environment variables."
@@ -94,8 +140,10 @@ def main():
         )
         sys.exit(1)
 
+    backup_existing_ini_files(args.config_directory)
     config_data = process_env_vars()
     update_ini_files(config_data, args.config_directory)
+    compare_and_cleanup_configs(args.config_directory)
 
 
 if __name__ == "__main__":
