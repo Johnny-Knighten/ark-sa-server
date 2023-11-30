@@ -92,7 +92,7 @@ def backup_existing_ini_files(path: str) -> None:
 
         try:
             logging.info(f"Creating backup of {file_path} to {backup_path}")
-            shutil.copyfile(file_path, backup_path)
+            shutil.move(file_path, backup_path)
         except Exception as e:
             logging.error(f"Error creating backup of {file_name}: {e}")
             continue
@@ -110,7 +110,7 @@ def get_latest_backup_file(base_file_path: str):
 def compare_and_cleanup_configs(path: str):
     for file in Path(path).glob("*.ini"):
         latest_backup = get_latest_backup_file(str(file))
-        
+
         if not latest_backup:
             logging.info(f"No backups exist for: {file}")
             continue
