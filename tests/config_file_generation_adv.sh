@@ -9,11 +9,7 @@ source ./tests/test_helper_functions.sh
 GAME_SETTINGS_PATH="/ark-server/server/ShooterGame/Saved/Config/WindowsServer"
 ARK_SA_BOOTSTRAP_PATH="/usr/local/bin/ark-sa-bootstrap.sh"
 
-perform_test "Single File With a Single Section With a Single Var \n
-             CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \n
-                File: GameUserSettings.ini \n
-                Section: ServerSettings \n
-                Var/Value: XPMultiplier=1.0" \
+perform_test "Single File With a Single Section With a Single Var" \
              'docker run --rm \
               -e DRY_RUN=True \
               -e CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \
@@ -26,15 +22,7 @@ perform_test "Single File With a Single Section With a Single Var \n
                   grep -q \"[ServerSettings]\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
                   grep -q \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini"'
 
-perform_test "Single File With a Single Section With Two Vars \n
-             CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \n
-                File: GameUserSettings.ini \n
-                Section: ServerSettings \n
-                Var/Value: XPMultiplier=1.0 \n
-              CONFIG_GameUserSettings_ServerSettings_TamingSpeedMultiplier=1.0 \n
-                File: GameUserSettings.ini \n
-                Section: ServerSettings \n
-                Var/Value: TamingSpeedMultiplier=1.0" \
+perform_test "Single File With a Single Section With Two Vars" \
              'docker run --rm \
               -e DRY_RUN=True \
               -e CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \
@@ -49,15 +37,7 @@ perform_test "Single File With a Single Section With Two Vars \n
                   grep -q \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
                   grep -q \"TamingSpeedMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini "'
 
-perform_test "Single File With Two Sections Each With a Single Var \n
-             CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \n
-                File: GameUserSettings.ini \n
-                  Section: ServerSettings \n
-                  Var/Value: XPMultiplier=1.0 \n
-             CONFIG_GameUserSettings_SessionSetting_SessionName=Test123 \n
-                File: GameUserSettings.ini \n
-                  Section: SessionSetting \n
-                  Var/Value: SessionName=Test123" \
+perform_test "Single File With Two Sections Each With a Single Var" \
              'docker run --rm \
               -e DRY_RUN=True \
               -e CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \
@@ -73,15 +53,7 @@ perform_test "Single File With Two Sections Each With a Single Var \n
                   grep -q \"[SessionSetting]\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
                   grep -q \"SessionName=Test123\" $GAME_SETTINGS_PATH/GameUserSettings.ini"'
 
-perform_test "Two Files Each With a Single Section and a Single Var \n
-             CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \n
-                File: GameUserSettings.ini \n
-                  Section: ServerSettings \n
-                  Var/Value: XPMultiplier=1.0 \n
-             CONFIG_Game_SLASH_Script_SLASH_ShooterGame_DOT_ShooterGameMode_BabyImprintingStatScaleMultiplier=1.0 \n
-                File: Game.ini \n
-                  Section: /Script/ShooterGame.ShooterGameMode \n
-                  Var/Value: BabyImprintingStatScaleMultiplier=1.0" \
+perform_test "Two Files Each With a Single Section and a Single Var" \
              'docker run --rm \
               -e DRY_RUN=True \
               -e CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \
@@ -97,6 +69,77 @@ perform_test "Two Files Each With a Single Section and a Single Var \n
                   test -f $GAME_SETTINGS_PATH/Game.ini && \
                   grep -q \"[/Script/ShooterGame.ShooterGameMode]\" $GAME_SETTINGS_PATH/Game.ini && \
                   grep -q \"BabyImprintingStatScaleMultiplier=1.0\" $GAME_SETTINGS_PATH/Game.ini"'
+
+perform_test "New CONFIG_ Introduced Between Runs Generates New Config Entry" \
+             'docker run --rm \
+              -e DRY_RUN=True \
+              -e CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \
+              -e GAME_SETTINGS_PATH=${GAME_SETTINGS_PATH} \
+              -e ARK_SA_BOOTSTRAP_PATH=${ARK_SA_BOOTSTRAP_PATH} \
+              --entrypoint bash \
+              johnnyknighten/ark-sa-server:latest \
+              -c "$ARK_SA_BOOTSTRAP_PATH > /dev/null 2>&1 && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"[ServerSettings]\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  export CONFIG_GameUserSettings_ServerSettings_PetXPMultiplier=2.0 && \
+                  $ARK_SA_BOOTSTRAP_PATH > /dev/null 2>&1 && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini.backup && \
+                  grep -q \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"PetXPMultiplier=2.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini"'
+
+perform_test "New Config and Backup Config Generated If CONFIG_ Value Changed Between Runs" \
+             'docker run --rm \
+              -e DRY_RUN=True \
+              -e CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \
+              -e GAME_SETTINGS_PATH=${GAME_SETTINGS_PATH} \
+              -e ARK_SA_BOOTSTRAP_PATH=${ARK_SA_BOOTSTRAP_PATH} \
+              --entrypoint bash \
+              johnnyknighten/ark-sa-server:latest \
+              -c "$ARK_SA_BOOTSTRAP_PATH > /dev/null 2>&1 && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"[ServerSettings]\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  export CONFIG_GameUserSettings_ServerSettings_XPMultiplier=2.0 && \
+                  $ARK_SA_BOOTSTRAP_PATH > /dev/null 2>&1 && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini.backup && \
+                  grep -q \"XPMultiplier=2.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini"'
+
+perform_test "Backup Config Not Generated If CONFIG_ Value Does Not Change Between Runs" \
+             'docker run --rm \
+              -e DRY_RUN=True \
+              -e CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \
+              -e GAME_SETTINGS_PATH=${GAME_SETTINGS_PATH} \
+              -e ARK_SA_BOOTSTRAP_PATH=${ARK_SA_BOOTSTRAP_PATH} \
+              --entrypoint bash \
+              johnnyknighten/ark-sa-server:latest \
+              -c "$ARK_SA_BOOTSTRAP_PATH > /dev/null 2>&1 && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"[ServerSettings]\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  export CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 && \
+                  $ARK_SA_BOOTSTRAP_PATH > /dev/null 2>&1 && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  test ! -f $GAME_SETTINGS_PATH/GameUserSettings.ini.backup && \
+                  grep -q \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini"'
+
+perform_test "Removing CONFIG_ Enviroment Variable Between Run Deletes Config From File" \
+             'docker run --rm \
+              -e DRY_RUN=True \
+              -e CONFIG_GameUserSettings_ServerSettings_XPMultiplier=1.0 \
+              -e GAME_SETTINGS_PATH=${GAME_SETTINGS_PATH} \
+              -e ARK_SA_BOOTSTRAP_PATH=${ARK_SA_BOOTSTRAP_PATH} \
+              --entrypoint bash \
+              johnnyknighten/ark-sa-server:latest \
+              -c "$ARK_SA_BOOTSTRAP_PATH > /dev/null 2>&1 && \
+                  test -f $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"[ServerSettings]\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  grep -q \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini && \
+                  unset CONFIG_GameUserSettings_ServerSettings_XPMultiplier && \
+                  $ARK_SA_BOOTSTRAP_PATH > /dev/null 2>&1 && \
+                  grep -vq \"XPMultiplier=1.0\" $GAME_SETTINGS_PATH/GameUserSettings.ini"'
 
 perform_test "Mega Test - Lots Of Vars" \
              'docker run --rm \
