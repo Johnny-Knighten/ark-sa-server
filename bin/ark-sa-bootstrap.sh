@@ -35,7 +35,7 @@ launch_update_service() {
 generate_config_files() {
   mkdir -p "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer"
 
-  if [[ ! -f "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer/GameUserSettings.ini" || "$MANUAL_CONFIG" = "False"]]; then
+  if [[ ! -f "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer/GameUserSettings.ini" || "$MANUAL_CONFIG" != "True" ]]; then
     echo "ARK SA Bootstrap - Generating GameUserSettings.ini"
 
     export CONFIG_GameUserSettings_SessionSettings_SessionName="${SERVER_NAME}"
