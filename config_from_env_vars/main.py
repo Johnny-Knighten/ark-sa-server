@@ -104,12 +104,17 @@ def get_latest_backup_file(base_file_path: str):
     backup_files = sorted(
         Path(directory).glob(f"{base_file_name}.backup*"), reverse=True
     )
-    return str(backup_files[0]) if backup_files else f"{base_file_path}.backup"
+    return str(backup_files[0]) if backup_files else ""
 
 
 def compare_and_cleanup_configs(path: str):
     for file in Path(path).glob("*.ini"):
         latest_backup = get_latest_backup_file(str(file))
+        
+        if not latest_backup:
+            logging.info(f"No backups exist for: {file}")
+            continue
+
         if Path(latest_backup).exists() and filecmp.cmp(
             file, latest_backup, shallow=False
         ):
