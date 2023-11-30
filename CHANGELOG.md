@@ -1,3 +1,85 @@
+## [2.0.0-next.4](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0-next.3...2.0.0-next.4) (2023-11-30)
+
+
+### Bug Fixes
+
+* added info log to list configs updated ([31f1ca5](https://github.com/Johnny-Knighten/ark-sa-server/commit/31f1ca5f70bbfb1a633b70ca3f13aaa6d10e8d10))
+* added python3 to dockerfile install and updated dependency tests ([b6db7e2](https://github.com/Johnny-Knighten/ark-sa-server/commit/b6db7e2e39f9bfa355eb36fab41f006880de2fdc))
+* caught edge case of no backups existing if it is first time creating config ([6e92fdf](https://github.com/Johnny-Knighten/ark-sa-server/commit/6e92fdf9bc6f94dbe3c0149ed64a6e62b1db6a15))
+* corrected syntax issue in ark-sa-bootstrap ([b85efc0](https://github.com/Johnny-Knighten/ark-sa-server/commit/b85efc0a5119cc5de30f04a1105891ad7850668f))
+* fixed bug that stopped new configs being updated when CONFIG_ values changed ([be8e4e3](https://github.com/Johnny-Knighten/ark-sa-server/commit/be8e4e3614b7dfdaf518de16efd4c67c9dd2b6f6))
+* integrated new python config generation into ark-sa-bootstrap ([8060e1a](https://github.com/Johnny-Knighten/ark-sa-server/commit/8060e1ae3f79017ced1c98f338bfb8193fb41c9a))
+* updated config_from_env_vars to main capitalization and remove spaces around = ([ae9e790](https://github.com/Johnny-Knighten/ark-sa-server/commit/ae9e7901437d4738caddeea2513079a394e5b5fd))
+
+
+### Features
+
+* configs are now backedup instead of overwritten, and removing CONFIG_ vars now also remove it from config ([d204ee6](https://github.com/Johnny-Knighten/ark-sa-server/commit/d204ee633d9c7cdbcbbf3cd5a12ec4c839de992d))
+* created python script to extract env vars and convert to ini files ([26745c4](https://github.com/Johnny-Knighten/ark-sa-server/commit/26745c4e4a61d5fb75c729673f47c8fe0eef888e))
+* introduced MANUAL_CONFIG to control if config file generation should be used ([3b72b1f](https://github.com/Johnny-Knighten/ark-sa-server/commit/3b72b1f0bd935a370ab8d466f5705311c94d907f))
+
+## [2.0.0-next.3](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0-next.2...2.0.0-next.3) (2023-11-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* every existing container deployment will need their env var names updated
+
+### Code Refactoring
+
+* renamed all env vars to drop ARK prefix ([d77c80c](https://github.com/Johnny-Knighten/ark-sa-server/commit/d77c80ce2620ec2dbdb0224e97ab46ebf0e4be8b))
+
+## [2.0.0-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0-next.1...2.0.0-next.2) (2023-11-27)
+
+
+### Bug Fixes
+
+* added unzip to container and related test ([470e128](https://github.com/Johnny-Knighten/ark-sa-server/commit/470e128cbccde16c5dfde081ee4c7396010616cb))
+
+## [2.0.0-next.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.1.0-next.2...2.0.0-next.1) (2023-11-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* breaking out into multiple volumes will require data transfer
+
+### Features
+
+* added backup on container stop ([e4c704c](https://github.com/Johnny-Knighten/ark-sa-server/commit/e4c704c72f447678ef6891b8512d1c04d72f7abd))
+* added option to limit # of backups stored ([dbe7dfd](https://github.com/Johnny-Knighten/ark-sa-server/commit/dbe7dfd1bbd80d7fa234b6f4feca446f141ed72a))
+* added scheduled update cron ([51bf6a5](https://github.com/Johnny-Knighten/ark-sa-server/commit/51bf6a527f37d563ef15278e1b8ba70972be7135))
+* introduce the option to store backups as zip instead of tar.gz ([1a26e08](https://github.com/Johnny-Knighten/ark-sa-server/commit/1a26e08f24e1c39987f780a40f4feaad76b3987b))
+* introduced backups on restarts and before updates ([183629f](https://github.com/Johnny-Knighten/ark-sa-server/commit/183629f19a8ac466c3536b6050eae2bf0cc97bfe))
+
+## [1.1.0-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.1.0-next.1...1.1.0-next.2) (2023-11-24)
+
+
+### Bug Fixes
+
+* prevent early shootergame log tail by deleteing old logs first ([0524b82](https://github.com/Johnny-Knighten/ark-sa-server/commit/0524b8279f7434b9d7924c10337395321837c343))
+* removes user/pw from supervisord conf due to launch issues ([91cf811](https://github.com/Johnny-Knighten/ark-sa-server/commit/91cf81191882de245ecaf4bd2f6f3535c38ce2fe))
+
+## [1.1.0-next.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.0.2...1.1.0-next.1) (2023-11-24)
+
+
+### Bug Fixes
+
+* added -l to useradd and made PGID and PUID build args ([e121ad1](https://github.com/Johnny-Knighten/ark-sa-server/commit/e121ad1cc76a9357a154a5c8a78d5fa1aef49392))
+* added dummy user/password to prevent warning msg at boot ([86a555e](https://github.com/Johnny-Knighten/ark-sa-server/commit/86a555eded96fbd0d81e3fe4ea760c7e545a3edf))
+* converted proton env vars to build args ([84f3eaf](https://github.com/Johnny-Knighten/ark-sa-server/commit/84f3eaf6049d385d0621a7b8b27cc426e8281ca4))
+* made ark-sa-server responsible for starting ark-sa-updater ([a27c950](https://github.com/Johnny-Knighten/ark-sa-server/commit/a27c95090df20ebd23a768ea505550c1a22f79fc))
+
+
+### Features
+
+* added scheduled restarts ([16ca5f1](https://github.com/Johnny-Knighten/ark-sa-server/commit/16ca5f114fd238599cf0f1d47e78df3b236dfca2))
+* added scheduled updates ([765af0c](https://github.com/Johnny-Knighten/ark-sa-server/commit/765af0c1c4adebce3cda5214a7e50fb1df258a32))
+* added timezone config to container ([90c053e](https://github.com/Johnny-Knighten/ark-sa-server/commit/90c053e19325f510ef8c47fc8c99a9f29ecda85a))
+* created supervisord controlled process to install/update server ([b07adef](https://github.com/Johnny-Knighten/ark-sa-server/commit/b07adef7898cc5097174d9142f589ac01038056a))
+* created supervisord controlled process to start ark sa server ([acbe0e8](https://github.com/Johnny-Knighten/ark-sa-server/commit/acbe0e8825ad0472773ac787835915535455aa69))
+* installed cron inside container ([28d6d6e](https://github.com/Johnny-Knighten/ark-sa-server/commit/28d6d6e37a5c3d2bd3ce1cb4b49197f2278ac5e7))
+* now using supervisor as our process manager ([02dbc14](https://github.com/Johnny-Knighten/ark-sa-server/commit/02dbc1484bc76cbbfb9a222abf265b54b7443f61))
+
 ## [1.0.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/1.0.1...1.0.2) (2023-11-20)
 
 
