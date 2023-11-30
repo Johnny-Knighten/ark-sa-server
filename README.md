@@ -15,6 +15,8 @@
 
 Docker Linux container image for running an ARK Survival Ascended dedicated server.
 
+**Note - This container has not been tested with the Epic Game Store version of the game only the Steam version. If there are any problem please open an issue.**
+
 **See the [wiki](https://github.com/Johnny-Knighten/ark-sa-server/wiki) for more detailed documentation.**
 
 # Table of Contents
