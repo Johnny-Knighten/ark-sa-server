@@ -110,4 +110,4 @@ jobs:
 
     - name: Unit Tests - config_from_env_vars
       run: |
-        python3 -m unittest tests/config_from_env_vars/test_main.py
+        python3 -m unittest tests/config_from_env_vars/test_main.py -v
