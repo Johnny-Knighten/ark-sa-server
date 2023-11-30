@@ -62,16 +62,28 @@ perform_test "Verify GE's Wine Proton Fork's Wine Executable Exists" \
                 johnnyknighten/ark-sa-server:latest \
                 -f /opt/glorious_eggroll/proton/bin/wine"
 
-perform_test "Verify ark-sa-container/bin Content is Present" \
-            "docker run --rm \
+perform_test "Verify supervisord.conf Is Present" \
+            'docker run --rm \
               --entrypoint bash \
               johnnyknighten/ark-sa-server:latest \
-              -c \"test -f /usr/local/bin/system-bootstrap.sh && \
+              -c "test -f /usr/local/etc/supervisord.conf"'
+
+perform_test "Verify Python Is Installed" \
+            'docker run --rm \
+              --entrypoint bash \
+              johnnyknighten/ark-sa-server:latest \
+              -c "python3 --version"'
+
+perform_test "Verify ark-sa-container/bin Content is Present" \
+            'docker run --rm \
+              --entrypoint bash \
+              johnnyknighten/ark-sa-server:latest \
+              -c "test -f /usr/local/bin/system-bootstrap.sh && \
                   test -f /usr/local/bin/ark-sa-bootstrap.sh && \
                   test -f /usr/local/bin/ark-sa-server.sh && \
                   test -f /usr/local/bin/ark-sa-updater.sh && \
                   test -f /usr/local/bin/ark-sa-backup.sh && \
-                  test -f /usr/local/bin/ark-sa/config-templating/bootstrap-configs.sh && \
-                  test -f /usr/local/bin/ark-sa/config-templating/GameUserSettings.template.ini \""
+                  test -f /usr/local/bin/config_from_env_vars/__init__.py && \
+                  test -f /usr/local/bin/config_from_env_vars/main.py"'
 
 log_failed_tests

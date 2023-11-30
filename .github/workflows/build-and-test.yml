@@ -30,6 +30,13 @@ jobs:
         severity: error
         scandir: './bin'
 
+    - name: Lint Python Files Using Black
+      uses: psf/black@stable
+      with:
+        options: "--check --verbose"
+        src: "./config_from_env_vars"
+        version: "~= 23.0"
+
     - name: Build Docker image (Push To Cache)
       uses: docker/build-push-action@v3
       with:
@@ -68,26 +75,39 @@ jobs:
       run: |
         ./tests/dependencies.sh
 
-    - name: Config File Generation Tests
+    - name: Config File Generation Tests (Core)
       run: |
-        ./tests/config_file_generation.sh
+        ./tests/config_file_generation_core.sh
 
-    - name: system-bootstrap Tests
+    - name: Config File Generation Tests (Advanced)
+      run: |
+        ./tests/config_file_generation_adv.sh
+
+    - name: Bin Script - system-bootstrap Tests
       run: |
         ./tests/bin_scripts/system-bootstrap.sh
 
-    - name: ark-sa-boostrap Tests
+    - name: Bin Script - ark-sa-boostrap Tests
       run: |
         ./tests/bin_scripts/ark-sa-bootstrap.sh
 
-    - name: ark-sa-updater Tests
+    - name: Bin Script - ark-sa-updater Tests
       run: |
         ./tests/bin_scripts/ark-sa-updater.sh
 
-    - name: ark-sa-server Tests
+    - name: Bin Script - ark-sa-server Tests
       run: |
         ./tests/bin_scripts/ark-sa-server.sh
 
-    - name: ark-sa-backup Tests
+    - name: Bin Script - ark-sa-backup Tests
       run: |
         ./tests/bin_scripts/ark-sa-backup.sh
+
+    - name: Ensure Python 3.10 Is Installed For Unit Testing of config_from_env_vars 
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Unit Tests - config_from_env_vars
+      run: |
+        python3 -m unittest tests/config_from_env_vars/test_main.py -v
