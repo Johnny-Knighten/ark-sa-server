@@ -160,10 +160,10 @@ class TestConfigFromEnvVars(unittest.TestCase):
 
     @patch("config_from_env_vars.main.os.listdir")
     @patch("config_from_env_vars.main.os.path.join")
-    @patch("config_from_env_vars.main.shutil.copyfile")
+    @patch("config_from_env_vars.main.shutil.move")
     @patch("config_from_env_vars.main.Path")
     def test_backup_existing_ini_files(
-        self, mock_path, mock_copyfile, mock_join, mock_listdir
+        self, mock_path, mock_move, mock_join, mock_listdir
     ):
         mock_listdir.return_value = ["config.ini"]
         mock_join.side_effect = lambda a, b: f"{a}/{b}"
@@ -176,35 +176,35 @@ class TestConfigFromEnvVars(unittest.TestCase):
 
         backup_existing_ini_files("/fake/path")
 
-        mock_copyfile.assert_called_once_with(
+        mock_move.assert_called_once_with(
             "/fake/path/config.ini", "/fake/path/config.ini.backup1"
         )
 
     @patch("config_from_env_vars.main.os.listdir")
-    @patch("config_from_env_vars.main.shutil.copyfile")
+    @patch("config_from_env_vars.main.shutil.move")
     def test_backup_existing_ini_files_empty_directory(
-        self, mock_copyfile, mock_listdir
+        self, mock_move, mock_listdir
     ):
         mock_listdir.return_value = []
 
         backup_existing_ini_files("/fake/path")
 
-        mock_copyfile.never_called()
+        mock_move.never_called()
 
     @patch("config_from_env_vars.main.os.listdir")
-    @patch("config_from_env_vars.main.shutil.copyfile")
-    def test_backup_existing_ini_files_no_ini_files(self, mock_copyfile, mock_listdir):
+    @patch("config_from_env_vars.main.shutil.move")
+    def test_backup_existing_ini_files_no_ini_files(self, mock_move, mock_listdir):
         mock_listdir.return_value = ["config.txt"]
 
         backup_existing_ini_files("/fake/path")
 
-        mock_copyfile.never_called()
+        mock_move.never_called()
 
-    @patch("config_from_env_vars.main.shutil.copyfile")
+    @patch("config_from_env_vars.main.shutil.move")
     @patch("config_from_env_vars.main.Path")
     @patch("config_from_env_vars.main.os.listdir")
     def test_backup_existing_ini_files_increment(
-        self, mock_listdir, mock_path, mock_copyfile
+        self, mock_listdir, mock_path, mock_move
     ):
         mock_listdir.return_value = ["config.ini"]
         path_instance = MagicMock()
@@ -214,15 +214,15 @@ class TestConfigFromEnvVars(unittest.TestCase):
 
         backup_existing_ini_files("/fake/path")
 
-        mock_copyfile.assert_called_once_with(
+        mock_move.assert_called_once_with(
             "/fake/path/config.ini", "/fake/path/config.ini.backup2"
         )
 
-    @patch("config_from_env_vars.main.shutil.copyfile")
+    @patch("config_from_env_vars.main.shutil.move")
     @patch("config_from_env_vars.main.Path")
     @patch("config_from_env_vars.main.os.listdir")
     def test_backup_existing_ini_files_multiple_ini(
-        self, mock_listdir, mock_path, mock_copyfile
+        self, mock_listdir, mock_path, mock_move
     ):
         mock_listdir.return_value = ["config.ini", "settings.ini"]
         path_instance = MagicMock()
@@ -232,11 +232,11 @@ class TestConfigFromEnvVars(unittest.TestCase):
 
         backup_existing_ini_files("/fake/path")
 
-        mock_copyfile.assert_any_call(
+        mock_move.assert_any_call(
             "/fake/path/config.ini", "/fake/path/config.ini.backup"
         )
 
-        mock_copyfile.assert_any_call(
+        mock_move.assert_any_call(
             "/fake/path/settings.ini", "/fake/path/settings.ini.backup"
         )
 
@@ -264,18 +264,18 @@ class TestConfigFromEnvVars(unittest.TestCase):
 
         self.assertEqual(latest_backup, f"{directory}/{base_file_name}.backup")
 
-    @patch("config_from_env_vars.main.shutil.copyfile")
+    @patch("config_from_env_vars.main.shutil.move")
     @patch("config_from_env_vars.main.Path")
     @patch("config_from_env_vars.main.os.listdir")
     def test_backup_existing_ini_files_error(
-        self, mock_listdir, mock_path, mock_copyfile
+        self, mock_listdir, mock_path, mock_move
     ):
         mock_listdir.return_value = ["config.ini"]
         mock_path_obj = MagicMock()
         mock_path.return_value = mock_path_obj
         mock_path_obj.exists.return_value = False
 
-        mock_copyfile.side_effect = OSError("Mocked file access error")
+        mock_move.side_effect = OSError("Mocked file access error")
 
         with self.assertLogs(level="ERROR") as log:
             backup_existing_ini_files("/fake/path")
