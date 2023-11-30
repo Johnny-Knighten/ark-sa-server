@@ -5,8 +5,10 @@ services:
     container_name: ark
     image: johnnyknighten/ark-sa-server:latest
     restart: unless-stopped
+    env_file: 
+      - .env
     environment:
-      #- TZ=America/Los_Angeles
+      - TZ=America/Los_Angeles
       - GAME_PORT=8888
       - QUERY_PORT=27016
       - MAX_PLAYERS=55
@@ -22,7 +24,6 @@ services:
       - MULTI_HOME=0.0.0.0      # Make Your Public IP
       - EPIC_PUBLIC_IP=0.0.0.0  # Make Your Public IP
       - NO_BATTLEYE=True
-      - REBUILD_CONFIG=True
       - SCHEDULED_RESTART=False
       - BACKUP_ON_SCHEDULED_RESTART=False
       - RESTART_CRON=0 4 * * 0,3

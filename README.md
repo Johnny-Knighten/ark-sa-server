@@ -13,7 +13,7 @@
 [![Docker Stars](https://img.shields.io/docker/stars/johnnyknighten/ark-sa-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/ark-sa-server)
 [![Docker Pulls](https://img.shields.io/docker/pulls/johnnyknighten/ark-sa-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/ark-sa-server)
 
-Docker container images for running an ARK Survival Ascended dedicated server.
+Docker Linux container image for running an ARK Survival Ascended dedicated server.
 
 **See the [wiki](https://github.com/Johnny-Knighten/ark-sa-server/wiki) for more detailed documentation.**
 
@@ -24,7 +24,7 @@ Docker container images for running an ARK Survival Ascended dedicated server.
    - [Linux Host](#linux-host)
    - [Windows Host](#windows-host)
 * [System Requirements](#system-requirements)
-* [Game/Server Configs](#gameserver-configs)
+* [Game/Server Configs](#game/server-configs)
    - [Environment Variables](#environment-variables)
    - [Exposed Ports](#exposed-ports)
    - [Volumes](#volumes)
@@ -40,24 +40,24 @@ Docker container images for running an ARK Survival Ascended dedicated server.
 
 * Simple automated installation of ARK Survival Ascended (SA) dedicated server
 * Configuration via environment variables and config files
-* Schedule server restarts and updates via Cron
+* Scheduled server restarts and updates via Cron
   * Can be frozen to a specific version that is already downloaded
 * Automated backups
 * Automatic mod deployment, management, and updating
-* Is a Linux Container that runs the Windows version of the game server via wine/proton
+* Linux Container that runs the Windows version of the game server via wine/proton
     * Will switch to Linux game server if it is ever released
 
 ## Quick Start
 
-It is assumed you already have Docker installed on your host machine. See [here](https://docs.docker.com/engine/install/) for instructions on how to install Docker on your host machine.
+It is assumed you already have Docker installed on your host machine. See [here](https://docs.docker.com/engine/install/) for instructions on how to install Docker.
 
 The commands below will run the latest version of the ARK SA Server in a Linux container using `wine`. It will expose the default ports needed for the game server and RCON. It will also set the server name and admin password. 
 
-**Note - Using `docker run` by itself isn't recommended to host a long term server. See the [Deployment Examples](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Deployment-Examples) section of the wiki for more deployment options.**
+**Note - Using `docker run` by itself isn't recommended to host a server in the long term. See the [Deployment Examples](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Deployment-Examples) section of the wiki for more deployment options.**
 
 ### Linux Host
 
-The ark server data in this example will be stored in the current users home directory under `/home/USER/ark-data`. 
+The ark server data in this example will be stored in your home directory (`/home/USERNAME/ark-data`). 
 
 ```bash
 # written for bash, but should work in other shells
@@ -70,7 +70,9 @@ $ docker run -d \
   -p 27020:27020/tcp \
   -e SERVER_NAME="\"Simple ARK SA Server\"" \
   -e ADMIN_PASSWORD=secretpassword \
-  -v $HOME/ark-data:/ark-server \
+  -v $HOME/ark-data/server:/ark-server/server \
+  -v $HOME/ark-data/logs:/ark-server/logs \
+  -v $HOME/ark-data/backups:/ark-server/backups \
   johnnyknighten/ark-sa-server:latest
 ```
 
@@ -88,11 +90,9 @@ To stop the container:
 $ docker stop ark-sa-server
 ```
 
-Note - When setting `SERVER_NAME` in the docker run command, you must escape the quotes with a backslash. This is because the value is passed to the server as a command line argument and the quotes are needed to keep the name together. When using docker compose, the escaped quotes are not needed and standard quotes are good enough.
-
 ### Windows Host
 
-See the [Windows Host](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Quick-Starts#windows-host) section in the Quick Starts page of the wiki for details.
+See the [Windows Host](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Quick-Start#windows-host) section in the Quick Starts page of the wiki for details.
 
 ## System Requirements
 
@@ -117,6 +117,7 @@ The table below shows all the available environment variables and their default 
 | --- | --- | :---: |
 | `SKIP_FILE_VALIDATION` | Skips SteamCMD validation of the server files. Can speed up server start time, but could risk not detecting corrupted files. | `False` |
 | `TZ` | Sets the timezone of the container. See the table [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and look in the TZ identifier column. Highly recommend to set this if you will be using any of the CRON variables. | `America/New_York` |
+| `MANUAL_CONFIG` | If set to `True` then the container will not generate any config files. This is useful if you want to manage the config files yourself. | `False` |
 | `SCHEDULED_RESTART` | Enable scheduled restarts of the server. | `False` |
 | `BACKUP_ON_SCHEDULED_RESTART` | Determines if the server should backup itself before restarting. | `False` |
 | `RESTART_CRON` | Cron expression for scheduled restarts. Default is everyday at 4am. | `0 4 * * *` |
@@ -144,7 +145,6 @@ The table below shows all the available environment variables and their default 
 | `MOD_LIST` | Comma separated list of mod ids to install. Needs to be wrapped in quotes and whitespace can appear before or after commas. | EMPTY |
 | `EPIC_PUBLIC_IP` | Public IP address of the server, used by Epic game clients. | EMPTY |
 | `MULTI_HOME_SERVER` | Provide your public IP address when hosting multiple servers on the same machine. | EMPTY |
-| `REBUILD_CONFIG` | Force rebuild of GameUserSettings.ini on container start. If you update any of the configuration variables use this to force rewrite GameUserSettings.ini to include the new values. *Note - this overwrites your current GameUserSettings.ini, so make a copy if needed.*| `False` |
 
 **Note - If you are new to CRON, check here to get help understanding the syntax: [crontab guru](https://crontab.guru/).**
 
@@ -193,7 +193,22 @@ See the [Restoring Backups](https://github.com/Johnny-Knighten/ark-sa-server/wik
 
 ### Config Files
 
-Configuration files are primarily used to adjust settings such as such as XP/Gathering/Taming rates and player stats. The config files are located in the /ark-server/ShooterGame/Saved/Config/WindowsServer directory inside the container and the primary file you will modify is GameUserSettings.ini.
+Configuration files are primarily used to adjust settings such as such as XP/Gathering/Taming rates and player stats. The config files are located in the `/ark-server/server/ShooterGame/Saved/Config/WindowsServer` directory inside the container and the primary file you will modify is `GameUserSettings.ini`.
+
+This container has two primary ways to manage config files.
+* [Environment Variables](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Config-Files#managing-config-files-via-environment-variables) - Recommended
+* [Manually](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Config-Files#managing-the-config-files-manually)
+
+You should not mix and match these methods (it is possible but you need to understand how both are handled inside the container). If you wish to manage the config files manually, you must set `MANUAL_CONFIG=True` to prevent the container from generating/overwriting any config files.
+
+Despite setting `MANUAL_CONFIG=True`, if the `GameUserSettings.ini` file is missing a minimal config will be generated using the following variables:
+* `SERVER_NAME`
+* `SERVER_PASSWORD`
+* `ADMIN_PASSWORD`
+* `MAX_PLAYERS`
+* `ENABLE_PVE`
+* `ENABLE_RCON`
+* `RCON_PORT`
 
 For more info see the [Config Files](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Config-Files) wiki page.
 

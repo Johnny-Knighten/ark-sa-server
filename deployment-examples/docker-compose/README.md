@@ -58,6 +58,12 @@ Stop the stack.
 $ docker compose -f basic-docker-compose.yml down
 ```
 
+### Stop Compose Stack With Timeout (Needed For Large Backups)
+Stop the stack and wait up to 10min before killing the container.
+```bash
+$ docker compose -f advanced-docker-compose.yml down -t 600
+```
+
 ## Advanced Example
 
 This example has more configuration options set via environment variables than the above example. This reflects a more robust configuration that would be used in a live server.
@@ -75,7 +81,32 @@ Press `CTRL+C` to stop the stack.
 ```bash
 $ docker compose -f advanced-docker-compose.yml up -d
 ```
+### Environment File To Store Configs
 
+It is important to note that the advanced example uses an environment file to store the environment variables. If you are going to use a lot of `CONFIG_` environment variables I recommend moving them to an environment file. This will make it easier to manage the config specific variables and prevent you compose file from becoming too long.
+
+You specify the environment file in the `env_file` section of your compose file:
+```yaml
+version: '3'
+services:
+  ark-sa:
+    container_name: ark
+    image: johnnyknighten/ark-sa-server:latest
+    restart: unless-stopped
+    env_file: 
+      - .env
+    ...
+```
+
+The actual environment file is a simple text file with each environment variable on its own line. 
+
+```env
+CONFIG_GameUserSettings_ServerSettings_DifficultyOffset=0.20
+CONFIG_GameUserSettings_ServerSettings_PlayerDamageMultiplier=1.0
+CONFIG_GameUserSettings_ServerSettings_StructureResistanceMultiplier=1.0
+CONFIG_GameUserSettings_ServerSettings_XPMultiplier=5.0
+...
+```
 ### Viewing Logs When Using A Detached Compose Stack 
 ####  View all logs generated.
 ```bash
@@ -110,6 +141,12 @@ Stop the stack.
 $ docker compose -f advanced-docker-compose.yml down
 ```
 
+### Stop Compose Stack With Timeout (Needed For Large Backups)
+Stop the stack and wait up to 10min before killing the container.
+```bash
+$ docker compose -f advanced-docker-compose.yml down -t 600
+```
+
 ## Note About Volumes
 
 In the two above examples a docker volume called `ark-files` will be created and store all server files.  This volume will persist even if the container is removed.  This allows the container to be removed and re-created without losing any server data.
@@ -133,4 +170,4 @@ services:
 
 ## Note About Server Updates
 
-If you have `ARK_PREVENT_AUTO_UPDATE` set to `True`, then the container will not download any updates via [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD) and will continue to use the files in the supplied volume/bind mount. Whenever you are ready to perform an update, set ARK_PREVENT_AUTO_UPDATE to `False ` and restart the container.  The container will then download the latest version of the server files and update the server.  Once the update is complete, set `ARK_PREVENT_AUTO_UPDATE` back to `True` and restart the container.  The container will then use the updated files for the server and go back to not updating on restarts.
+If you have `UPDATE_ON_BOOT` set to `False`, then the container will not download any updates via [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD) and will continue to use the files in the supplied volume/bind mount. Whenever you are ready to perform an update, set `UPDATE_ON_BOOT` to `True ` and restart the container.  The container will then download the latest version of the server files and update the server.  Once the update is complete, set `UPDATE_ON_BOOT` back to `False` and restart the container.  The container will then use the updated files for the server and go back to not updating on restarts.
