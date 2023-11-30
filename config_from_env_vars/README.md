@@ -11,7 +11,7 @@ options:
                         Path to store created ini files.
 ```
 
-# Environment Variable Format
+## Environment Variable Format
 
 ```bash
 CONFIG_<config_file>_<section>_<variable>=<value>.
@@ -31,9 +31,15 @@ CONFIG_<config_file>_<section>_<variable>=<value>.
 * `<value>`
   * The value to set the variable to.
 
-# Example Execution
+## File Backups
 
-## Example 1
+When a `CONFIG_` variable is changed between executions, the script will create a backup copy of the current config file then generate a new one. The backup will be stored in the same directory as the config file with the same name and the `.backup#` extension. The `#` will be incremented for each backup created, and the highest number reflects the newest backup.
+
+If you introduce `CONFIG_` vars and eventually remove all of them, the current configs will have a backup made, but no new config will be generated. 
+
+## Example Execution
+
+### Example 1
 
 ```bash
 export CONFIG_Test_Test_Section_Var=Value
@@ -48,7 +54,7 @@ Creates
 Var = Value
 ```
 
-## Example 2
+### Example 2
 
 ```bash
 export CONFIG_Test_Test_DOT_Section_Var=Test
@@ -63,7 +69,7 @@ Creates
 Var = Test
 ```
 
-# Test Execution
+## Test Execution
 
 To execute the unit tests associated with this script, run the following command from the project's root directory:
 
