@@ -1,3 +1,23 @@
+## [2.0.0-next.4](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0-next.3...2.0.0-next.4) (2023-11-30)
+
+
+### Bug Fixes
+
+* added info log to list configs updated ([31f1ca5](https://github.com/Johnny-Knighten/ark-sa-server/commit/31f1ca5f70bbfb1a633b70ca3f13aaa6d10e8d10))
+* added python3 to dockerfile install and updated dependency tests ([b6db7e2](https://github.com/Johnny-Knighten/ark-sa-server/commit/b6db7e2e39f9bfa355eb36fab41f006880de2fdc))
+* caught edge case of no backups existing if it is first time creating config ([6e92fdf](https://github.com/Johnny-Knighten/ark-sa-server/commit/6e92fdf9bc6f94dbe3c0149ed64a6e62b1db6a15))
+* corrected syntax issue in ark-sa-bootstrap ([b85efc0](https://github.com/Johnny-Knighten/ark-sa-server/commit/b85efc0a5119cc5de30f04a1105891ad7850668f))
+* fixed bug that stopped new configs being updated when CONFIG_ values changed ([be8e4e3](https://github.com/Johnny-Knighten/ark-sa-server/commit/be8e4e3614b7dfdaf518de16efd4c67c9dd2b6f6))
+* integrated new python config generation into ark-sa-bootstrap ([8060e1a](https://github.com/Johnny-Knighten/ark-sa-server/commit/8060e1ae3f79017ced1c98f338bfb8193fb41c9a))
+* updated config_from_env_vars to main capitalization and remove spaces around = ([ae9e790](https://github.com/Johnny-Knighten/ark-sa-server/commit/ae9e7901437d4738caddeea2513079a394e5b5fd))
+
+
+### Features
+
+* configs are now backedup instead of overwritten, and removing CONFIG_ vars now also remove it from config ([d204ee6](https://github.com/Johnny-Knighten/ark-sa-server/commit/d204ee633d9c7cdbcbbf3cd5a12ec4c839de992d))
+* created python script to extract env vars and convert to ini files ([26745c4](https://github.com/Johnny-Knighten/ark-sa-server/commit/26745c4e4a61d5fb75c729673f47c8fe0eef888e))
+* introduced MANUAL_CONFIG to control if config file generation should be used ([3b72b1f](https://github.com/Johnny-Knighten/ark-sa-server/commit/3b72b1f0bd935a370ab8d466f5705311c94d907f))
+
 ## [2.0.0-next.3](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0-next.2...2.0.0-next.3) (2023-11-27)
 
 
