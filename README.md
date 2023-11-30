@@ -31,6 +31,8 @@ Docker Linux container image for running an ARK Survival Ascended dedicated serv
    - [Backups](#backups)
    - [Config Files](#config-files)
    - [Mods](#mods)
+* [Backups](#backups)
+   - [Tip For Using `BACKUP_ON_STOP=True` ](#tip-for-using-backup_on_stoptrue)
 * [Deployment](#deployment)
 * [Tags](#tags)
 * [Shout Outs](#shout-outs)
@@ -215,6 +217,14 @@ For more info see the [Config Files](https://github.com/Johnny-Knighten/ark-sa-s
 ### Mods
 
 Mods are handled via the `MOD_LIST` environment variable. The variable is a comma separated list of mod ids to install. The mod ids list need to be wrapped in quotes, and white space is allowed before/after commas since all whitespace in the quotes will be removed. Right now, if you are lucky, the mod author will put the id in there mod description. An alternative way to get mod ids is by installing them on your local machine then going to `PATH_TO_STEAM\Steam\steamapps\common\ARK Survival Ascended\ShooterGame\Binaries\Win64\ShooterGame\Mods\RANDOM#` and look at the subdirectories' name. The first number before the `_` in the subdirectories name is the mod id. 
+
+## Backups
+
+There are several different ways to perform backups using this container. See the [Backups](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups) section of the wiki for exact details.
+
+### Tip For Using `BACKUP_ON_STOP=True`
+
+If you are planning on using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker stop/compose down` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. The longer your server has been running the bigger your backup will become which increases the time needed to backup the server. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.
 
 ## Deployment
 
