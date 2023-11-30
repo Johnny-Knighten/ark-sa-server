@@ -41,7 +41,8 @@ ENV DEBUG=False \
     SCHEDULED_BACKUP=False \
     BACKUP_CRON="0 6 * * *" \
     ZIP_BACKUPS=False \
-    RETAIN_BACKUPS=
+    RETAIN_BACKUPS= \
+    MANUAL_CONFIG=False
 
 RUN set -x && \
     apt-get update && \

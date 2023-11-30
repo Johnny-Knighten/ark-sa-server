@@ -35,15 +35,21 @@ launch_update_service() {
 generate_config_files() {
   mkdir -p "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer"
 
-  export CONFIG_GameUserSettings_SessionSettings_SessionName="${SERVER_NAME}"
-  export CONFIG_GameUserSettings_ServerSettings_RCONEnabled="${ENABLE_RCON}"
-  export CONFIG_GameUserSettings_ServerSettings_RCONPort="${RCON_PORT}"
-  export CONFIG_GameUserSettings_SLASH_Script_SLASH_Engine_DOT_GameSession_MaxPlayers="${MAX_PLAYERS}"
-  export CONFIG_GameUserSettings_ServerSettings_ServerPassword="${SERVER_PASSWORD}"
-  export CONFIG_GameUserSettings_ServerSettings_ServerAdminPassword="${ADMIN_PASSWORD}"
-  export CONFIG_GameUserSettings_ServerSettings_ServerPVE="${ENABLE_PVE}"
+  if [[ ! -f "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer/GameUserSettings.ini" || "$MANUAL_CONFIG" = "False"]]; then
+    echo "ARK SA Bootstrap - Generating GameUserSettings.ini"
 
-  python3 /usr/local/bin/config_from_env_vars/main.py --path "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer"
+    export CONFIG_GameUserSettings_SessionSettings_SessionName="${SERVER_NAME}"
+    export CONFIG_GameUserSettings_ServerSettings_RCONEnabled="${ENABLE_RCON}"
+    export CONFIG_GameUserSettings_ServerSettings_RCONPort="${RCON_PORT}"
+    export CONFIG_GameUserSettings_SLASH_Script_SLASH_Engine_DOT_GameSession_MaxPlayers="${MAX_PLAYERS}"
+    export CONFIG_GameUserSettings_ServerSettings_ServerPassword="${SERVER_PASSWORD}"
+    export CONFIG_GameUserSettings_ServerSettings_ServerAdminPassword="${ADMIN_PASSWORD}"
+    export CONFIG_GameUserSettings_ServerSettings_ServerPVE="${ENABLE_PVE}"
+
+    python3 /usr/local/bin/config_from_env_vars/main.py --path "${SERVER_DIR}/ShooterGame/Saved/Config/WindowsServer"
+  else
+    echo "ARK SA Bootstrap - Skipping GameUserSettings.ini Generation MANAUL_CONFIG is True"
+  fi
 }
 
 # -eq 1  below because we assume the single config file is generate at this point
