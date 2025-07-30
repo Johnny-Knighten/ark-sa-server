@@ -30,7 +30,7 @@ perform_test "Verify tzdata is Installed" \
              'docker run --rm \
                 --entrypoint bash \
                 johnnyknighten/ark-sa-server:latest \
-                -c "cat /usr/share/zoneinfo/tzdata.zi | head -n 1 | grep \"# version 2023c\"" > /dev/null 2>&1'
+                -c "cat /usr/share/zoneinfo/tzdata.zi | head -n 1 | grep \"# version\"" > /dev/null 2>&1'
 
 perform_test "Verify tar is Installed" \
              'docker run --rm \
