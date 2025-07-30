@@ -1,0 +1,60 @@
+---
+services:
+  ark-sa-the-island:
+    container_name: ark-the-island
+    image: 8580187957c6
+    restart: unless-stopped
+    environment:
+      - SERVER_NAME="Simple ARK SA Server - The Island"
+      - ADMIN_PASSWORD=secretpassword
+      - NO_BATTLEYE=True
+      - MAP=TheIsland_WP
+      - GAME_PORT=7777
+      - QUERY_PORT=27015
+      - RCON_PORT=27020
+      - CLUSTER_ID=MY_ARK_SA_CLUSTER_TEST
+      - CLUSTER_DIR=/ark-server/cluster
+      - NO_TRANSFER_FROM_FILTERING=True
+    volumes:
+      - 'ark-server-the-island:/ark-server/server'
+      - 'ark-backups-the-island:/ark-server/backups'
+      - 'ark-logs-the-island:/ark-server/logs'
+      - 'ark-cluster:/ark-server/cluster'
+    ports:
+      - 7777:7777/udp
+      - 7778:7778/udp
+      - 27015:27015/udp
+      - 27020:27020/tcp
+  ark-sa-ragnarok:
+    container_name: ark-ragnarok
+    image: 8580187957c6
+    restart: unless-stopped
+    environment:
+      - SERVER_NAME="Simple ARK SA Server - Ragnarok"
+      - ADMIN_PASSWORD=secretpassword
+      - NO_BATTLEYE=True
+      - MAP=Ragnarok_WP
+      - GAME_PORT=7779
+      - QUERY_PORT=27016
+      - RCON_PORT=27021
+      - CLUSTER_ID=MY_ARK_SA_CLUSTER_TEST
+      - CLUSTER_DIR=/ark-server/cluster
+      - NO_TRANSFER_FROM_FILTERING=True
+    volumes:
+      - 'ark-server-ragnarok:/ark-server/server'
+      - 'ark-backups-ragnarok:/ark-server/backups'
+      - 'ark-logs-ragnarok:/ark-server/logs'
+      - 'ark-cluster:/ark-server/cluster'
+    ports:
+      - 7779:7779/udp
+      - 7780:7780/udp
+      - 27016:27016/udp
+      - 27021:27021/tcp
+volumes:
+  ark-cluster:
+  ark-server-the-island:
+  ark-server-ragnarok:
+  ark-backups-the-island:
+  ark-backups-ragnarok:
+  ark-logs-the-island:
+  ark-logs-ragnarok:
