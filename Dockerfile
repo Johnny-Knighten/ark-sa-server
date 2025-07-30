@@ -42,7 +42,10 @@ ENV DEBUG=False \
     BACKUP_CRON="0 6 * * *" \
     ZIP_BACKUPS=False \
     RETAIN_BACKUPS= \
-    MANUAL_CONFIG=False
+    MANUAL_CONFIG=False \
+    CLUSTER_ID= \
+    CLUSTER_DIR= \
+    NO_TRANSFER_FROM_FILTERING=
 
 RUN set -x && \
     apt-get update && \
