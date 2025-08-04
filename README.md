@@ -34,6 +34,7 @@ Docker Linux container image for running an ARK Survival Ascended dedicated serv
    - [Config Files](#config-files)
    - [Mods](#mods)
 * [Deployment](#deployment)
+* [Server Clustering](#server-clustering)
 * [Tags](#tags)
 * [Shout Outs](#shout-outs)
 * [Contributing](#contributing)
@@ -239,6 +240,7 @@ If you are running all servers on the same host, then you should set the `CLUSTE
 Things are a little more complicated if you are running the servers on different hosts. In this case, you will need to set the `CLUSTER_DIR` to a shared volume that all servers can access. This can be done using some type of network share storage such as NFS or SMB. This setup has not been tested yet, but it should work as long as the servers can access the same cluster data directory.
 
 Clustering is an advanced feature and is more nuanced than a single server setup. Take extra care when setting up your cluster and ensure that all servers are configured correctly. For instance, there can be issues if you have different mods or configs on different servers in the cluster. For more details you can look [here](https://ark.wiki.gg/wiki/Server_configuration#Cross-ARK_Data_Transfer).
+
 ## Tags
 
 Tags used in this project are focused on the version of the GitHub release and the execution environment it uses. It is not based on the game/server version or mod versions.
