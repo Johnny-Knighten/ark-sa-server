@@ -38,6 +38,15 @@ start_server() {
     launch_flags+=" -NoBattlEye"
   fi
 
+  if [[ -n "$CLUSTER_ID" ]]; then
+    launch_flags+=" -clusterid=$CLUSTER_ID"
+    launch_flags+=" -ClusterDirOverride=$CLUSTER_DIR"
+  fi
+
+  if [[ "$NO_TRANSFER_FROM_FILTERING" = "True" ]]; then
+    launch_flags+=" -NoTransferFromFiltering"
+  fi
+
   if [[ -n "$EPIC_PUBLIC_IP" ]]; then
     launch_flags+=" --PublicIPforEpic $EPIC_PUBLIC_IP"
   fi

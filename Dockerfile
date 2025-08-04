@@ -42,20 +42,23 @@ ENV DEBUG=False \
     BACKUP_CRON="0 6 * * *" \
     ZIP_BACKUPS=False \
     RETAIN_BACKUPS= \
-    MANUAL_CONFIG=False
+    MANUAL_CONFIG=False \
+    CLUSTER_ID= \
+    CLUSTER_DIR="/ark-server/cluster" \
+    NO_TRANSFER_FROM_FILTERING=False
 
 RUN set -x && \
     apt-get update && \
     apt-get install --no-install-recommends -y  \
-                        wget=1.21.2-2ubuntu1 \
-                        xz-utils=5.2.5-2ubuntu1 \
-                        xvfb=2:21.1.4-2ubuntu1.7~22.04.2 \
-                        supervisor=4.2.1-1ubuntu1 \
-                        cron=3.0pl1-137ubuntu3 \
-                        tzdata=2023c-0ubuntu0.22.04.2 \
-                        zip=3.0-12build2 \
-                        unzip=6.0-26ubuntu3.1 \
-                        python3=3.10.6-1~22.04 && \
+                        wget \
+                        xz-utils \
+                        xvfb \
+                        supervisor \
+                        cron \
+                        tzdata \
+                        zip \
+                        unzip \
+                        python3 && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/glorious_eggroll
