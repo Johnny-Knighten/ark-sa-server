@@ -1,3 +1,18 @@
+## [2.1.0](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0...2.1.0) (2025-08-04)
+
+
+### Bug Fixes
+
+* added default value for CLUSTER_DIR and made it depend on CLUSTER_ID ([8582cdf](https://github.com/Johnny-Knighten/ark-sa-server/commit/8582cdf55172ccee9841e3aea7de4d8b2563f561))
+* remove hardcoded ubuntu dependencies to prevent build issues due to some versions missing ([d8281c0](https://github.com/Johnny-Knighten/ark-sa-server/commit/d8281c01a4f860064a0f39adcf3f861963efd551))
+* removed depend test against tzdata since a specific version is no longer installed ([867c6da](https://github.com/Johnny-Knighten/ark-sa-server/commit/867c6da468eb34bf50741b056c1c857070375619))
+
+
+### Features
+
+* added required cluster startup flags and env vars ([668e3aa](https://github.com/Johnny-Knighten/ark-sa-server/commit/668e3aaf848b4be997ce3ff73aa163cabcad91ea))
+* initial server clustering setup ([2013d79](https://github.com/Johnny-Knighten/ark-sa-server/commit/2013d79e19379748e4aff16b1026e4791a4e4d5d))
+
 ## [2.1.0-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.1.0-next.1...2.1.0-next.2) (2025-08-04)
 
 
