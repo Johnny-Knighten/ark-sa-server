@@ -1,3 +1,10 @@
+## [2.1.0-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.1.0-next.1...2.1.0-next.2) (2025-08-04)
+
+
+### Bug Fixes
+
+* added default value for CLUSTER_DIR and made it depend on CLUSTER_ID ([8582cdf](https://github.com/Johnny-Knighten/ark-sa-server/commit/8582cdf55172ccee9841e3aea7de4d8b2563f561))
+
 ## [2.1.0-next.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0...2.1.0-next.1) (2025-07-30)
 
 
