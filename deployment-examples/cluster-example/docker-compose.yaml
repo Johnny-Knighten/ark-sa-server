@@ -2,7 +2,7 @@
 services:
   ark-sa-the-island:
     container_name: ark-the-island
-    image: 8580187957c6
+    image: johnnyknighten/ark-sa-server:latest
     restart: unless-stopped
     environment:
       - SERVER_NAME="Simple ARK SA Server - The Island"
@@ -27,7 +27,7 @@ services:
       - 27020:27020/tcp
   ark-sa-ragnarok:
     container_name: ark-ragnarok
-    image: 8580187957c6
+    image: johnnyknighten/ark-sa-server:latest
     restart: unless-stopped
     environment:
       - SERVER_NAME="Simple ARK SA Server - Ragnarok"

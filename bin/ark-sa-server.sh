@@ -40,13 +40,10 @@ start_server() {
 
   if [[ -n "$CLUSTER_ID" ]]; then
     launch_flags+=" -clusterid=$CLUSTER_ID"
-  fi
-
-  if [[ -n "$CLUSTER_DIR" ]]; then
     launch_flags+=" -ClusterDirOverride=$CLUSTER_DIR"
   fi
 
-  if [[ -n "$NO_TRANSFER_FROM_FILTERING" ]]; then
+  if [[ "$NO_TRANSFER_FROM_FILTERING" = "True" ]]; then
     launch_flags+=" -NoTransferFromFiltering"
   fi
 
