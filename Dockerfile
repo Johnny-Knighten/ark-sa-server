@@ -44,8 +44,8 @@ ENV DEBUG=False \
     RETAIN_BACKUPS= \
     MANUAL_CONFIG=False \
     CLUSTER_ID= \
-    CLUSTER_DIR= \
-    NO_TRANSFER_FROM_FILTERING=
+    CLUSTER_DIR="/ark-server/cluster" \
+    NO_TRANSFER_FROM_FILTERING=False
 
 RUN set -x && \
     apt-get update && \
