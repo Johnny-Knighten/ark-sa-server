@@ -6,6 +6,7 @@ from configparser import RawConfigParser
 from pathlib import Path
 import shutil
 import sys
+import re
 from typing import Dict
 
 # Configure logging
@@ -32,7 +33,7 @@ def process_env_vars() -> Dict[str, Dict[str, Dict[str, str]]]:
             continue
 
         file_name = tokens[1]
-        var_name = tokens[-1]
+        var_name = re.sub(r"(\d+)$", r"\[\1\]", tokens[-1])
         section_name = "_".join(tokens[2:-1]).replace("SLASH", "/").replace("DOT", ".")
         section_name = (
             section_name.replace("_/_", "/").replace("/_", "/").replace("_._", ".")
