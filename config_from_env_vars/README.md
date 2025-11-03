@@ -28,6 +28,7 @@ CONFIG_<config_file>_<section>_<variable>=<value>.
 * `<variable>`
   * The name of the variable to create in the config file.
   * Must be after the last underscores `_`.
+  * May end with a number to produce a variable like <variable>[number]
 * `<value>`
   * The value to set the variable to.
 
@@ -67,6 +68,21 @@ Creates
 #Test.ini
 [Test.Section]
 Var = Test
+```
+
+### Example 3
+
+```bash
+export CONFIG_Test_Test_DOT_Section_Var5=Test
+python3 main.py --path $(pwd)
+```
+
+Creates
+  
+```ini
+#Test.ini
+[Test.Section]
+Var[5] = Test
 ```
 
 ## Test Execution
