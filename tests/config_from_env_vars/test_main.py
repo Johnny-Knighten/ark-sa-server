@@ -109,7 +109,7 @@ class TestConfigFromEnvVars(unittest.TestCase):
 
     @patch.dict(
         "os.environ",
-        {"CONFIG_Game_ServerSettings_PlayerBaseStatMultipliers7": "6.0"},
+        {"CONFIG_Game_ServerSettings_PlayerBaseStatsMultipliers7": "6.0"},
     )
     def test_process_env_vars_with_number_in_varname(self):
         result = process_env_vars()
