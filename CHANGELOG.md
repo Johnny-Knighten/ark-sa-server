@@ -1,3 +1,10 @@
+## [2.2.0](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.1.0...2.2.0) (2025-11-07)
+
+
+### Features
+
+* Enable using config variables like VariableName[index] ([#34](https://github.com/Johnny-Knighten/ark-sa-server/issues/34)) ([a3d0d3e](https://github.com/Johnny-Knighten/ark-sa-server/commit/a3d0d3e09b3d62f8993efc34a44d9bdf75e74270))
+
 ## [2.1.0](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.0.0...2.1.0) (2025-08-04)
 
 
