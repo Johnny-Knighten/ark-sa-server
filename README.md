@@ -198,6 +198,24 @@ If desired, you can also manually trigger a backup. See the [Manual Backup](http
 
 See the [Restoring Backups](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#restoring-backups) section of the wiki for details.
 
+#### Restore tips & path components (important)
+
+**As of this update, the backup script has been fixed to create archives containing only the contents of `Saved` (without leading path components).** New backups can be restored directly:
+- `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server/ShooterGame/Saved`
+- or `unzip /path/to/ark-sa-server-YYYYMMDDHHMMSS.zip -d /ark-server/server/ShooterGame/Saved`
+
+**For older backups** created before this fix, some may include parent directory path components in the archive (for example: `ark-server/server/ShooterGame/Saved/...`). When restoring these older backups, the leading path components will be recreated unless you remove them on extraction.
+
+- Inspect the archive first to see the stored paths:
+  - tar: `tar -tzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz | head -n 20`
+  - zip: `unzip -l /path/to/ark-sa-server-YYYYMMDDHHMMSS.zip | head -n 20`
+
+- If an older archive includes leading directories (for example `ark-server/server/ShooterGame/Saved/...`) you can remove them during extraction using `--strip-components`. Example for an archive with path `ark-server/server/ShooterGame/Saved/`:
+  - `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server/ShooterGame/Saved --strip-components=4`
+  - The `--strip-components=4` removes the first 4 path components (`ark-server`, `server`, `ShooterGame`, `Saved`) so files extract directly into the target directory. You can determine the correct number by inspecting the archive output above and counting path segments.
+
+This issue was reported in #33: https://github.com/Johnny-Knighten/ark-sa-server/issues/33 — it noted the need for `--strip-components=4` when extracting some older tar backups. The backup script has now been updated to avoid this need by archiving only the contents of `Saved`.
+
 #### Tip For Using `BACKUP_ON_STOP=True`
 
 If you are planning on using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker stop/compose down` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. The longer your server has been running the bigger your backup will become which increases the time needed to backup the server. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.

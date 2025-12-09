@@ -69,4 +69,31 @@ perform_test "Verify ark-sa-updater Is Launched When 'update' Is Passed To The S
               -c "/usr/local/bin/ark-sa-backup.sh update");
              echo $OUTPUT | grep -q "supervisorctl start ark-sa-updater"'
 
+perform_test "Verify .tar.gz Backup Contains Only Saved Contents (Not Full Path)" \
+             'docker run --rm \
+              --entrypoint bash \
+              johnnyknighten/ark-sa-server:latest \
+              -c "mkdir -p /ark-server/server/ShooterGame/Saved/testdir && \
+                echo \"test\" > /ark-server/server/ShooterGame/Saved/test.txt && \
+                echo \"nested\" > /ark-server/server/ShooterGame/Saved/testdir/nested.txt && \
+                /usr/local/bin/ark-sa-backup.sh > /dev/null 2>&1 && \
+                BACKUP_FILE=\$(ls /ark-server/backups/*.tar.gz | head -n 1) && \
+                ! tar -tzf \$BACKUP_FILE | grep -q \"^ark-server\" && \
+                tar -tzf \$BACKUP_FILE | grep -q \"^\\./test.txt\" && \
+                tar -tzf \$BACKUP_FILE | grep -q \"^\\./testdir/nested.txt\""'
+
+perform_test "Verify .zip Backup Contains Only Saved Contents (Not Full Path)" \
+             'docker run --rm \
+              -e ZIP_BACKUPS=True \
+              --entrypoint bash \
+              johnnyknighten/ark-sa-server:latest \
+              -c "mkdir -p /ark-server/server/ShooterGame/Saved/testdir && \
+                echo \"test\" > /ark-server/server/ShooterGame/Saved/test.txt && \
+                echo \"nested\" > /ark-server/server/ShooterGame/Saved/testdir/nested.txt && \
+                /usr/local/bin/ark-sa-backup.sh > /dev/null 2>&1 && \
+                BACKUP_FILE=\$(ls /ark-server/backups/*.zip | head -n 1) && \
+                ! unzip -l \$BACKUP_FILE | grep -q \"^ark-server\" && \
+                unzip -l \$BACKUP_FILE | grep -q \"test.txt\" && \
+                unzip -l \$BACKUP_FILE | grep -q \"testdir/nested.txt\""'
+
 log_failed_tests

@@ -38,18 +38,20 @@ start_ark_sa_update() {
 }
 
 zip_backup() {
-if [[ "$DRY_RUN" = "True" ]]; then
-    echo "DRY_RUN - zip -r \"${BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).zip\" \"${SERVER_DIR}/ShooterGame/Saved\""
+  # Create zip of the contents of Saved (archive root is the contents, not the full absolute path)
+  if [[ "$DRY_RUN" = "True" ]]; then
+    echo "DRY_RUN - (cd \"${SERVER_DIR}/ShooterGame/Saved\" && zip -r \"${BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).zip\" .)"
   else
-    zip -r "${BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).zip" "${SERVER_DIR}/ShooterGame/Saved"
+    (cd "${SERVER_DIR}/ShooterGame/Saved" && zip -r "${BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).zip" .)
   fi
 }
 
 tar_gz_backup() {
+  # Create tar.gz of the contents of Saved (archive root is the contents, not the full absolute path)
   if [[ "$DRY_RUN" = "True" ]]; then
-    echo "DRY_RUN - tar -czf \"${BACKUPS_DIR}/server-backup-$(date +%Y%m%d%H%M%S).tar.gz\" \"${SERVER_DIR}/ShooterGame/Saved\""
+    echo "DRY_RUN - (cd \"${SERVER_DIR}/ShooterGame/Saved\" && tar -czf \"${BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).tar.gz\" .)"
   else
-    tar -czf "${BACKUPS_DIR}"/ark-sa-server-$(date +%Y%m%d%H%M%S).tar.gz "${SERVER_DIR}"/ShooterGame/Saved
+    (cd "${SERVER_DIR}/ShooterGame/Saved" && tar -czf "${BACKUPS_DIR}/ark-sa-server-$(date +%Y%m%d%H%M%S).tar.gz" .)
   fi
 }
 
