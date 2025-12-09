@@ -200,21 +200,21 @@ See the [Restoring Backups](https://github.com/Johnny-Knighten/ark-sa-server/wik
 
 #### Restore tips & path components (important)
 
-Note: some backups include parent directory path components in the archive (for example: `ark-server/server/ShooterGame/Saved/...`). When restoring, these leading path components will be recreated unless you remove them on extraction.
+**As of this update, the backup script has been fixed to create archives containing only the contents of `Saved` (without leading path components).** New backups can be restored directly:
+- `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server/ShooterGame/Saved`
+- or `unzip /path/to/ark-sa-server-YYYYMMDDHHMMSS.zip -d /ark-server/server/ShooterGame/Saved`
+
+**For older backups** created before this fix, some may include parent directory path components in the archive (for example: `ark-server/server/ShooterGame/Saved/...`). When restoring these older backups, the leading path components will be recreated unless you remove them on extraction.
 
 - Inspect the archive first to see the stored paths:
   - tar: `tar -tzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz | head -n 20`
   - zip: `unzip -l /path/to/ark-sa-server-YYYYMMDDHHMMSS.zip | head -n 20`
 
-- If the tar archive includes leading directories (for example `ark-server/server/ShooterGame/Saved/...`) you can remove them during extraction using `--strip-components`. Example:
+- If an older archive includes leading directories (for example `ark-server/server/ShooterGame/Saved/...`) you can remove them during extraction using `--strip-components`. Example:
   - `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server --strip-components=<N>`
   - Replace `<N>` with the number of leading path components to remove so the extracted paths match the target location. (You can determine `<N>` by inspecting the archive output above and counting path segments.)
 
-- Simpler (and recommended): change the backup creation so archives contain only the contents of `Saved`. If the backup contains only the contents of `Saved` you can restore with:
-  - `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server/ShooterGame/Saved`
-  - or `unzip /path/to/ark-sa-server-YYYYMMDDHHMMSS.zip -d /ark-server/server/ShooterGame/Saved`
-
-This issue was reported in #33: https://github.com/Johnny-Knighten/ark-sa-server/issues/33 — it notes adding `--strip-components=4` when extracting some tar backups to remove the extra leading directories. The repo's backup script can be adjusted (see file: bin/ark-sa-backup.sh) to avoid this need by archiving only the contents of `Saved`.
+This issue was reported in #33: https://github.com/Johnny-Knighten/ark-sa-server/issues/33 — it noted the need for `--strip-components=4` when extracting some older tar backups. The backup script has now been updated to avoid this need by archiving only the contents of `Saved`.
 
 #### Tip For Using `BACKUP_ON_STOP=True`
 
