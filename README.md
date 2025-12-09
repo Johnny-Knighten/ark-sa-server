@@ -198,6 +198,24 @@ If desired, you can also manually trigger a backup. See the [Manual Backup](http
 
 See the [Restoring Backups](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#restoring-backups) section of the wiki for details.
 
+#### Restore tips & path components (important)
+
+Note: some backups include parent directory path components in the archive (for example: `ark-server/server/ShooterGame/Saved/...`). When restoring, these leading path components will be recreated unless you remove them on extraction.
+
+- Inspect the archive first to see the stored paths:
+  - tar: `tar -tzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz | head -n 20`
+  - zip: `unzip -l /path/to/ark-sa-server-YYYYMMDDHHMMSS.zip | head -n 20`
+
+- If the tar archive includes leading directories (for example `ark-server/server/ShooterGame/Saved/...`) you can remove them during extraction using `--strip-components`. Example:
+  - `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server --strip-components=<N>`
+  - Replace `<N>` with the number of leading path components to remove so the extracted paths match the target location. (You can determine `<N>` by inspecting the archive output above and counting path segments.)
+
+- Simpler (and recommended): change the backup creation so archives contain only the contents of `Saved`. If the backup contains only the contents of `Saved` you can restore with:
+  - `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server/ShooterGame/Saved`
+  - or `unzip /path/to/ark-sa-server-YYYYMMDDHHMMSS.zip -d /ark-server/server/ShooterGame/Saved`
+
+This issue was reported in #33: https://github.com/Johnny-Knighten/ark-sa-server/issues/33 — it notes adding `--strip-components=4` when extracting some tar backups to remove the extra leading directories. The repo's backup script can be adjusted (see file: bin/ark-sa-backup.sh) to avoid this need by archiving only the contents of `Saved`.
+
 #### Tip For Using `BACKUP_ON_STOP=True`
 
 If you are planning on using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker stop/compose down` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. The longer your server has been running the bigger your backup will become which increases the time needed to backup the server. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/ark-sa-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.
