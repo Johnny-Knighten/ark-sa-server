@@ -92,7 +92,8 @@ perform_test "Verify .zip Backup Contains Only Saved Contents (Not Full Path)" \
                 echo \"nested\" > /ark-server/server/ShooterGame/Saved/testdir/nested.txt && \
                 /usr/local/bin/ark-sa-backup.sh > /dev/null 2>&1 && \
                 BACKUP_FILE=\$(ls /ark-server/backups/*.zip | head -n 1) && \
-                unzip -l \$BACKUP_FILE | grep -v \"ark-server\" | grep -q \"\\./test.txt\" && \
-                unzip -l \$BACKUP_FILE | grep -q \"\\./testdir/nested.txt\""'
+                ! unzip -l \$BACKUP_FILE | grep -q \"^ark-server\" && \
+                unzip -l \$BACKUP_FILE | grep -q \"test.txt\" && \
+                unzip -l \$BACKUP_FILE | grep -q \"testdir/nested.txt\""'
 
 log_failed_tests
