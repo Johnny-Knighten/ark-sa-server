@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.2.0...2.2.1) (2025-12-09)
+
+
+### Bug Fixes
+
+* remove leading directory components from backup archives ([#36](https://github.com/Johnny-Knighten/ark-sa-server/issues/36)) ([82acd9b](https://github.com/Johnny-Knighten/ark-sa-server/commit/82acd9b56ab1a82549aa42601f8edab49ef96f8b)), closes [#33](https://github.com/Johnny-Knighten/ark-sa-server/issues/33)
+
 ## [2.2.0](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.1.0...2.2.0) (2025-11-07)
 
 
