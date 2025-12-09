@@ -78,7 +78,7 @@ perform_test "Verify .tar.gz Backup Contains Only Saved Contents (Not Full Path)
                 echo \"nested\" > /ark-server/server/ShooterGame/Saved/testdir/nested.txt && \
                 /usr/local/bin/ark-sa-backup.sh > /dev/null 2>&1 && \
                 BACKUP_FILE=\$(ls /ark-server/backups/*.tar.gz | head -n 1) && \
-                tar -tzf \$BACKUP_FILE | head -n 5 | grep -v \"^ark-server\" && \
+                ! tar -tzf \$BACKUP_FILE | grep -q \"^ark-server\" && \
                 tar -tzf \$BACKUP_FILE | grep -q \"^\\./test.txt\" && \
                 tar -tzf \$BACKUP_FILE | grep -q \"^\\./testdir/nested.txt\""'
 

@@ -210,9 +210,9 @@ See the [Restoring Backups](https://github.com/Johnny-Knighten/ark-sa-server/wik
   - tar: `tar -tzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz | head -n 20`
   - zip: `unzip -l /path/to/ark-sa-server-YYYYMMDDHHMMSS.zip | head -n 20`
 
-- If an older archive includes leading directories (for example `ark-server/server/ShooterGame/Saved/...`) you can remove them during extraction using `--strip-components`. Example:
-  - `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server --strip-components=<N>`
-  - Replace `<N>` with the number of leading path components to remove so the extracted paths match the target location. (You can determine `<N>` by inspecting the archive output above and counting path segments.)
+- If an older archive includes leading directories (for example `ark-server/server/ShooterGame/Saved/...`) you can remove them during extraction using `--strip-components`. Example for an archive with path `ark-server/server/ShooterGame/Saved/`:
+  - `sudo tar -xzf /path/to/ark-sa-server-YYYYMMDDHHMMSS.tar.gz -C /ark-server/server/ShooterGame/Saved --strip-components=4`
+  - The `--strip-components=4` removes the first 4 path components (`ark-server`, `server`, `ShooterGame`, `Saved`) so files extract directly into the target directory. You can determine the correct number by inspecting the archive output above and counting path segments.
 
 This issue was reported in #33: https://github.com/Johnny-Knighten/ark-sa-server/issues/33 — it noted the need for `--strip-components=4` when extracting some older tar backups. The backup script has now been updated to avoid this need by archiving only the contents of `Saved`.
 
