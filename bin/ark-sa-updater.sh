@@ -29,8 +29,10 @@ download_and_update_ark_sa_server() {
   fi
 
   if [[ "$DRY_RUN" = "True" ]]; then
+    echo "$DRY_RUN_MSG steamcmd +login anonymous +quit"
     echo "$DRY_RUN_MSG steamcmd +force_install_dir $SERVER_DIR +login anonymous $app_update +quit"
   else
+    steamcmd +login anonymous +quit
     steamcmd +force_install_dir "$SERVER_DIR" +login anonymous $app_update +quit
   fi
 }
