@@ -1,3 +1,11 @@
+## [2.2.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.2.1...2.2.2) (2026-01-13)
+
+
+### Bug Fixes
+
+* corrected config error and missing xaudio2 dll ([#39](https://github.com/Johnny-Knighten/ark-sa-server/issues/39)) ([1db674c](https://github.com/Johnny-Knighten/ark-sa-server/commit/1db674c79087488c8a6e252aa9aaf9d4e18ede18))
+* moved force_install_dir before login in steamcmd args ([#38](https://github.com/Johnny-Knighten/ark-sa-server/issues/38)) ([4308238](https://github.com/Johnny-Knighten/ark-sa-server/commit/4308238c1c2eee47a4a69a0b8fe0ccac36e8d88c))
+
 ## [2.2.2-next.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.2.2-next.1...2.2.2-next.2) (2025-12-26)
 
 
