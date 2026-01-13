@@ -69,6 +69,14 @@ RUN PROTON_GE_FILE="$PROTON_GE_VAR-$PROTON_GE_VER-$PROTON_GE_ARCH" && \
     mv "lutris-$PROTON_GE_VER-$PROTON_GE_ARCH" ./proton && \
     rm -r "$PROTON_GE_FILE.tar.xz"
 
+# Download and install XAudio2 DLL - Dependency Added in version 77.46
+RUN wget "https://www.nuget.org/api/v2/package/Microsoft.XAudio2.Redist/1.2.11" -O xaudio2.nupkg && \
+    unzip xaudio2.nupkg -d xaudio2_extract && \
+    mkdir -p $SERVER_DIR/ShooterGame/Binaries/Win64/ && \
+    cp xaudio2_extract/build/native/release/bin/x64/xaudio2_9redist.dll $SERVER_DIR/ShooterGame/Binaries/Win64/xaudio2_9.dll && \
+    chmod 775 $SERVER_DIR/ShooterGame/Binaries/Win64/xaudio2_9.dll && \
+    chown 7777:7777 $SERVER_DIR/ShooterGame/Binaries/Win64/xaudio2_9.dll
+
 RUN groupadd -g "$PGID" -o ark-sa && \
     useradd -l -g "$PGID" -u "$PUID" -o --create-home ark-sa && \
     usermod -a -G crontab ark-sa

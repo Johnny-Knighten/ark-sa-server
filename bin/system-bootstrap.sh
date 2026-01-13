@@ -16,6 +16,7 @@ cleanup() {
 }
 
 main() {
+  ensure_xaudio2_dll
   setup_cron_jobs
   if [[ "$DRY_RUN" = "True" ]]; then
     echo "DRY_RUN - exec /usr/bin/supervisord -c /usr/local/etc/supervisord.conf"
@@ -110,6 +111,36 @@ wait_for_backup_completion() {
       break
     fi
   done
+}
+
+# Fix for xaudio2_9.dll dependency added in ARK SA server version 77.46
+# This ensures the DLL is present even if it was deleted from the persisted volume
+ensure_xaudio2_dll() {
+  local dll_path="${SERVER_DIR}/ShooterGame/Binaries/Win64/xaudio2_9.dll"
+  
+  if [[ -f "$dll_path" ]]; then
+    echo "System Bootstrap - xaudio2_9.dll already exists, skipping installation"
+    return 0
+  fi
+  
+  echo "System Bootstrap - xaudio2_9.dll not found, installing..."
+  
+  local temp_dir="/tmp/xaudio2_install_$$"
+  mkdir -p "$temp_dir"
+  cd "$temp_dir"
+  
+  wget -q "https://www.nuget.org/api/v2/package/Microsoft.XAudio2.Redist/1.2.11" -O xaudio2.nupkg
+  unzip -q xaudio2.nupkg -d xaudio2_extract
+  
+  mkdir -p "${SERVER_DIR}/ShooterGame/Binaries/Win64/"
+  cp xaudio2_extract/build/native/release/bin/x64/xaudio2_9redist.dll "$dll_path"
+  chmod 775 "$dll_path"
+  chown 7777:7777 "$dll_path"
+  
+  cd /
+  rm -rf "$temp_dir"
+  
+  echo "System Bootstrap - xaudio2_9.dll installation complete"
 }
 
 main
