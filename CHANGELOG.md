@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.2.2...2.2.3) (2026-07-23)
+
+
+### Bug Fixes
+
+* force windows platform type for steamcmd downloads ([#45](https://github.com/Johnny-Knighten/ark-sa-server/issues/45)) ([ec93d80](https://github.com/Johnny-Knighten/ark-sa-server/commit/ec93d80bac5ab042a4cf82e28184477e74ab310b))
+
 ## [2.2.2](https://github.com/Johnny-Knighten/ark-sa-server/compare/2.2.1...2.2.2) (2026-01-13)
 
 
