@@ -2,6 +2,7 @@ name: Release
 run-name: Release for Push on ${{ github.ref_name }} #${{ github.run_number }}
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
